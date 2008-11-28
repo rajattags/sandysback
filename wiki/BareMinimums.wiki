@@ -1,0 +1,13 @@
+#summary Bare minimums for a 1st version
+#labels Phase-Requirements
+
+= Feature List =
+
+ * parsing written English into calendar events
+ * Info attached to an event (maybe just textbox to write unformated text in? step up to simplified wiki markup à lá googlecode?)
+ * emailing (on queue and daily digests)
+ * reschedule appointments
+ * recurring events
+ * tagging (and smart tagging at that - @weekly, @monthly)
+ * export to .ics (goodness for google calendar, ical, and all things compliant with RFC 2445)
+ * Add events via XMPP messaging (ie. jabber, google talk, etc)
