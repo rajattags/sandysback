@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary A place to compile technical/programming issues.
 #labels Phase-Requirements,Phase-Design
 
 = Introduction =
