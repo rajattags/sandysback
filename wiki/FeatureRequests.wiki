@@ -1,5 +1,5 @@
+#summary A place to compile features requested by users
 #labels Phase-Requirements
-Compilation of priority features
 
 = Feature Requests =
 
