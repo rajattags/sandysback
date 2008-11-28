@@ -6,6 +6,8 @@
  * Mesh the export of data from Sandy with the import of your new system - _jdvalentine via twitter_
  * CCing Sandy when I write e-mails to others (and create an event) - _jdvalentine via twitter_
  * User can chose the assistant name from a pool (feminine and masculine) - _npovoa via email_
+ * Remind other people of events (send emails to the outside world, not just the user) - _annarave via email_
+ *  Talk to other "Sandy's" to resolve reschedules, cancellations, etc - _npovoa via email_
 
 == 3rd party integration ==
 
