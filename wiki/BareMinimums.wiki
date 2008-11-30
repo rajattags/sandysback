@@ -1,13 +1,26 @@
-#summary Bare minimums for a 1st version
+#summary Bare minimums for alpha and beta versions
 #labels Phase-Requirements
 
-= Feature List =
+= Feature List for first prototype =
+_These are things without which it's pointless to consider it a working prototype_
 
  * Parsing written English into calendar events
- * Info attached to an event (maybe just textbox to write unformated text in? step up to simplified wiki markup à lá googlecode?)
- * Emailing (on queue and daily digests)
- * Reschedule appointments
- * Recurring events
  * Tagging (and smart tagging at that - @weekly, @monthly)
- * Export to .ics (goodness for google calendar, ical, and all things compliant with RFC 2445)
+ * Email reminders (on queue and daily digests)
+ * Reschedule/edit appointments and to-dos
+ * Recurring events
+
+
+
+= Production (beta) Version = 
+_These things are really nice but not killers for an alpha release_
+ * Twitter/laconi.ca/identi.ca  or just plain SMS support _I'd prefer this in the alpha but can understand if it needs to wait to beta. Anna_
+ * Info attached to an event (maybe just textbox to write unformated text in? step up to simplified wiki markup à lá googlecode?)
  * Add events via XMPP messaging (ie. jabber, google talk, etc)
+ * Export to .ics (goodness for google calendar, ical, and all things compliant with RFC 2445) 
+
+
+= Future Versions =
+ * Multiple "personalities"(not just Sandy)
+ * Sending reminders to "friends" 
+ * Support for non-English Languages
