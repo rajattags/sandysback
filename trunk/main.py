@@ -1,13 +1,28 @@
 import logging
+import os
 import wsgiref.handlers
-from google.appengine.ext import webapp
-import search
 
+from google.appengine.ext import webapp
+from google.appengine.api import users
+
+import search
 import models
+
+def current_user():
+  if 'USER' in os.environ:
+    return users.User(os.environ['USER'] + '@sandysback.com')
+  else:
+    user = users.get_current_user()
+    if user is None:
+      user = users.User('tester@sandysback.com')
+    return user
 
 def main_respond(resp, content=''):
   resp.headers['Content-Type'] = 'text/html'
   resp.out.write('<html><head><title>Sand 1 Main</title></head><body>\n')
+  resp.out.write('<p>Hi, %s  ' % current_user().nickname())
+  resp.out.write(' (<a href="%s">Logout</a>)</p>' %
+                   users.create_logout_url('/'))
   resp.out.write('<p>%s</p>\n' % content)
   resp.out.write('<p>\n')
   resp.out.write('<form action="/" method="get">\n')
@@ -22,6 +37,9 @@ def main_respond(resp, content=''):
 def bare_respond(resp, content=''):
   resp.headers['Content-Type'] = 'text/html'
   resp.out.write('<html><head><title>Sand 1 Barebones</title></head><body>\n')
+  resp.out.write('<p>Hi, %s  ' % current_user().nickname())
+  resp.out.write(' (<a href="%s">Logout</a>)</p>' %
+                   users.create_logout_url('/'))
   resp.out.write('<p>%s</p>\n' % content)
   resp.out.write('<p>\n')
   resp.out.write('<form action="/" method="get">\n')
@@ -47,6 +65,7 @@ def store(phrase):
   """
   entity = models.Fact()
   entity.stuff = phrase
+  entity.user = current_user()
   entity.put()
   logging.info('R %r', phrase)
   return "OK, remembering: %r" % phrase
@@ -60,9 +79,9 @@ def fetch(phrase):
   Returns:
     a list of str with all the facts containing all the words in phrase
   """
-  query = search.SearchableQuery('Fact')
-  query.Search(phrase)
-  res = [f['stuff'] for f in query.Run()]
+  query = models.Fact.all().search(phrase).filter(
+              "user =", current_user())
+  res = [f.stuff for f in query]
   logging.info('L %r -> %d', phrase, len(res))
   return res
 

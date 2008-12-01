@@ -3,6 +3,6 @@ import search
 
 class Fact(search.SearchableModel):
   stuff = db.TextProperty()
-  # tags = db.TextProperty()
+  user = db.UserProperty()
   publishDate = db.DateTimeProperty(auto_now_add=True)
 
