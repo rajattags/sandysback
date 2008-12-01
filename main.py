@@ -2,11 +2,12 @@ import logging
 import os
 import wsgiref.handlers
 
-from google.appengine.ext import webapp
 from google.appengine.api import users
+from google.appengine.ext import db
+from google.appengine.ext import webapp
 
-import search
 import models
+import search
 
 def current_user():
   if 'USER' in os.environ:
@@ -17,15 +18,18 @@ def current_user():
       user = users.User('tester@sandysback.com')
     return user
 
+def do_logout():
+  try: return users.create_logout_url('/')
+  except AssertionError: return '/'
+
 def main_respond(resp, content=''):
   resp.headers['Content-Type'] = 'text/html'
   resp.out.write('<html><head><title>Sand 1 Main</title></head><body>\n')
   resp.out.write('<p>Hi, %s  ' % current_user().nickname())
-  resp.out.write(' (<a href="%s">Logout</a>)</p>' %
-                   users.create_logout_url('/'))
+  resp.out.write(' (<a href="%s">Logout</a>)</p>' % do_logout())
+  resp.out.write('<form action="/" method="get">\n')
   resp.out.write('<p>%s</p>\n' % content)
   resp.out.write('<p>\n')
-  resp.out.write('<form action="/" method="get">\n')
   resp.out.write('<label for="do">What to do:</label>\n')
   resp.out.write('<input type="text" id="do" name="do">\n')
   resp.out.write('<input type="submit" value="Do"></p>\n')
@@ -38,8 +42,7 @@ def bare_respond(resp, content=''):
   resp.headers['Content-Type'] = 'text/html'
   resp.out.write('<html><head><title>Sand 1 Barebones</title></head><body>\n')
   resp.out.write('<p>Hi, %s  ' % current_user().nickname())
-  resp.out.write(' (<a href="%s">Logout</a>)</p>' %
-                   users.create_logout_url('/'))
+  resp.out.write(' (<a href="%s">Logout</a>)</p>' % do_logout())
   resp.out.write('<p>%s</p>\n' % content)
   resp.out.write('<p>\n')
   resp.out.write('<form action="/" method="get">\n')
@@ -81,12 +84,24 @@ def fetch(phrase):
   """
   query = models.Fact.all().search(phrase).filter(
               "user =", current_user())
-  res = [f.stuff for f in query]
+  res = [(f.stuff, f.key()) for f in query]
   logging.info('L %r -> %d', phrase, len(res))
   return res
 
+def getkey(verb, rest, req):
+  if not rest.startswith('#'):
+    return None, "Sorry, invalid arg %r for verb %s" % (rest, verb)
+  try:
+    num = int(rest[1:])
+  except ValueError:
+    return None, "Sorry, invalid number %r for verb %s" % (rest[1:], verb)
+  key = req.get('ZZ%s' % num, '')
+  if not key:
+    return None, "Sorry, no number %r in previous list" % num
+  return key, None
 
-def parse(phrase):
+
+def parse(phrase, req):
   """Parse and execute the phrase (first word is the "verb").
 
   Args:
@@ -104,6 +119,21 @@ def parse(phrase):
       return store(rest)
     elif first_word in ('l', 'lookup'):
       return fetch(rest)
+    elif first_word in ('z', 'zaza'):
+      key, msg = getkey('zaza', rest, req)
+      if key is None:
+        return msg
+      entity = db.get(db.Key(key))
+      return [(entity.stuff, entity.key())]
+    elif first_word in ('f', 'forget'):
+      key, msg = getkey('forget', rest, req)
+      if key is None:
+        return msg
+      entity = db.get(db.Key(key))
+      msg = "OK, forgotten %r" % entity.stuff
+      entity.delete()
+      return msg
+
   return "Sorry, don't understand %r for %r" % (first_word, rest)
 
 
@@ -114,11 +144,14 @@ class MainPage(webapp.RequestHandler):
     if not stuff:
       main_respond(self.response, "What do you want to do?")
     else:
-      result = parse(stuff)
+      result = parse(stuff, self.request)
       if isinstance(result, list):
         if result:
-          result.insert(0, 'Found %d:' % len(result))
-          result = '<br>'.join(result)
+          lines = ['Found %d:' % len(result)]
+          for i, (stuff, key) in enumerate(result):
+            lines.append('<input type="hidden" name="ZZ%s" value="%s"> '
+                         '#%s %s' % (i+1, key, i+1, stuff))
+          result = '<br>\n'.join(lines)
         else:
           result = "Oops, found no relevant facts."
       main_respond(self.response, result)
