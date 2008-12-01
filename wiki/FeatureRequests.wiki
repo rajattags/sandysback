@@ -8,13 +8,14 @@
  * User can chose the assistant name from a pool (feminine and masculine) - _npovoa via email_
  * Remind other Sandy users of to-dos (by SMS or that users preferred mode) - _annarave via email_
  * Talk to other "Sandy's" to resolve reschedules, cancellations, etc - _npovoa via email_
- * Send a 'remember email' that automatically shows up on a syndicated calendar -  _kerri9494 via blog_
- * SMS reminders - _jd via blog_
- * Feed content of sandy to calendar - _jd via blog_
+
 
 == 3rd party integration ==
 
  * Single-letter Twitter name (handy for using from a mobile) - _jdvalentine via twitter_
+ * Send a 'remember email' that automatically shows up on a syndicated calendar -  _kerri9494 via blog_
+ * SMS reminders - _jd via blog_
+ * Feed content of sandy to calendar - _jd via blog_
 
 
 = Details =
