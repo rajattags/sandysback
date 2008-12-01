@@ -23,6 +23,7 @@ class _Common(unittest.TestCase):
       clear_datastore()
       self.application = main.application()
       self.app = webtest.TestApp(self.application)
+      os.environ['USER_EMAIL'] = 'foo@bar.baz'
 
 
 class MainTest(_Common):
@@ -58,6 +59,47 @@ class MainTest(_Common):
       response = self.app.get('/?do=l%20Bob')
       self.assertEqual('200 OK', response.status)
       self.assertTrue('Found 1' in response)
+
+  def test_separate_users(self):
+      os.environ['USER'] = 'someuser'
+      response = self.app.get('/?do=remember%20Bob%20is%20your%20uncle')
+      self.assertEqual('200 OK', response.status)
+      self.assertTrue('OK, remembering' in response)
+      response = self.app.get('/?do=lookup%20Bob')
+      self.assertEqual('200 OK', response.status)
+      self.assertTrue('Found 1' in response)
+      del os.environ['USER']
+      response = self.app.get('/?do=l%20Bob')
+      self.assertEqual('200 OK', response.status)
+      self.assertTrue('Oops' in response)
+      os.environ['USER'] = 'another'
+      response = self.app.get('/?do=l%20Bob')
+      self.assertEqual('200 OK', response.status)
+      self.assertTrue('Oops' in response)
+      os.environ['USER'] = 'someuser'
+      response = self.app.get('/?do=lookup%20Bob')
+      self.assertEqual('200 OK', response.status)
+      self.assertTrue('Found 1' in response)
+
+  def _keytest(self, verb):
+      response = self.app.get('/?do=%s%%20#1' % verb)
+      self.assertEqual('200 OK', response.status)
+      self.assertTrue('Sorry' in response)
+      response = self.app.get('/?do=%s%%20#2' % verb)
+      self.assertEqual('200 OK', response.status)
+      response = self.app.get('/?do=%s%%202' % verb)
+      self.assertEqual('200 OK', response.status)
+      response = self.app.get('/?do=%s%%20#foo' % verb)
+      self.assertEqual('200 OK', response.status)
+      self.assertTrue('Sorry' in response)
+
+  def test_zaza(self):
+      for verb in 'z', 'zaza':
+        self._keytest(verb)
+
+  def test_forget(self):
+      for verb in 'f', 'forget':
+        self._keytest(verb)
 
 
 class BareTest(_Common):
