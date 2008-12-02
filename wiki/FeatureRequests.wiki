@@ -12,7 +12,7 @@
  * Talk to other "Sandy's" to resolve reschedules, cancellations, etc - _npovoa via email_
  * Multiple 'keywords' like "remind me to" and not just "r" or "remind" - _npovoa via IM_
  * Sandy to send emails on our behalf to other users - _annarave via IM_
- * Make sandy location aware, send you location, she sends your to-dos there - _nikjones via twitter_
+ * Make sandy location aware: send you location, she sends your to-dos there - _nikjones via twitter_
 
 == 3rd party integration ==
 
