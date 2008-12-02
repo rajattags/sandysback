@@ -4,7 +4,8 @@
 = Feature List for first prototype =
 _These are things without which it's pointless to consider it a working prototype_
 
- * Parsing written English into calendar events
+ * Parsing written English into calendar events 
+     (including disambiguating dates using European/American standards)
  * Tagging (and smart tagging at that - @weekly, @monthly)
  * Email reminders (on queue and daily digests)
  * Reschedule/edit appointments and to-dos
