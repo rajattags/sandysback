@@ -1,3 +1,4 @@
+import email
 import logging
 import os
 import wsgiref.handlers
@@ -45,13 +46,13 @@ def bare_respond(resp, content=''):
   resp.out.write(' (<a href="%s">Logout</a>)</p>' % do_logout())
   resp.out.write('<p>%s</p>\n' % content)
   resp.out.write('<p>\n')
-  resp.out.write('<form action="/" method="get">\n')
+  resp.out.write('<form action="/bare" method="get">\n')
   resp.out.write('<label for="search">Look for:</label>\n')
   resp.out.write('<input type="text" id="search" name="search">\n')
   resp.out.write('<input type="submit" value="Search"></p>\n')
   resp.out.write('</form>')
   resp.out.write('<p>\n')
-  resp.out.write('<form action="/" method="post">\n')
+  resp.out.write('<form action="/bare" method="post">\n')
   resp.out.write('<label for="create">Create:</label>\n')
   resp.out.write('<input type="text" id="create" name="create">\n')
   resp.out.write('<input type="submit" value="Create"></p>\n')
@@ -75,7 +76,7 @@ def store(phrase):
 
 
 def fetch(phrase):
-  """Fetch all facts containing all words in phrase.
+  """Fetch all facts containing all words in phrase (current user)
 
   Args:
     phrase: a str with space-separated words
@@ -87,6 +88,21 @@ def fetch(phrase):
   res = [(f.stuff, f.key()) for f in query]
   logging.info('L %r -> %d', phrase, len(res))
   return res
+
+
+def fetchall(phrase):
+  """Fetch all facts containing all words in phrase (any user)
+
+  Args:
+    phrase: a str with space-separated words
+  Returns:
+    a list of str with all the facts containing all the words in phrase
+  """
+  query = models.Fact.all().search(phrase)
+  res = [(f.stuff, f.key()) for f in query]
+  logging.info('*L %r -> %d', phrase, len(res))
+  return res
+
 
 def getkey(verb, rest, req):
   if not rest.startswith('#'):
@@ -171,21 +187,32 @@ class BarePage(webapp.RequestHandler):
     if not stuff:
       bare_respond(self.response, "What stuff are you looking for?")
     else:
-      # Search the 'Person' Entity based on our keyword
-      query = search.SearchableQuery('Fact')
-      query.Search(stuff)
       res = []
       n = 0
-      for result in query.Run():
-         res.append(result['stuff'])
+      for result, _ in fetchall(stuff):
+         res.append(result)
          n += 1
       res.insert(0, "Found %d:" % n)
       bare_respond(self.response, "<br>\n".join(res))
 
 
+class MailPage(webapp.RequestHandler):
+  def post(self):
+    # Do stuff with the email message
+    sender = self.request.GET.get("from", "")
+    recipient = self.request.GET.get("to", "")
+    message = email.message_from_string(self.request.body)
+    # create a fact recording the response
+    entity = models.Fact()
+    entity.stuff = 'mail from: %s to: %s msg: %s' % (sender, recipient, message)
+    entity.put()
+    bare_respond(self.response, "Created fact: from mail<br>")
+
+
 def application():
   return webapp.WSGIApplication([('/', MainPage),
                                  ('/bare', BarePage),
+                                 ('/fromail', MailPage),
                                 ],
                                 debug=True)
 
