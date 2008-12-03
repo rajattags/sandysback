@@ -35,6 +35,7 @@ True = all day event. False = otherwise.
 
 
 || *name (varchar)* ||
+
 What the user has decided to name this event.
 
 || *details (varchar)* ||
