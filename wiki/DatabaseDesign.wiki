@@ -1,3 +1,5 @@
+#summary Proposed database design
+
 = Database Design =
 
 Below is a proposed database design.
