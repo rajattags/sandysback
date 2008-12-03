@@ -91,20 +91,20 @@ Does the user's timezone observe daylight savings time?
 || *dateFormat (fixed char)* ||
 
 UNIX _date_ FORMAT string. e.g.:
-* %m/%d/%y     (e.g., 1/20/2008)
-* %d/%m/%y     (e.g., 20/1/2008)
-* %m.%d.%y     (e.g., 1.20.2008)
-* %d.%m.%y     (e.g., 20.1.2008)
-* %B %d, %y    (e.g., Jan 20, 2008)
-* etc.
+  * %m/%d/%y     (e.g., 1/20/2008)
+  * %d/%m/%y     (e.g., 20/1/2008)
+  * %m.%d.%y     (e.g., 1.20.2008)
+  * %d.%m.%y     (e.g., 20.1.2008)
+  * %B %d, %y    (e.g., Jan 20, 2008)
+  * etc.
 
 
 || *timeFormat (fixed char)* ||
 
 UNIX _date_ FORMAT string. e.g.:
-* %H:%M     (e.g., 14:00)
-* %I:%M %p  (e.g., 2:00 PM)
-* etc.
+  * %H:%M     (e.g., 14:00)
+  * %I:%M %p  (e.g., 2:00 PM)
+  * etc.
 
 
 || *dailyDigest (timestamp)* ||
