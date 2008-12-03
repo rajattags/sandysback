@@ -23,7 +23,7 @@
  * SMS updating (creating events via SMS) - _Erasmus via blog_
  * Use Jott to email Sandy - _akinto via blog_
  * Conversational interaction with sandy via IM - _npovoa via IM_
- * Link todo lists/GTD apps (ie. OmniFocus) - _nikjones via twitter_
+ * Bi-directional goodness with other to-do lists/GTD apps (ie. OmniFocus) - _nikjones via twitter_
 
 = Stuff users weren't crazy about =
 
