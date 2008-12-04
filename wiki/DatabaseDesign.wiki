@@ -67,6 +67,10 @@ The weekday on which this event takes place. (i.e., if the original date is the 
 We use this to link this event to a particular user. See users table (below).
 
 
+|| *reminderSent (boolean)* ||
+
+Default = False (reminder not sent yet). Set to true when reminder has been sent.
+
 
 ==TABLE: Users==
 || *name (varchar)* ||
