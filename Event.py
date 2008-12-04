@@ -46,6 +46,16 @@ class Event:
 	# For this release weekdayRepeat is always equal to None.
 	weekdayRepeat = '';
 
+	# Variable: id
+	# *int:* (public) The id of the event. This variable may be set
+	# to None. The only class which should read or write this 
+	# variable is <Database>. <Event> objects returned by
+	# Database.lookupEvents> will have id values, and
+	# <Database.updateEvent> and <Database.deleteEvent>
+	# will look at <Event>s' id values.
+	id = '';
+
+
 	### Private Variables ###
 
 	# None
