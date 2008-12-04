@@ -34,9 +34,9 @@ The actual time the reminder is to be sent (again, in UTC). This field is simply
 True = all day event. False = otherwise.
 
 
-|| *name (varchar)* ||
+|| *title (varchar)* ||
 
-What the user has decided to name this event.
+What the user has decided to title this event.
 
 || *details (varchar)* ||
 
