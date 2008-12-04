@@ -1,0 +1,31 @@
+#summary Class "Email" (proposed class structure)
+
+= Class: Email =
+
+== Variables ==
+
+=== Public Variables ===
+  * _string_ `to`
+  * _string_ `from`
+  * _string_ `message`
+    * The body of the email, except part that has been quoted (such as in a forward or reply)
+  * _string_ `quote`
+    * Quoted text (if this email is a forward or reply)
+
+=== Private Variables ===
+  * None
+
+
+== Methods ==
+
+=== Public Methods ===
+   * *Constructor*
+    * Arguments
+      * _string_ `email`: raw email
+    * Description: Sets the public variables to what this method can parse from `email`. Sets variable(s) to `null` that part of the email is not present.
+
+  * *Destructor*
+    * Does nothing
+
+=== Private Methods ===
+  * None
