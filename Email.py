@@ -34,10 +34,18 @@ class Email:
 	#
 	# Parameters:
 	#   email - (string) raw email
-
 	def __init__(self, email):
 
-	
+
+	# Method: __del__
+	# Does nothing for now
+	#
+	# Parameters:
+	#   None
+	def __del__(self):
+
+
+
 	### Private Methods ###
 
 	# None

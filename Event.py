@@ -77,27 +77,35 @@ class Event:
 	### Public Methods ###
 
 	# Method: __init__
-	# Sets the public variables to what this method can parse from *message*.
-	# Sets variable(s) to None if that part of the event is not present.
+	# If only one argument is passed in, *arg1* is a message which contains information
+	# about this event, in regular human syntax, which must be parsed.
+	#
+	# If more than one argument is passed in, <eventTime> is set to value of *arg1*, and
+	# all the remaining public variables are set to the arguments passed to this function
+	# which have the same name. If any arguments not set are set, the respective public
+	# variables are set to None.
 	#
 	# Parameters:
-	#   message - (string) raw email
-	def __init__(self, message):
+	#   arg1
+	#        - *if no other arguments are provided:* (string) message containing information about this event.
+	#        -  *Otherwise:* (int) value of arg1 is copied into <eventTime>
+	#
+	#   beforeRemind - (int) value copied into <beforeRemind>
+	#   allDay - (bool) value copied into <allDay>
+	#   eventName - (string) value copied into <eventName>
+	#   description - (string) value copied into <description>
+	#   tags - (string) value copied into <tags>
+	#   repeat - (string) value copied into <repeat>
+	#   weekdayRepeat - (string) value copied into <weekdayRepeat>
+	def __init__(self, arg1, eventTime=None, beforeRemind=None, allDay=None, eventName=None, description=None, tags=None, repeat=None, weekdayRepeat=None, id=None):
 
-	
-	# Method: __init__
-	# Sets the public variables to the arguments passed to this method.
+
+	# Method: __del__
+	# Does nothing for now
 	#
 	# Parameters:
-	#   eventTime - <eventTime>
-	#   beforeRemind - <beforeRemind>
-	#   allDay - <allDay>
-	#   eventName - <eventName>
-	#   description - <description>
-	#   tags - <tags>
-	#   repeat - <repeat>
-	#   weekdayRepeat - <weekdayRepeat>
-	def __init__(self, eventTime, beforeRemind, allDay, eventName, description, tags, repeat, weekdayRepeat):
+	#   None
+	def __del__(self):
 
 
 	### Private Methods ###
