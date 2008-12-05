@@ -72,6 +72,10 @@ We use this to link this event to a particular user. See users table (below).
 Default = False (reminder not sent yet). Set to true when reminder has been sent.
 
 
+|| *id (key)* ||
+
+
+
 ==TABLE: Users==
 || *name (varchar)* ||
 
