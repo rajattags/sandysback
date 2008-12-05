@@ -16,16 +16,15 @@ class SendEmail:
 	### Public Methods ###
 
 	# Method: __init__
-	# Queries <Database.reminders> to retrieve reminders which haven't been
-	# sent and whose reminderTime (in the database) is less than the current
-	# timestamp, plus <howOftenSend> minutes. Creates <Event> objects for each
-	# event and passes the objects (one at a time) to <sendReminder>. After a
+	# Calls <Database.reminderTimeSearchEvents> to retrieve events which need
+	# reminders sent prior to the current time, plus <howOftenSend> minutes.
+	# Passes the returned <Event> objects (one at a time) to <sendReminder>. After a
 	# reminder has been sent, the reminderSent field in the database is set
 	# to true.
 	#
-	# This also calls <Database.users> to retrieve the users who want reminders
-	# to be sent within the next <howOftenSend> minutes. Passes the user IDs
-	# (one at a time) to <sendDigest>.
+	# This also calls <Database.digestTimeSearchUsers> to retrieve the users
+	# who want daily digests send within the next <howOftenSend> minutes.
+	# Passes the returned <User> objects (one at a time) to <sendDigest>.
 	#
 	# Parameters:
 	#   None
@@ -44,7 +43,7 @@ class SendEmail:
 
 	# Method: sendDigest
 	# Looks up all events belonging to *userID* which will occur within
-	# days4digest (in the database) days from now.
+	# days4digest (in the database) days from now. Sends email to user.
 	#
 	# Parameters:
 	#   userID - (int) ID of the user
