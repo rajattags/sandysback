@@ -1,0 +1,88 @@
+= Introduction =
+
+I'm not a programmer by any means, but I had to map out the logic for e-mails that the service sends in order to come up with phrase databases...so I thought I'd write it out for you all.
+
+Hope it helps
+
+---- 
+= Remind/Remember/R Email Response =
+==Section 1: GREETING==
+This is how the Remind email response is mapped out
+
+===SIMPLE PROTOTYPE VERSION:===
+|GREETING| (i.e. Good Morning, NAME!)
+
+===EXPANDED VERSION (EVENTUALLY):===
+CHECK WHAT TIME IT IS 
+If it’s from 5AM to 7:30AM
+|EARLY| (i.e. Wow, NAME, you’re up early!”
+If it’s from 7:30AM to 12PM
+|MORNING|
+If it’s from 12PM to 6:00PM
+|G3: AFTERNOON|
+If it’s from 6PM to 11PM
+|EVENING|
+If it’s from 11PM to 5AM
+|LATE|
+
+==Section 2: Output Items Requested To Remember==
+===Priority 1: Calendar Items===
+SEE IF THERE’S A DATE IN THE REQUEST
+IF SCHEDULED FOR ONE DATE (@CAL or whatever in backend, not time-specific): 
+|CAL1A| (i.e. I scheduled this for you:)
+OUTPUT ITEM
+
+NOTE: If it’s one day with no time and just date, output this after:
+|CAL1B| (i.e. I didn't see a time for this reminder, so I scheduled it for 12am. To set a time now, reply with: update #1 |OR 2+} |when to remind you|. For example: update #1 |OR 2+| 11/14/2008 at 2pm.)
+
+Make sure it spits out the todo number as the number referred to in "update #X"
+
+IF SCHEDULED FOR TWO OR MORE DATES (@CAL or whatever in backend, not time-specific): 
+|CAL2A| (i.e. I scheduled these for you:)
+OUTPUT ITEMS
+
+For each one that's listed that doesn't have a date, put this below it:
+|CAL1B| (i.e. I didn't see a time for this reminder, so I scheduled it for 12am. To set a time now, reply with: update #1 |OR 2+} |when to remind you|. For example: update #1 |OR 2+| 11/14/2008 at 2pm.)
+
+Make sure it spits out the todo number as the number referred to in "update #X"
+
+===Priority 2: To-do Items===
+AFTER CALENDAR ITEM OUTPUT, THE NEXT PRIORITY IS A TODO
+IF TAG IS @TODO, IS ONE ITEM:
+|TODO1A| (i.e. I scheduled this and added it to your to-do list:)
+OUTPUT ITEM
+
+Then output this:
+|TODO1B"I didn't see a date or time for this reminder, so I scheduled for it to be done as soon as possible. To set a date or time now, reply with: update #1 |when to remind you|. For example: update #1 11/14/2008 at 2pm.)
+
+IF TAG IS @TODO, IS TWO OR MORE ITEMS:
+|TODO2A| (i.e. I scheduled these and added them to your to-do list:)
+OUTPUT ITEMS LINE BY LINE, SO THEY CAN BE UPDATED/REFERRED TO 
+
+Then output this after each:
+|TODO2B| (i.e. I didn't see a date or time for this reminder, so I scheduled for it to be done as soon as possible.  To set a date or time now, reply with: update #1 |OR 2+} |when to remind you|. For example: update #1 |OR 2+| 11/14/2008 at 2pm.)
+
+Make sure it spits out the todo number as the number referred to in "update #X"
+
+===Priority 3: Else Items===
+Finally, it’ll just be what’s tagged otherwise to remember
+IF TAG IS ELSE AND IS ONE ITEM: 
+|TAG1A| (i.e. I’ve taken note of this:)
+OUTPUT ITEM
+
+Then output this:
+|TAG1B| (i.e. To make this note a todo or to assign any date to it, reply with: update #1 |when to remind you|. For example: update #1 11/14/2008 at 2pm.)
+
+IF TAG IS ELSE AND IS TWO OR MORE ITEMs:
+|TAG2A| (i.e. I’ve taken note of these:)
+OUTPUT ITEMS
+
+Then output this after each:
+|TAG1B| (i.e. To make this note a todo or to assign any date to it, reply with: update #1 |when to remind you|. For example: update #1 11/14/2008 at 2pm.)
+
+
+==Section 3: Closing==
+|CLOSING| (i.e. Sincerely.)
+
+==Section 4: Tip==
+|TIP| (Tip on how to use the service)
