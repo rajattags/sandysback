@@ -134,3 +134,6 @@ timestamp pointing to midnight of the day the daily digest was sent. Set to 0 if
 || *days4digest (int)* ||
 
 Number of days to include on the daily digest (default=1)
+
+
+|| *id (key)* ||
