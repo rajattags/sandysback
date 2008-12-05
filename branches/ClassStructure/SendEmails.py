@@ -16,11 +16,11 @@ class SendEmail:
 	### Public Methods ###
 
 	# Method: __init__
-	# Calls <Database.reminderTimeSearchEvents> to retrieve events which need
-	# reminders sent prior to the current time, plus <howOftenSend> minutes.
-	# Passes the returned <Event> objects (one at a time) to <sendReminder>. After a
-	# reminder has been sent, the reminderSent field in the database is set
-	# to true.
+	# Initializes connection to SMTP server. Calls <Database.reminderTimeSearchEvents>
+	# to retrieve events which need reminders sent prior to the current time, plus
+	# <howOftenSend> minutes. Passes the returned <Event> objects (one at a time) to
+	# <sendReminder>. After a reminder has been sent, the reminderSent field in the
+	# database is set to true.
 	#
 	# This also calls <Database.digestTimeSearchUsers> to retrieve the users
 	# who want daily digests send within the next <howOftenSend> minutes.
@@ -29,6 +29,15 @@ class SendEmail:
 	# Parameters:
 	#   None
 	def __init__(self, email):
+
+
+	# Method: __del__
+	# Does nothing for now
+	#
+	# Parameters:
+	#   None
+	def __del__(self):
+
 
 	# Method: sendReminder
 	# Parses compiles the information in *event* into an email, and sends it.

@@ -24,6 +24,14 @@ class ReceiveEmail:
 	def __init__(self, email):
 
 
+	# Method: __del__
+	# Disconnects from the email account.
+	#
+	# Parameters:
+	#   None
+	def __del__(self):
+
+
 	# Method: addEvent
 	# Parses <Email.message> from *email* and creates an <Event>, which is passed to
 	# <Database.addEvent>. Multiple (or no) events may be added, depending on how many

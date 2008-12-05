@@ -22,6 +22,14 @@ class Email:
 	def __init__(self):
 
 
+	# Method: __del__
+	# Disconnects from the database
+	#
+	# Parameters:
+	#   None
+	def __del__(self):
+
+
 	# Method: addEvent
 	# Adds an event to the database
 	#
