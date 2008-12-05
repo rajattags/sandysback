@@ -4,7 +4,8 @@
 
 Below is a proposed database design.
 
-NOTE: Fields of type "timestamp" are actually integers whose values should be UNIX timestamps. In MySQL, there is a field type called "timestamp" which does something different...
+NOTE: Fields of type "timestamp" are actually integers whose values should be UNIX timestamps. In MySQL, there is a field type called "timestamp" which does something different. Also, please note that all times are in UTC, even when this is not explicitly stated.
+
 
 ==TABLE: Reminders==
 
