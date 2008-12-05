@@ -120,7 +120,7 @@ UNIX _date_ FORMAT string. e.g.:
 
 || *dailyDigest (int)* ||
 
-Number of seconds after midnight the user wants the daily digest sent (in UTC). Can be negative if the user wants the daily digest sent before midnight, UTC
+Number of seconds after midnight the user wants the daily digest sent (in UTC). Can be negative if the user wants the daily digest sent before midnight, UTC. This field is NULL of the user doesn't want a daily digest sent.
 
 
 || *days4digest (int)* ||
