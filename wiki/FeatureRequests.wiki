@@ -24,6 +24,7 @@
  * Use Jott to email Sandy - _akinto via blog_
  * Conversational interaction with sandy via IM - _npovoa via IM_
  * Bi-directional goodness with other to-do lists/GTD apps (ie. OmniFocus) - _nikjones via twitter_
+ * dial2do Support - _annarave_ via wikicomments
 
 = Stuff users weren't crazy about =
 
