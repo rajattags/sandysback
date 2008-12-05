@@ -46,13 +46,26 @@ class Event:
 	# For this release weekdayRepeat is always equal to None.
 	weekdayRepeat = '';
 
+
+	# Variable: userEmail
+	# *string:* (public) The id of the user who owns this event
+	#
+	# For this release weekdayRepeat is always equal to None.
+	userEmail = '';
+
+
+	# Variable: reminderSent
+	# *bool:* (public) True if a reminder has been sent for this event. False if otherwise.
+	reminderSent = '';
+
+
 	# Variable: id
 	# *int:* (public) The id of the event. This variable may be set
 	# to None. The only class which should read or write this 
 	# variable is <Database>. <Event> objects returned by
-	# Database.lookupEvents> will have id values, and
+	# <Database>'s searching methods will have id values and
 	# <Database.updateEvent> and <Database.deleteEvent>
-	# will look at <Event>s' id values.
+	# will look at id values.
 	id = '';
 
 
