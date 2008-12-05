@@ -118,9 +118,9 @@ UNIX _date_ FORMAT string. e.g.:
   * etc.
 
 
-|| *dailyDigest (timestamp)* ||
+|| *dailyDigest (int)* ||
 
-Time after midnight the user wants the daily digest sent (in UTC). Can be negative if the user wants the daily digest sent before midnight, UTC
+Number of seconds after midnight the user wants the daily digest sent (in UTC). Can be negative if the user wants the daily digest sent before midnight, UTC
 
 
 || *days4digest (int)* ||
