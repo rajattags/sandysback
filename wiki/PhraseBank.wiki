@@ -1,0 +1,67 @@
+#summary "Sandy's" personality phrasebanks to be called
+
+<wiki:toc max_depth="3" />
+
+------------------------------------------
+=Universals=
+_Note: These are word banks that cross more than one e-mail_
+===GREETING===  
+# Greeting 1
+===EARLY===
+# Phrase 1
+===AFTERNOON===
+# Phrase 1
+===EVENING===
+# Phrase 1
+===LATE===
+# Phrase 1
+===CLOSING===
+# Phrase 1
+===TIP===
+# Phrase 1
+-------------------------------------------------
+=”R” Response=
+===CAL1===
+# Phrase 1
+===CAL2===
+# Phrase 1
+===NOTIME===
+# Phrase 1
+===TODO1===
+# Phrase 1
+===TODO2===
+# Phrase 1
+===NODATE===
+# Phrase 1
+===ROTHER1===
+# Phrase 1
+===ROTHER2===
+# Phrase 1
+===ROTHER3===
+-------------------------------
+=2) "U" Response=
+===UDATE===
+# Phrase 1
+===UFORGET===
+# Phrase 1
+===UDONE===
+# Phrase 1
+===UTAG===
+# Phrase 1
+===UOTHER===
+# Phrase 1
+===UFAIL===
+# Phrase 1
+
+=3) Daily Digests=
+===DAY===
+# Phrase 1
+===NOCAL===
+# Phrase 1
+===NOTODO===
+------------------------------------------
+=4) Reminders=
+===REMINDER===
+# Phrase 1
+===RTIP===
+# Phrase 1
