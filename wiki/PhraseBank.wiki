@@ -6,18 +6,25 @@
 =Universals=
 _Note: These are word banks that cross more than one e-mail_
 ===GREETING===  
+_Greetings for any time of the day_
 # Greeting 1
 ===EARLY===
+_Morning greetings_
 # Phrase 1
 ===AFTERNOON===
+_Afternoon greetings_
 # Phrase 1
 ===EVENING===
+_Evening greetings_
 # Phrase 1
 ===LATE===
+_Late night greetings_
 # Phrase 1
 ===CLOSING===
+_Closing phrase of the email_
 # Phrase 1
 ===TIP===
+_Tips on how the assistant functions and how to make the most out of the service_
 # Phrase 1
 -------------------------------------------------
 =”R” Response=
