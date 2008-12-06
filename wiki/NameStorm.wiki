@@ -12,11 +12,11 @@
   # Ian
   # Dan
   # Gil
-  # Mac
   # Igor
-  # Jeeves
   # Hal
 
 =Agency Names=
   # The Agency
-  # Agency 2
+  # Virtual Agency
+  # Able Pros
+  # The Wired Help
