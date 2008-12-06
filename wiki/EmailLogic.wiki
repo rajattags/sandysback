@@ -49,23 +49,25 @@ _NOTE: Sandy just had a simple, standard "hi" - I call that "GREETING" in a diff
 
 ==Section 2: Successful Update Notification==
 *If it's an updated date/time:*
-  # *UDATE*: "I've rescheduled this for you"
-
+  # *UDATE1*: "I've rescheduled this for you" - single
+  # *UDATE2*: "I've rescheduled these for you" - multiple
 *If it's been forgotten:*
-  # *UFORGET*: "Consider this forgotten"
-
+  # *UFORGET1*: "Consider this forgotten" - single
+  # *UFORGET2*: "Consider these forgotten" - multiple
 *If it's been marked as done:*
-  # *UDONE*: "I've crossed this off the list"
-
+  # *UDONE1*: "I've crossed this off the list" - single
+  # *UDONE2*: "I've crossed these off the list" - multiple
 *If it's been tagged something else:*
-  # *UTAG*: "I've changed the tags on this item:"
-
+  # *UTAG1*: "I've changed the tags on this item:" - single
+  # *UTAG2*: "I've changed the tags on these items:" - multiple
 *All else:*
-  # *UOTHER*: "I've updated this for you"
+  # *UOTHER1*: "I've updated this for you" - single
+  # *UOTHER2*: "I've updated these for you" - multiple
 
 ==Section 2A: Unsuccessful Update Notification==
 *If it's unrecognized in the database:*
-  # *UFAIL*: "I couldn't seem to find this for you.  Have you deleted it?"
+  # *UFAIL1*: "I couldn't seem to find these for you.  Have you deleted them?" - single
+  # *UFAIL2*: "I couldn't seem to find this for you.  Have you deleted it?" - multiple
 
 ==Section 3: Closing==
   # *CLOSING*: Closing remark
