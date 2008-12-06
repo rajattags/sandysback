@@ -1,0 +1,9 @@
+#summary Ideas for names of the assistants and the "agency"
+
+=Assistant Names=
+  #Item 1
+  #Item 2
+
+=Agency Names=
+  #Agency 1
+  #Agency 2
