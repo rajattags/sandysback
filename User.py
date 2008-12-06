@@ -91,7 +91,7 @@ class User:
 	#   digestSent - <digestSent>
 	#   days4digest - <days4digest>
 	#   id - <id>
-	def __init__(name, fromEmail, toEmail, timeZone, dateFormat, timeFormat, dailyDigest, days4digest, id):
+	def __init__(self, name, fromEmail, toEmail, timeZone, dateFormat, timeFormat, dailyDigest, days4digest, id):
 
 
 	# Method: __del__
