@@ -32,8 +32,7 @@ _NOTE: Sandy just had a simple, standard "hi" - I call that "GREETING" in a diff
 *If it's something else tagged to remember/there is no date and time and todo at all:*
   # *ROTHER1*: "I made a note of this" - single item
   # *ROTHER2*: "I made a note of these" - multiple items
-  # *NOTIME:* If there's no time scheduled, just a date, it will list something like "I didn't see a time for this reminder, so I scheduled it for 12am. To set a time now, reply with: update #1 |OR 2+} |when to remind you|. For example: update #1 |OR 2+| 11/14/2008 at 2pm.)"
-  # *NODATE*: Then list something like "To make this note a todo or to assign any date to it, reply with: update #1 |when to remind you|. For example: update #1 11/14/2008 at 2pm."
+  # *ROTHER3*: Then list something like "To make this note a todo or to assign any date to it, reply with: update #1 |when to remind you|. For example: update #1 11/14/2008 at 2pm."
 
 ==Section 3: Closing==
   # *CLOSING*: Closing remark
