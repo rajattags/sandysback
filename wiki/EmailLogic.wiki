@@ -1,3 +1,5 @@
+#summary How "Sandy" composes her emails, and the phrasebanks to be called upon
+
 <wiki:toc max_depth="1" />
 
 ------------------------------------------
