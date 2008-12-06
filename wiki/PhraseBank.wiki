@@ -1,4 +1,4 @@
-#summary "Sandy's" personality phrasebanks to be called
+#summary Phrases that will make up the assistant's name.
 
 <wiki:toc max_depth="3" />
 
@@ -12,17 +12,20 @@ _Greetings for any time of the day_
   # Hi there, NAME!
   # Hey there, NAME!
   # How's it going, NAME?
+  # Que pasa, NAME?
 ===EARLY===
 _Morning greetings_
   # Good morning, NAME!
   # Top of the morning to you, NAME!
-  # I see you're off to an early start, NAME!
+  # Early start, huh, NAME?
+  # Time for another cup of coffee, NAME?
 ===AFTERNOON===
 _Afternoon greetings_
-  # Phrase 1
+  # Good afternoon, NAME!
+  # Almost lunchtime, NAME?
 ===EVENING===
 _Evening greetings_
-  # Phrase 1
+  # Good evening, NAME.
 ===LATE===
 _Late night greetings_
   # You're up late, NAME!
@@ -32,7 +35,7 @@ _Closing phrase of the email_
   # Sincerely,
   # Take care,
   # Let's do this!
-  # Feel free to let me know if I can do anything else!
+  # Let me know if I can do anything else!
   # Your loyal e-ssistant,
   # Always happy to help,
 ===TIP===
@@ -42,48 +45,68 @@ _Tips on how the assistant functions and how to make the most out of the service
 =”R” Response=
 ===CAL1===
 _Scheduled a single item_
-  # Phrase 1
+  # I put this on your calendar:
 ===CAL2===
 _Scheduled multiple items_
-  # Phrase 1
+  # I put these on your calendar:
 ===NOTIME===
 _The assistant reminds you that there was no time, just a date scheduled_
   # Phrase 1
 ===TODO1===
 _One to-do item recorded_
-  # Phrase 1
+  # I put this on your to-do list:
 ===TODO2===
 _Multiple to-do items recorded_
-  # Phrase 1
+  # I put these on your to-do list:
 ===NODATE===
 _No time or date recorded, so assistant scheduled it immediately_
   # Phrase 1
 ===ROTHER1===
 _Assistant makes note of something, no time, date or todo_
-  # Phrase 1
+  # I made a note of this for you:
 ===ROTHER2===
 _Assistant makes note of multiple things with no time, dates or todos
-  # Phrase 1
+  # I made notes of these for you:
 ===ROTHER3===
 _Assistant reminds you that there’s no time, date or todo and you can update it to include that_
 -------------------------------
 ="U" Response=
-===UDATE===
-_Assistant has rescheduled_
-  # Phrase 1
-===UFORGET===
-_Assistant has forgotten item_
-  # Phrase 1
-===UDONE===
+===UDATE1===
+_Assistant has rescheduled one item_
+  # I've rescheduled this for you:
+===UDATE2===
+_Assistant has rescheduled two or more items_
+  # I've rescheduled these for you:
+===UFORGET1===
+_Assistant has forgotten item one item_
+  # Consider this forgotten: 
+===UFORGET2===
+_Assistant has forgotten two or more items_
+  # Consider these forgotten: 
+===UDONE1===
 _Assistant has noted completion of item_
-  # Phrase 1
-===UTAG===
+  # I've crossed this off of your list: 
+  # I've marked this as done:
+===UDONE2===
+_Assistant has noted completion of item_
+  # I've crossed these off of your list: 
+  # I've marked these as done:
+===UTAG1===
 _Assistant has changed the tags of an item_
   # Phrase 1
-===UOTHER===
+===UTAG2===
+_Assistant has changed the tags of an item_
+  # Phrase 1
+===UOTHER1===
 _All else – other kid of change_
   # Phrase 1
-===UFAIL===
+===UOTHER2===
+_All else – other kid of change_
+  # Phrase 1
+===UFAIL1===
+_The update has failed_
+  # Phrase 1
+===UFAIL2===
 _The update has failed_
   # Phrase 1
 
