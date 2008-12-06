@@ -7,10 +7,16 @@
 _Note: These are word banks that cross more than one e-mail_
 ===GREETING===  
 _Greetings for any time of the day_
-  # Greeting 1
+  # Hi, NAME!
+  # Hello, NAME!
+  # Hi there, NAME!
+  # Hey there, NAME!
+  # How's it going, NAME?
 ===EARLY===
 _Morning greetings_
-  # Phrase 1
+  # Good morning, NAME!
+  # Top of the morning to you, NAME!
+  # I see you're off to an early start, NAME!
 ===AFTERNOON===
 _Afternoon greetings_
   # Phrase 1
@@ -19,10 +25,16 @@ _Evening greetings_
   # Phrase 1
 ===LATE===
 _Late night greetings_
-  # Phrase 1
+  # You're up late, NAME!
+  # Burning the midnight oil, NAME?
 ===CLOSING===
 _Closing phrase of the email_
-  # Phrase 1
+  # Sincerely,
+  # Take care,
+  # Let's do this!
+  # Feel free to let me know if I can do anything else!
+  # Your loyal e-ssistant,
+  # Always happy to help,
 ===TIP===
 _Tips on how the assistant functions and how to make the most out of the service_
   # Phrase 1
