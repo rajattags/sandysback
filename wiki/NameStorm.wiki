@@ -1,9 +1,22 @@
 #summary Ideas for names of the assistants and the "agency"
 
 =Assistant Names=
-  #Item 1
-  #Item 2
+*Female Names*
+  # Mia
+  # Amy
+  # Liz
+  # Coco
+
+*Male Names*
+  # James
+  # Ian
+  # Dan
+  # Gil
+  # Mac
+  # Igor
+  # Jeeves
+  # Hal
 
 =Agency Names=
-  #Agency 1
-  #Agency 2
+  # The Agency
+  # Agency 2
