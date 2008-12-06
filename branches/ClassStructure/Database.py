@@ -38,7 +38,7 @@ class Email:
 	# 
 	# Returns:
 	#   Nothing
-	def addEvent(event):
+	def addEvent(self, event):
 
 
 	# Method: textSearchEvents
@@ -53,7 +53,7 @@ class Email:
 	#
 	# Reuturns:
 	#   events - list of <Event> objects.
-	def textSearchEvents(pattern):
+	def textSearchEvents(self, pattern):
 
 
 	# Method: timeSearchEvents
@@ -67,7 +67,7 @@ class Email:
 	#
 	# Reuturns:
 	#   events - list of <Event> objects.
-	def timeSearchEvents(time1, time2, user=None):
+	def timeSearchEvents(self, time1, time2, user=None):
 
 
 	# Method: reminderTimeSearchEvents
@@ -80,7 +80,7 @@ class Email:
 	#
 	# Reuturns:
 	#   events - list of <Event> objects.
-	def reminderTimeSearchEvents(time, user=None):
+	def reminderTimeSearchEvents(self, time, user=None):
 
 
 	# Method: tagSearchEvents
@@ -93,7 +93,7 @@ class Email:
 	#
 	# Reuturns:
 	#   events - list of <Event> objects.
-	def tagSearchEvents(tags, any=false):
+	def tagSearchEvents(self, tags, any=false):
 
 
 	# Method: idSearchEvents
@@ -105,7 +105,7 @@ class Email:
 	# Reuturns:
 	#   event - <Event> object containing the information about the event we found.
 	#           event=None if no such event was found.
-	def idSearchEvents(id):
+	def idSearchEvents(self, id):
 
 
 	# Method: searchEvents
@@ -126,7 +126,7 @@ class Email:
 	#
 	# Reuturns:
 	#   events - list of <Event> objects.
-	def searchEvents(queries, any=false):
+	def searchEvents(self, queries, any=false):
 
 
 	# Method: updateEvent
@@ -140,7 +140,7 @@ class Email:
 	# 
 	# Returns:
 	#   Nothing
-	def updateEvent(event):
+	def updateEvent(self, event):
 
 
 	# Method: deleteEvent
@@ -151,7 +151,7 @@ class Email:
 	# 
 	# Returns:
 	#   Nothing
-	def deleteEvent(event):
+	def deleteEvent(self, event):
 
 
 	# Method: addUser
@@ -162,7 +162,7 @@ class Email:
 	# 
 	# Returns:
 	#   Nothing
-	def addUser(user):
+	def addUser(self, user):
 
 
 	# Method: emailSearchUser
@@ -174,7 +174,7 @@ class Email:
 	# Returns:
 	#   user - <User> object containing the information about the user we found.
 	#          user=None if no such user was found.
-	def emailSearchUser(user):
+	def emailSearchUser(self, user):
 
 
 	# Method: digestTimeSearchUsers
@@ -190,7 +190,7 @@ class Email:
 	#
 	# Reuturns:
 	#   users - list of <User> objects.
-	def digestTimeSearchUsers(time):
+	def digestTimeSearchUsers(self, time):
 	
 
 	# Method: updateUser
@@ -204,7 +204,7 @@ class Email:
 	# 
 	# Returns:
 	#   Nothing
-	def updateUser(user):
+	def updateUser(self, user):
 
 
 	# Method: deleteUser
@@ -215,7 +215,7 @@ class Email:
 	# 
 	# Returns:
 	#   Nothing
-	def deleteUser(user):
+	def deleteUser(self, user):
 
 
 
