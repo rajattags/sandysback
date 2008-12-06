@@ -39,7 +39,7 @@ _Note: These are word banks that cross more than one e-mail_
 # Phrase 1
 ===ROTHER3===
 -------------------------------
-=2) "U" Response=
+="U" Response=
 ===UDATE===
 # Phrase 1
 ===UFORGET===
@@ -53,14 +53,14 @@ _Note: These are word banks that cross more than one e-mail_
 ===UFAIL===
 # Phrase 1
 
-=3) Daily Digests=
+=Daily Digests=
 ===DAY===
 # Phrase 1
 ===NOCAL===
 # Phrase 1
 ===NOTODO===
 ------------------------------------------
-=4) Reminders=
+=Reminders=
 ===REMINDER===
 # Phrase 1
 ===RTIP===
