@@ -29,46 +29,67 @@ _Tips on how the assistant functions and how to make the most out of the service
 -------------------------------------------------
 =”R” Response=
 ===CAL1===
+_Scheduled a single item_
   # Phrase 1
 ===CAL2===
+_Scheduled multiple items_
   # Phrase 1
 ===NOTIME===
+_The assistant reminds you that there was no time, just a date scheduled_
   # Phrase 1
 ===TODO1===
+_One to-do item recorded_
   # Phrase 1
 ===TODO2===
+_Multiple to-do items recorded_
   # Phrase 1
 ===NODATE===
+_No time or date recorded, so assistant scheduled it immediately_
   # Phrase 1
 ===ROTHER1===
+_Assistant makes note of something, no time, date or todo_
   # Phrase 1
 ===ROTHER2===
+_Assistant makes note of multiple things with no time, dates or todos
   # Phrase 1
 ===ROTHER3===
+_Assistant reminds you that there’s no time, date or todo and you can update it to include that_
 -------------------------------
 ="U" Response=
 ===UDATE===
+_Assistant has rescheduled_
   # Phrase 1
 ===UFORGET===
+_Assistant has forgotten item_
   # Phrase 1
 ===UDONE===
+_Assistant has noted completion of item_
   # Phrase 1
 ===UTAG===
+_Assistant has changed the tags of an item_
   # Phrase 1
 ===UOTHER===
+_All else – other kid of change_
   # Phrase 1
 ===UFAIL===
+_The update has failed_
   # Phrase 1
 
 =Daily Digests=
 ===DAY===
+_Brief sentence before schedule is listed_
   # Phrase 1
 ===NOCAL===
+_No items on calendar today_
   # Phrase 1
 ===NOTODO===
+_No items on todo list today_
+  # Phrase 1
 ------------------------------------------
 =Reminders=
 ===REMINDER===
+_Reminder prompt_
   # Phrase 1
 ===RTIP===
+_Tip on how to “snooze” reminder_
   # Phrase 1
