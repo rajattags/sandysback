@@ -7,68 +7,68 @@
 _Note: These are word banks that cross more than one e-mail_
 ===GREETING===  
 _Greetings for any time of the day_
-# Greeting 1
+  # Greeting 1
 ===EARLY===
 _Morning greetings_
-# Phrase 1
+  # Phrase 1
 ===AFTERNOON===
 _Afternoon greetings_
-# Phrase 1
+  # Phrase 1
 ===EVENING===
 _Evening greetings_
-# Phrase 1
+  # Phrase 1
 ===LATE===
 _Late night greetings_
-# Phrase 1
+  # Phrase 1
 ===CLOSING===
 _Closing phrase of the email_
-# Phrase 1
+  # Phrase 1
 ===TIP===
 _Tips on how the assistant functions and how to make the most out of the service_
-# Phrase 1
+  # Phrase 1
 -------------------------------------------------
 =”R” Response=
 ===CAL1===
-# Phrase 1
+  # Phrase 1
 ===CAL2===
-# Phrase 1
+  # Phrase 1
 ===NOTIME===
-# Phrase 1
+  # Phrase 1
 ===TODO1===
-# Phrase 1
+  # Phrase 1
 ===TODO2===
-# Phrase 1
+  # Phrase 1
 ===NODATE===
-# Phrase 1
+  # Phrase 1
 ===ROTHER1===
-# Phrase 1
+  # Phrase 1
 ===ROTHER2===
-# Phrase 1
+  # Phrase 1
 ===ROTHER3===
 -------------------------------
 ="U" Response=
 ===UDATE===
-# Phrase 1
+  # Phrase 1
 ===UFORGET===
-# Phrase 1
+  # Phrase 1
 ===UDONE===
-# Phrase 1
+  # Phrase 1
 ===UTAG===
-# Phrase 1
+  # Phrase 1
 ===UOTHER===
-# Phrase 1
+  # Phrase 1
 ===UFAIL===
-# Phrase 1
+  # Phrase 1
 
 =Daily Digests=
 ===DAY===
-# Phrase 1
+  # Phrase 1
 ===NOCAL===
-# Phrase 1
+  # Phrase 1
 ===NOTODO===
 ------------------------------------------
 =Reminders=
 ===REMINDER===
-# Phrase 1
+  # Phrase 1
 ===RTIP===
-# Phrase 1
+  # Phrase 1
