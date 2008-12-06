@@ -1,6 +1,6 @@
 <wiki:toc max_depth="1" />
 
----- 
+------------------------------------------
 =Emails To Be Sent=
 ==Emails the Assistant Sends:==
   # "R" Response
@@ -32,7 +32,7 @@ _NOTE: Sandy just had a simple, standard "hi" - I call that "GREETING" in a diff
 *If it's something else tagged to remember/there is no date and time and todo at all:*
   # *ROTHER1*: "I made a note of this" - single item
   # *ROTHER2*: "I made a note of these" - multiple items
-  # *NOTIME: If there's no time scheduled, just a date, it will list something like "I didn't see a time for this reminder, so I scheduled it for 12am. To set a time now, reply with: update #1 |OR 2+} |when to remind you|. For example: update #1 |OR 2+| 11/14/2008 at 2pm.)"
+  # *NOTIME:* If there's no time scheduled, just a date, it will list something like "I didn't see a time for this reminder, so I scheduled it for 12am. To set a time now, reply with: update #1 |OR 2+} |when to remind you|. For example: update #1 |OR 2+| 11/14/2008 at 2pm.)"
   # *NODATE*: Then list something like "To make this note a todo or to assign any date to it, reply with: update #1 |when to remind you|. For example: update #1 11/14/2008 at 2pm."
 
 ==Section 3: Closing==
@@ -44,69 +44,69 @@ _NOTE: Sandy just had a simple, standard "hi" - I call that "GREETING" in a diff
 ------------------------------------------
 =2) "U" Response=
 ==Section 1: Greeting==
-1) GREETING: Simple "hi"
+  # *GREETING*: Simple "hi"
 
 ==Section 2: Successful Update Notification==
-===If it's an updated date/time:===
-1) UDATE: "I've rescheduled this for you"
+*If it's an updated date/time:*
+  # *UDATE*: "I've rescheduled this for you"
 
-===If it's been forgotten:===
-1) UFORGET: "Consider this forgotten"
+*If it's been forgotten:*
+  # *UFORGET*: "Consider this forgotten"
 
-===If it's been marked as done:===
-1) UDONE: "I've crossed this off the list"
+*If it's been marked as done:*
+  # *UDONE*: "I've crossed this off the list"
 
-===If it's been tagged something else:===
-1) UTAG: "I've changed the tags on this item:"
+*If it's been tagged something else:*
+  # *UTAG*: "I've changed the tags on this item:"
 
-===All else:===
-1) UOTHER: "I've updated this for you"
+*All else:*
+  # *UOTHER*: "I've updated this for you"
 
 ==Section 2A: Unsuccessful Update Notification==
-If it's unrecognized in the database:
-1) UFAIL: "I couldn't seem to find this for you.  Have you deleted it?"
+*If it's unrecognized in the database:*
+  # *UFAIL*: "I couldn't seem to find this for you.  Have you deleted it?"
 
 ==Section 3: Closing==
-1) CLOSING: Closing remark
+  # *CLOSING*: Closing remark
 
 ==Section 4: Tip==
-2) TIP: "Sandy" gives a tip
+  # *TIP*: "Sandy" gives a tip
 
 ------------------------------------------
 =3) Daily Digests=
 ==Section 1: Greeting==
-1) GREETING: Simple "hi"
+  # *GREETING*: Simple "hi"
 
 ==Section 2: Digest Briefing Sentence==
-1) DAY: "Here's how your day is looking"
+  # *DAY*: "Here's how your day is looking"
 
 ==Section 3: Listing Items==
-Note: When calendar items have been tagged with "todo," they're not double-listed, but rather, listed as "see #X, Y and Z" at the end of the "todo" section.
-Calendar events are listed as "WEEKDAY, DATE" at beginning of section, To-dos are just listed as "To-dos" at beginning of that section
+_Note: When calendar items have been tagged with "todo," they're not double-listed, but rather, listed as "see #X, Y and Z" at the end of the "todo" section.
+Calendar events are listed as "WEEKDAY, DATE" at beginning of section, To-dos are just listed as "To-dos" at beginning of that section_
 
-===If there are no events or to-dos scheduled for that day:===
-1) NOCAL: "Your schedule is free today.  Maybe you should take care of some errands?"
-2) NOTODOS:  "No errands to run today."
+*If there are no events or to-dos scheduled for that day:*
+  # *NOCAL*: "Your schedule is free today.  Maybe you should take care of some errands?"
+  # *NOTODOS*:  "No errands to run today."
 
 ==Section 4: Closing==
-1) CLOSING: Closing remark
+  # *CLOSING*: Closing remark
 
 ==Section 5: Tip==
-2) TIP: "Sandy" gives a tip
+  # *TIP*: "Sandy" gives a tip
 
 ------------------------------------------
 =4) Reminders=
 ==Section 1: Greeting==
-2) EARLY: Morning "hi"
-3) AFTERNOON: Afternoon "hi"
-4) EVENING: Evening "hi"
-5) LATE: Late "hi"
+  # *EARLY*: Morning "hi"
+  # *AFTERNOON*: Afternoon "hi"
+  # *EVENING*: Evening "hi"
+  # *LATE*: Late "hi"
 
 ==Section 2: Reminder==
-1) REMINDER: "You asked to be reminder about:"
+  # *REMINDER*: "You asked to be reminder about:"
 
 ==Section 3: Reminder Tip==
-1) RTIP: "To snooze this reminder until you get home, reply with: snooze until this evening"
+  # *RTIP*: "To snooze this reminder until you get home, reply with: snooze until this evening"
 
 ==Section 4: CLOSING==
-1) CLOSING: Closing remark
+  # *CLOSING*: Closing remark
