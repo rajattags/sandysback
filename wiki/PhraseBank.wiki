@@ -105,10 +105,12 @@ _All else – other kid of change_
   # Phrase 1
 ===UFAIL1===
 _The update has failed_
-  # Phrase 1
+  # Hey, I actually can't find this for you. Can you check this?:
+  # I wish I could help you with that, but I don't know what you mean. Could you tell me again?:
 ===UFAIL2===
 _The update has failed_
-  # Phrase 1
+  # Hey, I actually can't find these for you. Can you check them?:
+  # I wish I could help you with those, but I don't know what you mean. Could you tell me again?:
 
 =Daily Digests=
 ===DAY===
