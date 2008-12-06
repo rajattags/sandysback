@@ -3,43 +3,43 @@
 ---- 
 =Emails To Be Sent=
 ==Emails the Assistant Sends:==
-1) "R" Response
-2) "U" Response
-3) Daily Digests
-4) Reminders
-5) Unrecognized email address
+  # "R" Response
+  # "U" Response
+  # Daily Digests
+  # Reminders
+  # Unrecognized email address
 
 =1) "R" Response=
 ==Section 1: Greeting==
 _NOTE: Sandy just had a simple, standard "hi" - I call that "GREETING" in a different email response.  Either is fine, but a timely greeting would improve the "personality"
-# *EARLY*: Morning "hi"
-# *AFTERNOON*: Afternoon "hi"
-# *EVENING*: Evening "hi"
-# *LATE*: Late "hi"
+  # *EARLY*: Morning "hi"
+  # *AFTERNOON*: Afternoon "hi"
+  # *EVENING*: Evening "hi"
+  # *LATE*: Late "hi"
 
 ==Section 2: Notification of Success==
 *If there are calendar items:*
-# *CAL1*: "I scheduled this for you" - single item
-# *CAL2*: "I scheduled these for you" - multiple items
-# *NOTIME*: If there's no time scheduled, just a date, it will list something like "I didn't see a time for this reminder, so I scheduled it for 12am. To set a time now, reply with: update #1 |OR 2+} |when to remind you|. For example: update #1 |OR 2+| 11/14/2008 at 2pm.)"
+  # *CAL1*: "I scheduled this for you" - single item
+  # *CAL2*: "I scheduled these for you" - multiple items
+  # *NOTIME*: If there's no time scheduled, just a date, it will list something like "I didn't see a time for this reminder, so I scheduled it for 12am. To set a time now, reply with: update #1 |OR 2+} |when to remind you|. For example: update #1 |OR 2+| 11/14/2008 at 2pm.)"
 
 *If there are to-do items:*
-# *TODO1*: "I added this to your to-do list" - single item
-# *TODO2*: "I added these to your to-do list" - multiple items
-# *NOTIME*: If there's no time scheduled, just a date, it will list something like "I didn't see a time for this reminder, so I scheduled it for 12am. To set a time now, reply with: update #1 |OR 2+} |when to remind you|. For example: update #1 |OR 2+| 11/14/2008 at 2pm.)"
-# *NODATE*: If there's no date or time scheduled, list something like "I didn't see a date or time for this reminder, so I scheduled for it to be done as soon as possible. To set a date or time now, reply with: update #1 |when to remind you|. For example: update #1 11/14/2008 at 2pm"
+  # *TODO1*: "I added this to your to-do list" - single item
+  # *TODO2*: "I added these to your to-do list" - multiple items
+  # *NOTIME*: If there's no time scheduled, just a date, it will list something like "I didn't see a time for this reminder, so I scheduled it for 12am. To set a time now, reply with: update #1 |OR 2+} |when to remind you|. For example: update #1 |OR 2+| 11/14/2008 at 2pm.)"
+  # *NODATE*: If there's no date or time scheduled, list something like "I didn't see a date or time for this reminder, so I scheduled for it to be done as soon as possible. To set a date or time now, reply with: update #1 |when to remind you|. For example: update #1 11/14/2008 at 2pm"
 
 *If it's something else tagged to remember/there is no date and time and todo at all:*
-# *ROTHER1*: "I made a note of this" - single item
-# *ROTHER2*: "I made a note of these" - multiple items
-# *NOTIME: If there's no time scheduled, just a date, it will list something like "I didn't see a time for this reminder, so I scheduled it for 12am. To set a time now, reply with: update #1 |OR 2+} |when to remind you|. For example: update #1 |OR 2+| 11/14/2008 at 2pm.)"
-# *NODATE*: Then list something like "To make this note a todo or to assign any date to it, reply with: update #1 |when to remind you|. For example: update #1 11/14/2008 at 2pm."
+  # *ROTHER1*: "I made a note of this" - single item
+  # *ROTHER2*: "I made a note of these" - multiple items
+  # *NOTIME: If there's no time scheduled, just a date, it will list something like "I didn't see a time for this reminder, so I scheduled it for 12am. To set a time now, reply with: update #1 |OR 2+} |when to remind you|. For example: update #1 |OR 2+| 11/14/2008 at 2pm.)"
+  # *NODATE*: Then list something like "To make this note a todo or to assign any date to it, reply with: update #1 |when to remind you|. For example: update #1 11/14/2008 at 2pm."
 
 ==Section 3: Closing==
-# *CLOSING*: Closing remark
+  # *CLOSING*: Closing remark
 
 ==Section 4: Tip==
-# *TIP*: "Sandy" gives a tip
+  # *TIP*: "Sandy" gives a tip
 
 ------------------------------------------
 =2) "U" Response=
