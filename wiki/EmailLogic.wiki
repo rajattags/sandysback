@@ -90,6 +90,7 @@ Calendar events are listed as "WEEKDAY, DATE" at beginning of section, To-dos ar
 *If there are no events or to-dos scheduled for that day:*
   # *NOCAL*: "Your schedule is free today.  Maybe you should take care of some errands?"
   # *NOTODO*:  "No errands to run today."
+  # *NOCAL & NOTODO*: "Nothing scheduled and no errands today! Where's that book you've been meaning to finish?" 
 
 ==Section 4: Closing==
   # *CLOSING*: Closing remark
