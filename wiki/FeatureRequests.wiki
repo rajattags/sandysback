@@ -3,6 +3,8 @@
 
 *This list does not include standard or obvious features for the service. You can check those at the [http://code.google.com/p/sandysback/wiki/BareMinimums Bare Minimums] page.
 
+<wiki:toc max_depth="2" />
+
 = Feature Requests =
 
  * Mesh the export of data from old Sandy with the new system - _jdvalentine via twitter_
@@ -13,9 +15,17 @@
  * Multiple 'keywords' like "remind me to" and not just "r" or "remember" - _npovoa via IM_
  * Sandy to send emails on our behalf to other users - _annarave via IM_
  * Make sandy location aware: send you location, she sends your to-dos there - _nikjones via twitter_
+ * Ability to schedule the sending of the daily digests a few days in advanced - _CaspianXI via blog _
+ * Daily Digest aware of tags (anything @birthday shows in digests a week before the event) - _CaspianXI via blog_
+ * Change when the reminders occur in function of the tag - _nicole, Ian via blog (though I gave it a spin)_
+ * Natural speech 'pluggable' for other languages - _Velmont via blog_
+ * Daily Digests with  a "portfolio" look and feel, as if an assistant was really briefing you. - _Brad Levinson_
+ * Ability to edit things 'yourself' on the site - _Master Tax Guide via Blog_
+
 
 == 3rd party integration ==
 
+ * Twitter integration - _Nicole, Chester, Johnathan Lister, Rivets, DazzlinDonna, etc via blog_ 
  * Single-letter Twitter name (handy for using from a mobile) - _jdvalentine via twitter_
  * Send a 'remember email' that automatically shows up on a syndicated calendar -  _kerri9494 via blog_
  * SMS reminders - _jd via blog_
@@ -25,7 +35,16 @@
  * Conversational interaction with sandy via IM - _npovoa via IM_
  * Bi-directional goodness with other to-do lists/GTD apps (ie. OmniFocus) - _nikjones via twitter_
  * dial2do Support - _annarave_ via wikicomments
+ * Integration with Jott - _akinto via blog_
+ * Google Calendar Integration - _tanman via blog_
+ * Retrieve information as needed via a Cell Phone query with a less verbose reply. - _Anonymous via blog_
+ * Integration with Google Gears (it's really about the ability to work offline) - _Anonymous via blog_
+
 
 = Stuff users weren't crazy about =
 
- * Return notifications - _Erasmus via blog_
+ * Return notifications - _Erasmus, Nicole via blog_
+
+= Nice things to have in mind =
+
+I loved Sandy's realness--the way I could count on her to understand what I wanted, the charm with which she wished me well each morning, the reliable reminders of the minutiae of each day and week. I know that's not very technical, but it's what mattered most to me, and why Remember the Milk just isn't going to cut it for me. I really did want Sandy. - _ melyndahuskey via blog_
