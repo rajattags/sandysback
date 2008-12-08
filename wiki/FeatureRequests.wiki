@@ -12,7 +12,7 @@
 
 =The Big Issues=
 
-Here's a chart of what are the former Sandy user base greatest concerns:
+Here's a chart of the greatest concerns of Sandy's former user:
 
 http://chart.apis.google.com/chart?cht=p3&chd=t:13,7,16,13,18&chs=400x100&chl=Natural%20Language|SMS|3rd%20Party%20Integration|Reminders|Misc&nonsense=s.png
 
