@@ -5,7 +5,18 @@
 
 <wiki:toc max_depth="2" />
 
-= Feature Requests =
+=The Big Issues=
+
+Here's a graph of what are the former Sandy's user base greatest concerns:
+
+http://chart.apis.google.com/chart?cht=p3&chd=t:13,7,16,13,18&chs=400x100&chl=Natural%20Language|SMS|3rd%20Party%20Integration|Reminders|Misc&nonsense=s.png
+
+*Reminders* are a big issue (recurring events, daily digests configurable to be sent days in advanced),  *3rd party* integration it mostly twitter, followed closely by dial2do, *SMS* is all about input and queries though that medium and finally *Natural Language* refers to the Assistant's ability to parse a common email.
+
+
+= Feature Request List =
+
+== Native to the Assistant ==
 
  * Mesh the export of data from old Sandy with the new system - _jdvalentine via twitter_
  * CCing Sandy when I write e-mails to others (and create an event) - _jdvalentine via twitter_
@@ -40,11 +51,6 @@
  * Retrieve information as needed via a Cell Phone query with a less verbose reply. - _Anonymous, MagnoliaSouth via blog_
  * Integration with Google Gears (it's really about the ability to work offline) - _Anonymous via blog_
 
-
-
-= Stuff users weren't crazy about =
-
- * Return notifications - _Erasmus, Nicole via blog_
 
 = Nice things to have in mind =
 
