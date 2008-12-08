@@ -27,10 +27,8 @@ class Events(object):
    def __init__(self, store):
      """Start Events up with an already-connected Store."""
 
-   def add(self, event, user=None):
-     """Add to the store an entity.Event instance (maybe with a specified User).
-
-     When user is not specified, the event itself must contain a valid user."""
+   def add(self, event):
+     """Add to the store an entity.Event instance (with its specified User)."""
 
    def update(self, event):
      """Update an Event that must already be present in the store."""

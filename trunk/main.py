@@ -10,7 +10,12 @@ from google.appengine.ext import webapp
 import models
 import search
 
+import gae_store
+gstore = gae_store.Store()
+events = gae_store.Events(gstore)
+
 def current_user():
+  return gae_store.Users.getit()
   if 'USER' in os.environ:
     return users.User(os.environ['USER'] + '@sandysback.com')
   else:
@@ -59,7 +64,7 @@ def bare_respond(resp, content=''):
   resp.out.write('</form>')
 
 
-def store(phrase):
+def store_fact(phrase):
   """Store a phrase as a new fact.
 
   Args:
@@ -67,10 +72,16 @@ def store(phrase):
   Returns:
     a str confirming it's remembering the new fact
   """
-  entity = models.Fact()
-  entity.stuff = phrase
-  entity.user = current_user()
-  entity.put()
+  user = current_user()
+  tags = []
+  words = phrase.split()
+  for w in words:
+    if w.startswith('#'):
+      tags.append(w)
+      phrase.replace(w, '')
+  event = gae_store.Event(all_day=False, description=phrase,
+                          tags=tags, user=user)
+  events.add(event)
   logging.info('R %r', phrase)
   return "OK, remembering: %r" % phrase
 
@@ -83,9 +94,7 @@ def fetch(phrase):
   Returns:
     a list of str with all the facts containing all the words in phrase
   """
-  query = models.Fact.all().search(phrase).filter(
-              "user =", current_user())
-  res = [(f.stuff, f.key()) for f in query]
+  res = events.textSearch(phrase, current_user())
   logging.info('L %r -> %d', phrase, len(res))
   return res
 
@@ -98,8 +107,7 @@ def fetchall(phrase):
   Returns:
     a list of str with all the facts containing all the words in phrase
   """
-  query = models.Fact.all().search(phrase)
-  res = [(f.stuff, f.key()) for f in query]
+  res = events.textSearch(phrase, None)
   logging.info('*L %r -> %d', phrase, len(res))
   return res
 
@@ -132,7 +140,7 @@ def parse(phrase, req):
     first_word, rest = p, ''
   else:
     if first_word in ('r', 'remember', 'remind'):
-      return store(rest)
+      return store_fact(rest)
     elif first_word in ('l', 'lookup'):
       return fetch(rest)
     elif first_word in ('z', 'zaza'):
@@ -164,9 +172,9 @@ class MainPage(webapp.RequestHandler):
       if isinstance(result, list):
         if result:
           lines = ['Found %d:' % len(result)]
-          for i, (stuff, key) in enumerate(result):
+          for i, ev in enumerate(result):
             lines.append('<input type="hidden" name="ZZ%s" value="%s"> '
-                         '#%s %s' % (i+1, key, i+1, stuff))
+                         '#%s %s' % (i+1, ev.key(), i+1, ev.description))
           result = '<br>\n'.join(lines)
         else:
           result = "Oops, found no relevant facts."
