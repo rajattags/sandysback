@@ -21,7 +21,7 @@
  * Natural speech 'pluggable' for other languages - _Velmont via blog_
  * Daily Digests with  a "portfolio" look and feel, as if an assistant was really briefing you. - _Brad Levinson_
  * Ability to edit things 'yourself' on the site - _Master Tax Guide via Blog_
-
+ * The ability to use more than one email address - _ MagnoliaSouth via Blog_
 
 == 3rd party integration ==
 
@@ -37,8 +37,9 @@
  * dial2do Support - _annarave_ via wikicomments
  * Integration with Jott - _akinto via blog_
  * Google Calendar Integration - _tanman via blog_
- * Retrieve information as needed via a Cell Phone query with a less verbose reply. - _Anonymous via blog_
+ * Retrieve information as needed via a Cell Phone query with a less verbose reply. - _Anonymous, MagnoliaSouth via blog_
  * Integration with Google Gears (it's really about the ability to work offline) - _Anonymous via blog_
+
 
 
 = Stuff users weren't crazy about =
