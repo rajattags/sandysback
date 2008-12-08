@@ -26,7 +26,7 @@ The data was gathered through blog comments, Twits, IM's and email.
 
 == Native to the Assistant ==
 
- * Mesh the export of data from old Sandy with the new system - _jdvalentine via twitter_
+ * Mesh the export data from old Sandy with the new system - _jdvalentine via twitter_
  * CCing Sandy when I write e-mails to others (and create an event) - _jdvalentine via twitter_
  * User can chose the assistant name from a pool (feminine and masculine) - _npovoa via email_
  * Remind other Sandy users of to-dos (by SMS or that users preferred mode) - _annarave via email_
