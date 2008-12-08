@@ -16,7 +16,7 @@ Here's a chart of the greatest concerns of Sandy's former user base:
 
 http://chart.apis.google.com/chart?cht=p3&chd=t:13,7,16,13,18&chs=400x100&chl=Natural%20Language|SMS|3rd%20Party%20Integration|Reminders|Misc&nonsense=s.png
 
-*Reminders* are a big issue (recurring events, daily digests configurable to be sent days in advanced),  *3rd party* integration it mostly twitter, followed closely by google calendar, *SMS* is all about input and queries though that medium and finally *Natural Language* refers to the Assistant's ability to parse a common email.
+*Reminders* are a big issue (recurring events, daily digests configurable to be sent days in advanced),  *3rd party* integration is mostly twitter, followed closely by google calendar, *SMS* is all about input and queries though that medium and finally *Natural Language* refers to the Assistant's ability to parse a common email.
 
 The data was gathered through blog comments, Twits, IM's and email.
 
