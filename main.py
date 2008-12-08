@@ -7,14 +7,14 @@ from google.appengine.api import users
 from google.appengine.ext import db
 from google.appengine.ext import webapp
 
-import models
-import search
-
 import gae_store
 gstore = gae_store.Store()
 events = gae_store.Events(gstore)
 
+# TODO: fetch lists of events, not list of strings...!
+
 def current_user():
+  # TODO: actually implement users;-)
   return gae_store.Users.getit()
   if 'USER' in os.environ:
     return users.User(os.environ['USER'] + '@sandysback.com')
@@ -96,7 +96,7 @@ def fetch(phrase):
   """
   res = events.textSearch(phrase, current_user())
   logging.info('L %r -> %d', phrase, len(res))
-  return res
+  return [r.description for r in res]
 
 
 def fetchall(phrase):
@@ -109,7 +109,7 @@ def fetchall(phrase):
   """
   res = events.textSearch(phrase, None)
   logging.info('*L %r -> %d', phrase, len(res))
-  return res
+  return [r.description for r in res]
 
 
 def getkey(verb, rest, req):
@@ -172,9 +172,9 @@ class MainPage(webapp.RequestHandler):
       if isinstance(result, list):
         if result:
           lines = ['Found %d:' % len(result)]
-          for i, ev in enumerate(result):
+          for i, s in enumerate(result):
             lines.append('<input type="hidden" name="ZZ%s" value="%s"> '
-                         '#%s %s' % (i+1, ev.key(), i+1, ev.description))
+                         '#%s %s' % (i+1, 'nokey', i+1, s))
           result = '<br>\n'.join(lines)
         else:
           result = "Oops, found no relevant facts."
@@ -185,9 +185,7 @@ class BarePage(webapp.RequestHandler):
   def post(self):
     # create a fact
     stuff = self.request.get('create')
-    entity = models.Fact()
-    entity.stuff = stuff
-    entity.put()
+    store_fact(stuff)
     bare_respond(self.response, "Created fact: %s<br>" % stuff)
 
   def get(self):
@@ -195,12 +193,8 @@ class BarePage(webapp.RequestHandler):
     if not stuff:
       bare_respond(self.response, "What stuff are you looking for?")
     else:
-      res = []
-      n = 0
-      for result, _ in fetchall(stuff):
-         res.append(result)
-         n += 1
-      res.insert(0, "Found %d:" % n)
+      res = fetch(stuff)
+      res.insert(0, "Found %d:" % len(res))
       bare_respond(self.response, "<br>\n".join(res))
 
 
@@ -211,9 +205,8 @@ class MailPage(webapp.RequestHandler):
     recipient = self.request.GET.get("to", "")
     message = email.message_from_string(self.request.body)
     # create a fact recording the response
-    entity = models.Fact()
-    entity.stuff = 'mail from: %s to: %s msg: %s' % (sender, recipient, message)
-    entity.put()
+    stuff = 'mail from: %s to: %s msg: %s' % (sender, recipient, message)
+    store_fact(stuff)
     bare_respond(self.response, "Created fact: from mail<br>")
 
 
