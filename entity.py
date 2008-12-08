@@ -6,25 +6,32 @@ class Event(object):
 
    highest_id = 999999    # highest event ID used so far
 
-   def __init__(self, reminder_time, repeat_interval, event_time, all_day,
-                name, description, tags, user):
+   def __init__(self, reminder_time=None, repeat_interval=None, event_time=None,
+                all_day=False, name=None, description=None,
+                tags=None, user=None, reminder_sent=False):
      """Initialize an event; fields can be None, or...:
      reminder_time: timestamp (seconds since epoch) at which to send reminder
      repeat_interval: seconds after reminder_time before next reminder (if any)
-     event_time: timestamp FOR which reminded is being sent
+     event_time: timestamp FOR which reminder is being sent
      all_day: bool, True for all-day events
-     name, description: two strings
+     name, description: two strings (description is the only mandatory field!)
      tags: list of strings
      user: entity.User instance owning this event.
+     reminder_sent:   bool, True if the reminder was sent
 
-     The event also has two more instance attributes:
+     The event also has one internally-generated instance attribute:
      theid:           an arbitrary unique ID
-     reminder_sent:   timestamp when a reminder was last sent, or None
+
+     All the time-related attributes can be None to make a so-called ``event''
+     which is actually a "fact" to remember (no reminders scheduled, etc).
      """
+     assert description is not None
+     if tags is None:
+       tags = []
      Event.highest_id += 1
      self.theid = Event.highest_id
      self.__dict__.update(locals())
-     self.reminder_sent = None
+     self.reminder_sent = False
 
 
 class User(object):
@@ -50,6 +57,13 @@ class User(object):
      """
      User.highest_id += 1
      self.theid = User.highest_id
-     self.__dict__.update(locals())
-     self.digest_sent = None
+     self.name = name
+     self.from_email = from_email
+     self.to_email = from_email
+     self.timezone_name = timezone_name
+     self.date_format = date_format
+     self.time_format = time_format
+     self.daily_digest_offset = daily_digest_offset
+     self.days_in_digest = days_in_digest
+     self.digest_sent = False
 
