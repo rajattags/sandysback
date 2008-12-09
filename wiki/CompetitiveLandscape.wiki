@@ -53,15 +53,15 @@ So we can look for good ideas and avoid bad ones, as well as to help evaluate wh
 
 An initial dump of sites. These will be added in above adjacent to the aspects of the mental model they line up with.
 
+It would be nice to go through these to try and find nice features, feature overlaps, etc etc.
 
-
-http://remindr.info/
-reqall
-deadline
-highrise
-backpack
-rtm
-ping.fm
-google calendar
-gmail
-gmail tasks
+ * [http://remindr.info Remindr.info] - guided reminder. Input limited to web frontend, output to twitter, email, SMS (I think), or XMPP. No sense of membership.
+ * [http://www.reqall.com reQall]
+ * [http://deadlineapp.com/ Deadline]
+ * [http://www.highrisehq.com Highrise]
+ * [http://www.backpackit.com/ Backpack]
+ * [http://www.rememberthemilk.com/ Remember the Milk]
+ * [http://ping.fm ping.fm]
+ * Google Calendar
+ * Gmail
+ * Gmail tasks
