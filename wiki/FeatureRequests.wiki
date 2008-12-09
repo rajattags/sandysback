@@ -41,6 +41,7 @@ The data was gathered through blog comments, Twits, IM's and email.
  * Daily Digests with  a "portfolio" look and feel, as if an assistant was really briefing you. - _Brad Levinson_
  * Ability to edit things 'yourself' on the site - _Master Tax Guide via Blog_
  * The ability to use more than one email address - _ MagnoliaSouth via Blog_
+ * Old Sandy didn't process emails with attachments, the new one should. - _Matt via blog_
 
 == 3rd party integration ==
 
