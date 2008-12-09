@@ -1,4 +1,5 @@
-#summary One-sentence summary of this page.
+#summary Archived from http://iwantsandy.com/help/guide
+#labels Deprecated
 
 ==About Me==
 
