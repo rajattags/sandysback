@@ -24,8 +24,11 @@ class Console(object):
     def run(self):
         print "Sandy console. Try 'inspect' to inspect what micro-parsers are available."
         input = None
-        while (input is not 'exit'):
+        while (True):
             input = raw_input('>> ')
+            if input.strip() in ['exit', 'quit']:
+                print "Bye"
+                return
             self.do_command(input)
 
 
