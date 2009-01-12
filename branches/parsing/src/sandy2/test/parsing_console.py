@@ -22,7 +22,7 @@ class Console(object):
 
 
     def run(self):
-        print "Sandy console. Try 'inspect' to inspect what micro-parsers are available."
+        print "Sandy console. Try 'help' to inspect what words I understand available."
         input = None
         while (True):
             input = raw_input('>> ')
@@ -41,11 +41,12 @@ class Console(object):
 
 class ConsoleUserFinder(IMicroParser):
 
-    """Consumes: input_medium"""
-    """Produces: user"""
+    """Consumes: input_medium
+    Produces: user
+    """
     def __init__(self):
-        self.id = self.__class__.__name__
-        self.is_followed_by = ['abstract_user_finding']
+        self.is_preceeded_by = ['input_medium']
+        self.is_followed_by = ['user']
 
     def micro_parse(self, parser, metadata):
         if metadata.setdefault('input_medium', 'stdin') == 'stdin':
@@ -53,24 +54,27 @@ class ConsoleUserFinder(IMicroParser):
 
 class ConsoleOutputSetter(IMicroParser):
 
-    """Consumes: input_medium"""
-    """Produces: reply_medium"""
+    """Consumes: input_medium
+    Produces: reply_medium
+    """
 
     def __init__(self):
-        self.id = self.__class__.__name__
-        self.is_followed_by = ['abstract_output_format']
+        #self.is_preceeded_by = ['input_medium']
+        self.is_followed_by = ['reply_medium']
 
     def micro_parse(self, parser, metadata):
         if metadata.setdefault('input_medium', 'stdin') == 'stdin':
             metadata.setdefault('reply_medium', 'stdout')
 
 class InspectCommand(IMicroParser):
-    """Consumes: tokens"""
-    """Produces: reply_message"""
+    """Short description: Display all micro-parsers in order
+    """
+    """Consumes: tokens
+    Produces: reply_message"""
 
-    """Short description: Display all micro-parsers in order"""
     def __init__(self):
         self.is_preceeded_by = ['tokens']
+        self.is_followed_by = ['reply_message']
 
     def micro_parse(self, parser, metadata):
         first_word = metadata['tokens'][0]
@@ -85,27 +89,29 @@ class InspectCommand(IMicroParser):
             metadata['reply_message'] = "Parsers:\n\t-> " +join(replies, " \n\t-> ")
 
 class HelpCommand(IMicroParser):
-
+    """Short description: illustrative, but useless command
+    """
+    """Long description : """
     """Consumes: tokens, user"""
     """Produces: reply_message"""
 
-    """Short description: illustrative, but useless command"""
-    """Long description : """
-
     def __init__(self):
-        self.is_preceeded_by = ['abstract_user_finding', 'tokens']
+        self.is_preceeded_by = ['user', 'tokens']
+        self.is_followed_by = ['reply_message']
 
     def micro_parse(self, parser, metadata):
         first_word = metadata['tokens'][0]
         if first_word in ['help', 'h', '?']:
-            metadata['reply_message'] = join(["Zoinks, ", metadata['user'], "! It's the ghost"], '')
+            replies = filter(lambda s: s.find("Short description") >= 0, map(lambda s: s.id + ":\n\t\t\t" + s.__doc__, parser.micro_parsers))
+            metadata['reply_message'] = "Available commands:\n\t-> " +join(replies, " \n\t-> ")
 
 class LogCommand(IMicroParser):
 
     """Consumes: tokens"""
 
     def __init__(self):
-        self.is_preceeded_by = ['abstract_user_finding', 'tokens']
+        self.is_preceeded_by = ['user', 'tokens', 'incoming_message']
+        self.is_followed_by = ['reply_message']
 
     def micro_parse(self, parser, metadata):
         first_word = metadata['tokens'][0]
@@ -119,7 +125,8 @@ class TokenizerParser(IMicroParser):
     """Produces: tokens"""
 
     def __init__(self):
-        self.id = 'tokens'
+        self.is_preceeded_by = ['incoming_message']
+        self.is_followed_by = ['tokens']
 
     def micro_parse(self, parse, metadata):
         metadata['tokens'] = map(lambda s: s.strip().lower(), metadata['incoming_message'].split(' '))
@@ -129,8 +136,8 @@ class TagExtractor(IMicroParser):
     """Produces: tags"""
 
     def __init__(self):
-        self.id = 'tags'
         self.is_preceeded_by = ['tokens']
+        self.is_followed_by = ['tags']
 
     def micro_parse(self, parser, metadata):
         tags = filter(lambda s: s.startswith('#'), metadata['tokens'])
