@@ -6,26 +6,11 @@ and actions supplied externally.
 
 
 class Parser(object):
-    """Variable: micro_parsers
-
-    An ordered list of micro-parsers. These will be sorted according to their
-    dependencies.
-    """
-    micro_parsers = []
-
-    """Variable: micro_parsers
-
-    The list of actions that are to be run after all micro-parsers have been
-    run.
-    """
-    actions = []
-
-    _ordered = False
 
     def __init__(self, micro_parsers=[], actions=[]):
         self.actions = actions
         self.micro_parsers = micro_parsers
-        self._ordered = False
+        self.__ordered = False
 
     def parse_message(self, message):
         return self.parse({"incoming_message": message, "incoming_medium": "stdin"})
@@ -40,13 +25,13 @@ class Parser(object):
         micro-parsers: for example this may be simple pattern matching,
         parts-of-speech tagging, or a context free grammar parser.
         """
-        if not self._ordered:
+        if not self.__ordered:
             # we only need to do the sort when we've added more micro-parsers.
             self.micro_parsers = topological_sort(self.micro_parsers)
-            self._ordered = True
+            self.__ordered = True
 
         for t in self.micro_parsers:
-            if self._can_continue(metadata):
+            if self.__can_continue(metadata):
                 # todo: check that this method actually exists.
                 t.micro_parse(self, metadata)
             else:
@@ -54,7 +39,7 @@ class Parser(object):
 
         return metadata
 
-    def _can_continue(self, metadata):
+    def __can_continue(self, metadata):
         """The STOP key should be used to prematurely terminate processing of a 
         command. 
         
@@ -67,7 +52,7 @@ class Parser(object):
         """Perform the actions in the order they were registered.
         """
         for a in self.actions:
-            if self._can_continue(metadata):
+            if self.__can_continue(metadata):
                 # todo: check that this method actually exists.
                 a.perform_action(self, metadata)
             else:
@@ -75,7 +60,7 @@ class Parser(object):
 
     def add_micro_parser(self, new_parser):
         self.micro_parsers.append(new_parser)
-        self.ordered = False
+        self.__ordered = False
 
     def add_action(self, new_action):
         self.actions.append(new_action)
