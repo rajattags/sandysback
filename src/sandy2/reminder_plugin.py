@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 class SchedulerPlugin(IPlugin):
     """Plugin to support scheduling messages to be parsed at a later date.
     
-    Special tags @weekly, @daily, @hourly are do what they should do, although the behaviour of messages which give these tags with a datum time is undefined. 
+    Special tags #weekly, #daily, #hourly are do what they should do, although the behaviour of messages which give these tags with a datum time is undefined. 
     These frequency tags can be combined, though I am not sure of the utility (or even bug-free-ness) of this in its current implementation.
 
     The interplay between timezones: 
