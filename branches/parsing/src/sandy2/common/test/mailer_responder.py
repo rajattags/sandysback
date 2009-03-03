@@ -6,8 +6,8 @@ class SimpleResponder:
         pass
     def run(self):
         parser = MailParser(email_address=['zander.alpha@gmail.com', 'zander.alpha@googlemail.com'], fullname='Zander The Wonderhorse')
-        sender = MailSender(username='zander.alpha@googlemail.com', password='OADTPCgd2gP6Vo1zr8uHqgeRTX')
-        receiver = MailListener(username='zander.alpha@googlemail.com', password='OADTPCgd2gP6Vo1zr8uHqgeRTX')
+        sender = MailSender(username='zander.alpha@googlemail.com', password='PASSWORD_THAT_ISNT_THIS')
+        receiver = MailListener(username='zander.alpha@googlemail.com', password='PASSWORD_THAT_ISNT_THIS')
         
         
         for txt in receiver.run():
