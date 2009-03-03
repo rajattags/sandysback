@@ -1,0 +1,19 @@
+remind == remember
+
+presence of a date indicates that a reminder is sent.
+
+frequency tags can be added to make a recurring event.
+
+reminders can be switched off.
+
+replies to a given mail continues a conversation.
+e.g.
+ * snooze for 2 days.
+ * update -@daily
+
+
+
+date detection
+ * parsedatetime seems like it may be very useful for us.
+  * http://code.google.com/p/parsedatetime/
+
