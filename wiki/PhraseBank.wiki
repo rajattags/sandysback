@@ -108,9 +108,9 @@ _The update has failed_
   # Hey, I actually can't find this for you. Can you check this?:
   # I wish I could help you with that, but I don't know what you mean. Could you tell me again?:
 ===UFAIL2===
-_The update has failed_
-  # Hey, I actually can't find these for you. Can you check them?:
-  # I wish I could help you with those, but I don't know what you mean. Could you tell me again?:
+_The update has failed because a command was not recognized_
+  # No Idea what you just said!:
+  # Sorry, I can't figure out what you want me to do:
 
 =Daily Digests=
 ===DAY===
