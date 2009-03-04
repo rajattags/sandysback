@@ -104,7 +104,7 @@ _All else – other kid of change_
 _All else – other kid of change_
   # Phrase 1
 ===UFAIL1===
-_The update has failed_
+_The update has failed because event was not found_
   # Hey, I actually can't find this for you. Can you check this?:
   # I wish I could help you with that, but I don't know what you mean. Could you tell me again?:
 ===UFAIL2===
