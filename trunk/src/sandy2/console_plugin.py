@@ -65,7 +65,7 @@ class ConsoleOutputSetter(IMicroParser):
             metadata.setdefault('reminder_medium', 'stdout')
 
 class ConsoleOutputReply(IMessageAction):
-    def perform_action(self, parser, metadata):        
+    def perform_action(self, metadata):        
         medium = metadata['output_medium']
         if medium == 'stdout':
             message = metadata['output_message']
