@@ -26,10 +26,14 @@ class Parser(object):
         parts-of-speech tagging, or a context free grammar parser.
         """
 
+        metadata = Message(metadata)
         for t in self.micro_parsers:
             if self.__can_continue(metadata):
                 # todo: check that this method actually exists.
-                t.micro_parse(metadata)
+                try:
+                    t.micro_parse(metadata)
+                except BaseException, e:
+                    print "Exception %s: in %s" % (e, t)
             else:
                 break
             if self.debug:
@@ -53,7 +57,7 @@ class Parser(object):
         for a in self.actions:
             if self.__can_continue(metadata):
                 # todo: check that this method actually exists.
-                a.perform_action(self, metadata)
+                a.perform_action(metadata)
             else:
                 break
 
@@ -80,5 +84,39 @@ class IMessageAction(INode):
 
     """An interface to let plugins add extra actions to the parser."""
 
-    def perform_action(self, parser, metadata):
+    def perform_action(self, metadata):
         """This single method should perform any action that should occur after all parsing has completed."""
+        
+class Message:
+    
+    def __init__(self, metadata):
+        self._metadata = metadata
+        self._non_message = {}
+        
+    def __setitem__(self, key, value):
+        self._metadata[key] = value
+    
+    def __getitem__(self, key):
+        return self._metadata.get(key, None)
+        
+    def has_key(self, key):
+        return self._metadata.has_key(key)
+    
+    def get(self, key, default=None):
+        return self._metadata.get(key, default)
+    
+    def __setattr__(self, key, value):
+        if key.startswith('_'):
+            self.__dict__[key] = value
+        else:
+            self._non_message[key] = value
+            
+    def __getattr__(self, key):
+        if key.startswith('_'):
+            return self.__dict__[key]
+        else:
+            return self._non_message[key]
+        
+    def setdefault(self, key, default):
+        return self._metadata.setdefault(key, default)
+            
