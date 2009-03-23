@@ -3,13 +3,18 @@
 from string import join
 
 # Modify the following to support other databases:
-import sqlite3
 
-dbmod = sqlite3
 # for standard sql
-# get_tables = "show tables"  # how to get a list of tables
+import MySQLdb
+dbmod = MySQLdb
+get_tables = "show tables"  # how to get a list of tables
+# see also http://mysql-python.sourceforge.net/MySQLdb.html
+
+
 # for sqlite3
-get_tables = "SELECT name FROM sqlite_master WHERE type = 'table'"
+#import sqlite3
+#dbmod = sqlite3
+#get_tables = "SELECT name FROM sqlite_master WHERE type = 'table'"
 
 import types
 
@@ -59,7 +64,7 @@ class Table:
         self.db = db
         self.name = join(tables, ', ')
         self.db_cursor = None
-        self._debug = True
+        self._debug = False
         self._styles = ["Cursor", "SSCursor"]
         self._sort = ""
         self._search = ""
@@ -114,7 +119,6 @@ class Table:
         if hasattr(dbmod, "cursors"):
             for style in self._styles:
                 if hasattr(dbmod.cursors, style):
-                    print style
                     self.db_cursor = self.db.obj.cursor(getattr(dbmod.cursors, style))
                     break
         else: 
@@ -123,9 +127,10 @@ class Table:
     def __query(self, q, data=None):
         if not self.db_cursor:
             self.__new_cursor()
+        if dbmod.paramstyle is 'format':
+            q = q.replace('?', '%s')
         if self._debug:
             print "Query: %s ; ==> %s" % (q, data)
-         
         return self.db_cursor.execute(q, data)
 
     def __getitem__(self, item):
@@ -233,10 +238,9 @@ class DB:
     for you and provide the existing copy of a table, if one already exists.
     """
     def __init__(self, *args, **kw):
-    	self.debug = True
+    	self.debug = False
         self._tables = {}
-        if args:
-            self.connect(*args, **kw)
+        self.connect(*args, **kw)
 
     def tables(self):
         """Return all tables.
@@ -276,17 +280,23 @@ class DB:
         
         The table columns must be an ordered list or tuple which will be passed directly to a CREATE TABLE statement.
         """
-        query = "create table %s (%s)" % (tablename, join(cols, ', '))  
+        query = "create table %s (%s);" % (tablename, join(cols, ', '))  
+        if (self.debug):
+        	print query
+        if tablename not in self.tables():
+            self.obj.cursor().execute(query)
+        return self.table(tablename)
+        
+    def drop_table(self, tablename):
+        query = "drop table %s;" % (tablename)
         if (self.debug):
         	print query
         self.obj.cursor().execute(query)
-        return self.table(tablename)
-        
-        
 
     def connect(self, *args, **kw):
         """Connect to a database."""
         self.obj = dbmod.connect(*args, **kw)
+        
 
 if __name__ == "__main__":
     print "This file should not be executed"
