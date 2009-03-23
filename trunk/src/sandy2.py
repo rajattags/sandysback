@@ -18,12 +18,12 @@ class Sandy2(object):
         
     def run(self):
         plugins = [ 
-#                   DatabasePlugin(),
+                   DatabasePlugin(),
                    SchedulerPlugin(),
                    ConsolePlugin(),
                    BasicMicroParsingPlugin(),
                    IntrospectionPlugin(),
-#                   GmailPlugin(),
+                   GmailPlugin(),
                 ]
         
         PluginSystem(plugins).start()
