@@ -98,11 +98,11 @@ class CyclicDependencyError(Exception):
 class DependencyList:
     """List capable of accepting INodes and other objects.
     """
-    def __init__(self, nodes=[], configure=None):
+    def __init__(self, nodes=None, configure=None):
         """Take an initial list of nodes, and a callable method. The callable is applied to each of the nodes on addition to the list.
         """
-        self.nodes = nodes
-        self.is_ordered = False
+        self._nodes = nodes if nodes else list()
+        self._is_ordered = False
         if configure is not None and callable(configure):
             self.configure = configure
             for node in nodes:
@@ -111,10 +111,11 @@ class DependencyList:
             self.configure = self.__nop
         
     def __iter__(self):
-        if not self.is_ordered:
-            self.nodes = topological_sort(self.nodes)
-            self.is_ordered = True
-        return self.nodes.__iter__()    
+        if not self._is_ordered:
+            new_nodes = topological_sort(self._nodes)
+            self._nodes = new_nodes
+            self._is_ordered = True
+        return self._nodes.__iter__()    
     
     def __nop(self, obj):
         pass
@@ -122,9 +123,9 @@ class DependencyList:
     def append(self, obj):
         """Append an object to the list.
         """
-        self.is_ordered = False
+        self._is_ordered = False
         self.configure(obj)
-        self.nodes.append(obj)
+        self._nodes.append(obj)
     
     def extend(self, obj):
         """Append an object to the list.
@@ -132,4 +133,4 @@ class DependencyList:
         self.append(obj)
         
     def __str__(self):
-        return str(self.nodes)
+        return str(self._nodes)
