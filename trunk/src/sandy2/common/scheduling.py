@@ -1,6 +1,5 @@
 
-from threading import Timer
-from threading import Lock
+from threading import Timer, Lock
 
 
 from datetime import datetime, timedelta
@@ -78,7 +77,7 @@ class Scheduler(object):
             self.lock.release()
 
     def __str__(self):
-        return "Next scheduled job is for: %s.\n%s" % (self.current_job_seconds_abs, self.job_store)
+        return "Next scheduled job is for: %s.\n%s" % (_s_to_dt(self.current_job_seconds_abs), self.job_store)
 
     def __process_jobs(self):
         # do two things in this method:
@@ -140,6 +139,10 @@ def _to_dt(time_obj):
 def _dt_to_s(dt):
     return _td_to_s(dt - datetime.min)
 
+def _s_to_dt(s):
+    return str(datetime.min + timedelta(0, s)) if s <= 9000 * 365 * 24 * 3600 else "never"
+
+
 def _td_to_s(td):
     total = td.days * 24 * 3600
     # total now in seconds
@@ -192,7 +195,7 @@ class InMemoryJobStore(IJobStore):
             return min
 
     def __str__(self):
-        return "\n->".join(map(lambda t: str(t), self.jobs))
+        return "\n->".join(map(lambda t: str(_s_to_dt(t[0])), self.jobs))
 
 class SchedulerDisposedException(Exception):
     def __init__(self):
