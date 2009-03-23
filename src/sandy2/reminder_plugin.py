@@ -24,13 +24,13 @@ class SchedulerPlugin(IPlugin):
 
     
     def __init__(self, parser=None, db=None):
+        self.is_followed_by = ['scheduling']
         self.parser = parser
         self.db = db
     
     def start_up(self):
         self.parser.add_micro_parser(TimedReminder())
         self.parser.add_micro_parser(FrequencyTagDetector())
-        self.parser.add_micro_parser(OutputSelector())
         schedule_action = ScheduleAction()
         self.parser.add_action(schedule_action)
         self.parser.add_micro_parser(SchedulerInspectionCommand(schedule_action.scheduler))
@@ -41,7 +41,8 @@ class TimedReminder(IMicroParser):
     """Short description: try some dates"""
     def __init__(self):
         self.is_preceeded_by = ['incoming_message', 'tz_offset', 'message_datetime_local']
-        self.is_followed_by = ['event_datetime', 'reminder', 'head']
+        self.is_followed_by = ['event_datetime', 'is_reminder', 'head']
+        self.constants = None
 
     def micro_parse(self, metadata):
         
@@ -50,15 +51,21 @@ class TimedReminder(IMicroParser):
 
         datetime_local = metadata.get('message_datetime_local', datetime.now())
         
+        if self.constants is None:
+            self.constants = pdc.Constants()
+            self.constants.DOWParseStyle = +1 # if today is "Friday", "Tuesday" is this Tuesday, not last Tuesday.
+            self.constants.CurrentDOWParseStyle = False # if today is Friday, "Friday" is next Friday, not today.
+
         dt = self.startTime(metadata['incoming_message'], sourceTime=datetime_local)
         if dt:
             # make sure we take into account the timezone, where appropriate.
             metadata['event_datetime'] = dt + td
         # reminder is set to true by the action below.
-        metadata.setdefault('reminder', False)
+        if not metadata.has_key('is_reminder'):
+            metadata['is_reminder'] = False
             
-    def startTime(self, msg, constants=pdc.Constants(), sourceTime=None):
-        calendar = pdt.Calendar(constants)
+    def startTime(self, msg, sourceTime=None):
+        calendar = pdt.Calendar(self.constants)
         (start, end, valid) = calendar.evalRanges(msg, sourceTime=sourceTime)
         
         if valid:
@@ -77,44 +84,6 @@ class TimedReminder(IMicroParser):
         
         return None
 
-class OutputSelector(IMicroParser):
-    
-    def __init__(self):
-        self.is_preceeded_by = ['reply_message', 'reminder_message', 'reminder', 'event_datetime', 'tags', 'special_tags']
-        self.is_followed_by = ['output_message', 'output_medium']
-       
-    def micro_parse(self, metadata):
-        tags = filter(lambda x : x in ('noconfirm', 'noreminder'), metadata['tags'])
-        metadata['tags'] = filter(lambda x : x in tags, metadata['tags'])
-        metadata['special_tags'].extend(tags)
-        
-        
-        metadata['output_message'] = ""
-        metadata['output_medium'] = ""
-        
-        # check we actually have some input.
-        if len(metadata.get('incoming_message', "")) == 0:
-            return
-        elif not metadata.get('reply_message', None):
-                metadata['output_message'] = "I'm not sure what to do with your request"
-                metadata['output_medium'] = metadata['reply_medium']
-                return
-        
-        if metadata.get('reminder', None):
-            # if this is a reminder, 
-            if 'noreminder' not in tags:
-                metadata['output_message'] = metadata['reminder_message']
-                metadata['output_medium'] = metadata['reminder_medium']
-        else:
-            # this is a reply, and we probably need to talk back.
-            metadata['output_medium'] = metadata['reply_medium']
-            if metadata.get('event_datetime', None):
-                # a reply to a schedule request.
-                if 'noconfirm' not in tags:
-                    metadata['output_message'] = "Confirm: %s (at %s)" % (metadata['incoming_message'], metadata['event_datetime'])
-            else:
-                metadata['output_message'] = metadata['reply_message']
-                
 class SchedulerInspectionCommand(IMicroParser):
     """Short description: Display the state of the schedule
     """
@@ -170,14 +139,12 @@ class ScheduleAction(IMessageAction):
         self.parser = None
         
     def resubmit_jobs(self, message, medium, user):
-        metadata = {"incoming_message" : message, "reminder": True, "input_medium": medium, "user_id": user}
+        metadata = {"incoming_message" : message, 'is_reminder': True, "input_medium": medium, "user_id": user}
         self.parser.parse(metadata)
         self.parser.perform_actions(metadata)
         
-    def perform_action(self, parser, metadata):
-        self.parser = parser
-
-        if not metadata['reminder']:
+    def perform_action(self, metadata):
+        if not metadata['is_reminder']:
             # first time round, we schedule a new event.
             dt = metadata.get('event_datetime', None)
             if dt:
