@@ -1,15 +1,12 @@
 import unittest
 
 
-from sandy2.common.di import Injector
 from sandy2.transports.mailer import MailParser, MailSender, MailListener
 
 class MailTest(unittest.TestCase):
     
     def setUp(self):
-        self.parser = MailParser()
-        di = Injector(my_email_address = 'zander.alpha@gmail.com', my_email_name = 'Zander the Wonder Horse')
-        di.configure(self.parser)
+        self.parser = MailParser(email_address = 'zander.alpha@gmail.com', fullname = 'Zander the Wonder Horse')
         pass
     
     def testParsing(self):
@@ -26,6 +23,7 @@ class MailTest(unittest.TestCase):
         message = self.parser.parse_raw_mail(self.reply())
         print self.parser.find_metadata(message)
 
+
     def testOutput(self):
         message = self.parser.parse_raw_mail(self.message())
         metadata = self.parser.find_metadata(message)
@@ -33,6 +31,15 @@ class MailTest(unittest.TestCase):
         reply = self.parser.construct_email(metadata, 'reminder_message')
 
         print str(reply)
+        print "=" * 80
+        message = self.parser.parse_raw_mail(self.more_message())
+        m = self.parser.find_metadata(message)
+        print m
+        m['reminder_message'] = 'Reminder text'
+        reply = self.parser.construct_email(m, 'reminder_message')
+        print str(reply)
+        
+        
 
     def xtestSend(self):
         message = self.parser.parse_raw_mail(self.message())
@@ -269,5 +276,60 @@ font-family:Arial'>Extension: 6076</span></font><o:p></o:p></p>
 <P></P></P></SPAN></BODY></html>
 ------_=_NextPart_001_01C98CFA.16D83FBD--"""
 
+
+    def more_message(self):
+        return """From jameshugman@gmail.com Tue Mar 10 16:24:28 2009
+Delivered-To: zander.alpha@gmail.com
+Received: by 10.223.121.204 with SMTP id i12cs92938far; Tue, 10 Mar 2009
+ 16:24:28 -0700 (PDT)
+Received: by 10.216.36.209 with SMTP id w59mr3097492wea.67.1236727468333;
+ Tue, 10 Mar 2009 16:24:28 -0700 (PDT)
+Return-Path: <jameshugman@gmail.com>
+Received: from ey-out-2122.google.com (ey-out-2122.google.com
+ [74.125.78.25]) by mx.google.com with ESMTP id
+ i7si10702653nfh.26.2009.03.10.16.24.27; Tue, 10 Mar 2009 16:24:27 -0700
+ (PDT)
+Received-SPF: pass (google.com: domain of jameshugman@gmail.com designates
+ 74.125.78.25 as permitted sender) client-ip=74.125.78.25;
+Authentication-Results: mx.google.com; spf=pass (google.com: domain of
+ jameshugman@gmail.com designates 74.125.78.25 as permitted sender)
+ smtp.mail=jameshugman@gmail.com; dkim=pass (test mode) header.i=@gmail.com
+Received: by ey-out-2122.google.com with SMTP id 9so315402eyd.9 for
+ <zander.alpha@gmail.com>; Tue, 10 Mar 2009 16:24:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=gamma;
+ h=domainkey-signature:received:received:subject:from:to:content-type
+ :organization:date:message-id:mime-version:x-mailer
+ :content-transfer-encoding;
+ bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
+ b=Cp/fHg4vPXuJbIVUAAPFs8EY6R1gWgsQBnUHRNba8bh/+p3TixXtQKcgWrsKIReb0p
+ 7Du+Hjv5SR5maMh2RFW5pTi716d10T+iSpIinJ0SkhbJgKABAzwWH55RhNJGiXgIiuCa
+ SZOsP0oyEfODaCbFertE9sSaFzGaSyLQaDPKc=
+DomainKey-Signature: a=rsa-sha1; c=nofws; d=gmail.com; s=gamma;
+ h=subject:from:to:content-type:organization:date:message-id
+ :mime-version:x-mailer:content-transfer-encoding;
+ b=KDUHYffY3eIYEtiqoycUkqqw7VJhjyRUiZdWRlteV/hc+5PzXuMSy5pTBFHymkDnS5
+ UsmXjps+b6bunEMk8jnCpXZO+irSrVzOOHlLigsiDa2aiH3dGCXU0GzsNJm+xPzWg0Xu
+ fmG0pltiOuXpJ0Hy8LKrssEuoxxu1Y8GsFwXE=
+Received: by 10.216.48.1 with SMTP id u1mr3078752web.189.1236727467064;
+ Tue, 10 Mar 2009 16:24:27 -0700 (PDT)
+Return-Path: <jameshugman@gmail.com>
+Received: from ?192.168.1.75?
+ (host81-151-177-13.range81-151.btcentralplus.com [81.151.177.13]) by
+ mx.google.com with ESMTPS id k7sm4688110nfh.75.2009.03.10.16.24.26
+ (version=SSLv3 cipher=RC4-MD5); Tue, 10 Mar 2009 16:24:26 -0700 (PDT)
+Subject: time at 10am tomorrow
+From: James Hugman <jameshugman@gmail.com>
+To: zander.alpha@gmail.com
+Content-Type: text/plain
+Organization: hugman.it ltd
+Date: Tue, 10 Mar 2009 23:23:24 +0000
+Message-Id: <1236727404.20638.4.camel@silverback>
+Mime-Version: 1.0
+X-Mailer: Evolution 2.24.3 
+X-Evolution-Source: imap://zander.alpha@imap.gmail.com/
+Content-Transfer-Encoding: 8bit
+
+
+"""
 if __name__ == '__main__':
     unittest.main()
