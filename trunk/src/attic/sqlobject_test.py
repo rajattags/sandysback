@@ -1,5 +1,5 @@
 import unittest
-from sandy2.common.sqlobject import DB, Table
+from attic.sqlobject import DB, Table
 
 
 class DBTest(unittest.TestCase):
