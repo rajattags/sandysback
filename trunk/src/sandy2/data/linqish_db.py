@@ -1,4 +1,4 @@
-from sandy2.data.linqish import Schema, SQLOperand, SQLCommand, SQLQuery
+from sandy2.data.linqish import Schema, SQLOperand, SQLCommand, SQLQuery, SQLTriple
 from threading import BoundedSemaphore
 
 # for standard sql
@@ -87,6 +87,20 @@ class Transaction:
         cursor.close()
         self.close()
         return tablenames
+    
+    def next_id(self, column):
+        # we should be a bit more careful about the harvesting
+        # auto-incrementing
+        if isinstance(column, SQLTriple):
+            q = self.schema.select(column).max().from_(column._pair)
+            results = self.execute(q)
+            for r in results:
+                mx = r[0]
+                if mx is not None:
+                    return mx + 1
+            return 0
+        else:
+            raise TypeError("Must use an SQLTriple to specify a column")
     
 class Results:
 
