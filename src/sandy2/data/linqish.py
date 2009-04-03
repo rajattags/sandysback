@@ -206,6 +206,9 @@ types_to_sqltypes = {
                      str : "VARCHAR(100)", 
                      int : "INTEGER",
                      bool: "BOOLEAN",
+                     "text" : "VARCHAR(1024)", 
+                     long: "BIGINT",
+                     float: "DOUBLE",
                      }
 
 class SQLColumn:
@@ -216,7 +219,7 @@ class SQLColumn:
         self(type)
         
     def __call__(self, type):
-        self._type = types_to_sqltypes.get(type)
+        self._type = types_to_sqltypes.get(type) if types_to_sqltypes.has_key(type) else str(type)
         return self
         
     def constraint(self, constraint):
@@ -235,7 +238,9 @@ class SQLColumn:
         return self.constraint("NOT NULL")
         
     def auto_increment(self):
-        return self.constraint("AUTOINCREMENT")
+#        return self.constraint("AUTOINCREMENT")
+        # not sure how this works yet,,,
+        return self
         
     def __map__(self):
         return {
@@ -410,6 +415,10 @@ class SQLQuery(SQLCommand):
         self._column_mask = "MAX(%s)"
         return self
     
+    def min(self):
+        self._column_mask = "MIN(%s)"
+        return self
+    
     def count(self):
         self._column_mask = "COUNT(%s)"
         return self
@@ -430,7 +439,30 @@ class SQLQuery(SQLCommand):
             map['where'] = self._where_ % {'condition': str(self._condition)}
         
         return map
-
+    
+    def order_by(self, *columns):
+        if len(columns):
+            order = "ORDER BY " + ", ".join([str(c) for c in columns])
+            if self._postamble:
+                self._postamble = "%s %s" % (order, self._postamble)
+            else: 
+                self._postamble = order
+        return self
+    
+    def ascending(self):
+        return self._ordering("ASC")
+        
+    def descending(self):
+        return self._ordering("DESC")
+        
+    def _ordering(self, order):
+        if self._postamble:
+            self._postamble = "%s %s" % (self._postamble, order)
+        else: 
+            self.postamble = order
+            
+        return self
+                
     def _select_count(self):
         map = self.__map__()
         map['columns'] = "COUNT(*)"
