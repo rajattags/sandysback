@@ -72,6 +72,10 @@ class MailParser(object):
 #          o the date sent, including timezone
         date_tuple = email.utils.parsedate_tz(message['Date'])
         tz_offset = date_tuple[9]
+        if not tz_offset:
+            tz_offset = 0
+        if tz_offset > 12 or tz_offset < -12:
+            tz_offset /= 3600
         datetime_local = datetime(*date_tuple[0:6])
 
         metadata['message_datetime_local'] = datetime_local
@@ -97,7 +101,7 @@ class MailParser(object):
         message['From'] = email.utils.formataddr((self.my_email_name, self.my_email_address[0]))
         prefix = 'REMINDER: ' if metadata.get('is_reminder', False) else 'Re: '
         message['Subject'] = prefix + metadata[self.prefix + 'subject']
-        
+        # TODO add Date header.
         return message
     
     def run(self):
