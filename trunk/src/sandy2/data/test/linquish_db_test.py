@@ -67,16 +67,16 @@ class LinqishDBTest(unittest.TestCase):
         schema = Schema()
         u = schema.user('u')
         
-        query = schema.insert_into(u)
         
         u.id = self.max_id + 1
         u.fullname = 'Seamus Hugman'
         u.reminder_medium = "email"
         
-        print query
+        query = schema.insert_into(u)
         
         results = self.t.execute(query)
         
+        print query
         print "Insert results = " + str(results)
         
         
