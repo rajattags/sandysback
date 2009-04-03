@@ -19,8 +19,7 @@ class IntrospectionPlugin(IPlugin):
 
 
 class InspectCommand(IMicroParser):
-    """Short description: Display all micro-parsers in order
-    """
+    """inspect\t:- Display all micro-parsers in order"""
     """Consumes: tokens
     Produces: reply_message"""
 
@@ -57,8 +56,7 @@ class MetadataCommand(IMicroParser):
             
 
 class HelpCommand(IMicroParser):
-    """Short description: illustrative, but useless command
-    """
+    """help, h, ?\t:- Gives this message."""
     """Long description : """
     """Consumes: tokens, user"""
     """Produces: reply_message"""
@@ -72,14 +70,16 @@ class HelpCommand(IMicroParser):
         first_word = metadata['first_word']
         if first_word in ['help', 'h', '?']:
             mp = filter(lambda mp: mp.__doc__, self.parser.micro_parsers)
-            replies = filter(lambda s: s.find("Short description") >= 0, map(lambda s: "".join((s.id, ":\n\t\t\t", s.__doc__)), mp))
+            prefix = ":- "
+            replies = filter(lambda s: s.find(prefix) >= 0, (s.__doc__ for s in mp))
             msg = "Available commands:\n\t-> " +join(replies, " \n\t-> ")
             metadata['reply_message'] = msg
             metadata['reminder_message'] = msg
 
 class TimeCommand(IMicroParser):
 
-    """Short description: Timing command"""
+    """time \t:- displays the time at the time of delivery. 
+            e.g. time at 11pm #hourly"""
     def __init__(self):
         self.is_preceeded_by = ['first_word']
         self.is_followed_by = ['reply_message', 'reminder_message']
@@ -88,12 +88,13 @@ class TimeCommand(IMicroParser):
         from datetime import datetime
         first_word = metadata['first_word']
         if first_word in ['time', 'date']:
-            msg = str(datetime.now())
+            msg = str(datetime.utcnow())
             metadata['reply_message'] = msg
             metadata['reminder_message'] = msg
 
 class EchoCommand(IMicroParser):
-    """Short description: echos exactly what was typed.
+    """remind, r <something> <time>:- I'll remind you of <something> at a specific time. 
+            e.g. remind me to pack my SCIP book 8am tomorrow.
     """
     def __init__(self):
         self.is_preceeded_by = ['incoming_message', 'first_word']
@@ -101,7 +102,7 @@ class EchoCommand(IMicroParser):
 
     def micro_parse(self, metadata):
         first_word = metadata['first_word']
-        if first_word in ['echo']:
+        if first_word in ['echo', 'remind', 'r']:
             metadata['reply_message'] = metadata['incoming_message']
             metadata['reminder_message'] = metadata['incoming_message']
             
