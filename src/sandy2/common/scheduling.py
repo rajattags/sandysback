@@ -5,7 +5,9 @@ from threading import Timer, Lock
 from datetime import datetime, timedelta
 
 
-
+    
+def _nop(*args, **kw):
+    return args
 
 class Scheduler(object):
     """Schedule calls to the same callable, but with different parameters. 
@@ -28,7 +30,7 @@ class Scheduler(object):
         scheduler.schedule(tomorrow, "id", "me", "wake me up")
     """
     
-    def __init__(self, function, job_store=None):
+    def __init__(self, function=_nop, job_store=None):
         """The callable to be parameterized, and the job store. If no job store is provided, then an InMemoryJobStore is used.
         Any scheduled jobs in the job store will be re-scheduled. If there are any jobs in the job store which have not been run yet, 
         but were scheduled to run before we were started, this will run those jobs immediately. 
@@ -38,10 +40,17 @@ class Scheduler(object):
         self.current_job_seconds_abs = _dt_to_s(datetime.max)
         self.callable = function
         self.job_store = job_store if job_store else InMemoryJobStore()
-        self.is_disposed = False
+        
         self.lock = Lock()
         # make sure we don't have any more jobs waiting
-        self.__reschedule()
+        self.start()
+
+    def start(self):
+        self.is_disposed = False
+        if hasattr(self.job_store, 'start') and callable(self.job_store.start):
+            self.job_store.start()
+        return self.__reschedule()
+
 
     def __manage_timer(self, seconds_abs):
         if seconds_abs is None:
@@ -49,12 +58,14 @@ class Scheduler(object):
             self.current_job_seconds_abs = _dt_to_s(datetime.max)
             return
        
-        now_seconds_abs = _dt_to_s(datetime.now())
+        now_seconds_abs = _dt_to_s(datetime.utcnow())
         if self.current_job_seconds_abs > seconds_abs or now_seconds_abs > self.current_job_seconds_abs:
             if self.current_job_timer is not None:
                 self.current_job_timer.cancel()
             
             seconds_rel = seconds_abs - now_seconds_abs
+            if seconds_rel < 0:
+                seconds_rel = 0
             self.current_job_timer = Timer(seconds_rel, self.__process_jobs)
             self.current_job_seconds_abs = seconds_abs
             self.current_job_timer.start()
@@ -77,7 +88,7 @@ class Scheduler(object):
             self.lock.release()
 
     def __str__(self):
-        return "Next scheduled job is for: %s.\n%s" % (_s_to_dt(self.current_job_seconds_abs), self.job_store)
+        return "Next scheduled job is for: %s.\n%s" % (_s_to_dt(self.current_job_seconds_abs), str(self.job_store))
 
     def __process_jobs(self):
         # do two things in this method:
@@ -92,20 +103,22 @@ class Scheduler(object):
             self.__reschedule()
             
             # collect all the jobs to do now.
-            ready_jobs = self.job_store.find_ready_jobs(_dt_to_s(datetime.now()))
+            ready_jobs = self.job_store.find_ready_jobs(_dt_to_s(datetime.utcnow()))
             
             # TODO what happens if someone pulls the plug, now??
             
+            for job_kw in ready_jobs:
+                try:
+                    self.callable(*job_kw[1], **job_kw[2])
+                except Exception, e:
+                    # shouldn't crash the scheduler
+                    print e
+                    pass
+        # if speed is really important to us, then we should consider farming the jobs 
+        # off to other threads.
         finally:
             self.lock.release()
         
-        for job_kw in ready_jobs:
-            try:
-                self.callable(*job_kw[1], **job_kw[2])
-            except Exception, e:
-                # shouldn't crash the scheduler
-                print e
-                pass
             
     def __reschedule(self):
         if not self.is_disposed:
@@ -134,7 +147,7 @@ def _to_dt(time_obj):
         time_obj = timedelta(0, time_obj)
         t = type(time_obj)            
     if t is timedelta:
-        return datetime.now() + time_obj
+        return datetime.utcnow() + time_obj
 
 def _dt_to_s(dt):
     return _td_to_s(dt - datetime.min)
@@ -153,7 +166,7 @@ def _td_to_s(td):
     
 def _t_to_td(t):
     return datetime.today() + t
-    
+
 
 class IJobStore(object):
     
@@ -163,7 +176,7 @@ class IJobStore(object):
     def store_job(self, abs_seconds, *job_kw, **job_kwargs):
         pass
     
-    def find_new_jobs(self, now):
+    def find_ready_jobs(self, now):
         pass
     
     def find_next_earliest_time(self):
