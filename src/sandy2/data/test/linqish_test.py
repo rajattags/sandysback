@@ -54,6 +54,8 @@ class LinqishTest(unittest.TestCase):
         
         print command._select_count()
         
+        print s.select(p.title).from_(p).where((p.author == 'JZ')).order_by(p.sales).descending()
+        
     def testUpdate(self):
         schema = Schema()
         
