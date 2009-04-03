@@ -10,7 +10,7 @@ class DatabasePlugin(IPlugin):
         self.parser = parser
         
     def install(self):
-        self.db = DB(user="root", passwd="NOT_REALLY", db="zander_test_database", host="127.0.0.1", port=3306)
+        self.db = DB(user="root", passwd="MySQL-root-0", db="zander_test_database", host="127.0.0.1", port=3306)
         # we should check if we already created this. 
         self.properties['database'] = self.db
         
@@ -24,7 +24,8 @@ class DatabasePlugin(IPlugin):
         table.id(int).primary_key()
         table.timezone_offset(int)
         table.reminder_medium(str)
-            
+        
+        tx = None
         if (user._name not in self.db.get_tablenames()):
             tx = self.db.new_transaction()
             tx.execute(table)
@@ -32,8 +33,6 @@ class DatabasePlugin(IPlugin):
             tx.close()
         else:
             print "Table %s already exists. Not re-creating." % (user._name)
-        
-#        self.db.create_table('user', 'id integer primary key', 'fullname varchar(100)', 'timezone_offset integer', 'reminder_medium varchar(10)')
 
 
         
@@ -44,7 +43,7 @@ class DatabasePlugin(IPlugin):
 
 class NewUserCreator(IMicroParser):
     def __init__(self, db=None, parser=None):
-        self.is_preceeded_by = ['user', 'user_id', 'reply_message', 'db']
+        self.is_preceeded_by = ['user', 'user_id', 'reply_message', 'db', 'tx']
         self.is_followed_by = ['create_new_user']
         self.database = db
 
@@ -87,9 +86,6 @@ class NewUserCreator(IMicroParser):
                 
                 rows = metadata.tx.execute(query)
                 
-#                rows = self.database.from_('user').\
-#                                        select('fullname', 'reminder_medium', 'timezone_offset').\
-#                                        where('id = ?', user_id)
 
                 for (name, medium, tz_offset) in rows:
                     metadata['fullname'] = name
@@ -100,7 +96,7 @@ class NewUserCreator(IMicroParser):
 class NewTransactionAnnotater(IMicroParser):
     
     def __init__(self, db=None):
-        self.is_followed_by = ['db']
+        self.is_followed_by = ['tx']
         self.database = db
     
     def micro_parse(self, metadata):
