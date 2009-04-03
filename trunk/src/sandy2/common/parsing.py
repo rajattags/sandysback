@@ -117,6 +117,9 @@ class Message:
         else:
             return self._non_message[key]
         
+    def items(self):
+        return self._non_message.items()
+        
     def setdefault(self, key, default):
         return self._metadata.setdefault(key, default)
             
