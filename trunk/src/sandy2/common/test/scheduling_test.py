@@ -69,7 +69,7 @@ class SchedulingTest(unittest.TestCase):
     def schedule(self, seconds, id, expected=None):
         if not expected:
             expected = seconds
-        dt = datetime.now() + timedelta(seconds=seconds)
+        dt = datetime.utcnow() + timedelta(seconds=seconds)
 #        dt = seconds
         self.sched.schedule(dt, id, expected)
     
@@ -78,12 +78,12 @@ class WaitForIt:
         self.execution_count = 0
         self.running = True
         self.epsilon = 0.02
-        self.datum = datetime.now()
+        self.datum = datetime.utcnow()
         
     
     def end(self, id, seconds):
         self.execution_count += 1
-        checkpoint = datetime.now() - self.datum
+        checkpoint = datetime.utcnow() - self.datum
         seconds_test = sandy2.common.scheduling._td_to_s(checkpoint)
         print seconds_test, ": id =", id, "; wait =", seconds
         if seconds > 0:
@@ -93,7 +93,7 @@ class WaitForIt:
     
     def wait(self):
         self.running = True
-        self.datum = datetime.now()
+        self.datum = datetime.utcnow()
         while self.running:
             time.sleep(1)
         

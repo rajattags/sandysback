@@ -71,7 +71,7 @@ class EmailPluginTest(unittest.TestCase):
         event = self.event()
         event['email_id'] = 'fred@freda.net'
         event['fullname'] = 'Fred Flintstone'
-        event['message_datetime_local'] = datetime.now()
+        event['message_datetime_local'] = datetime.utcnow()
         event['incoming_message'] = 'help in 3 seconds'
         
         event = self.parser.parse(event)
