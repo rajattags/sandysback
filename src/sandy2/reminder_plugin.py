@@ -27,14 +27,21 @@ class SchedulerPlugin(IPlugin):
         self.is_followed_by = ['scheduling']
         self.parser = parser
         self.db = db
+        self.properties = None
+    
+    def install(self):
+        self.scheduler = Scheduler()
+        self.properties['scheduler'] = self.scheduler
     
     def start_up(self):
         self.parser.add_micro_parser(TimedReminder())
         self.parser.add_micro_parser(FrequencyTagDetector())
-        schedule_action = ScheduleAction()
+        schedule_action = ScheduleAction(scheduler=self.scheduler)
         self.parser.add_action(schedule_action)
         self.parser.add_micro_parser(SchedulerInspectionCommand(schedule_action.scheduler))
     
+    def run(self):
+        self.scheduler.start()
 
 class TimedReminder(IMicroParser):
 
@@ -49,7 +56,7 @@ class TimedReminder(IMicroParser):
         tz_offset = metadata.get('tz_offset', 0)
         td = timedelta(0, 3600 * tz_offset)
 
-        datetime_local = metadata.get('message_datetime_local', datetime.now())
+        datetime_local = metadata.get('message_datetime_local', datetime.utcnow())
         
         if self.constants is None:
             self.constants = pdc.Constants()
@@ -59,7 +66,7 @@ class TimedReminder(IMicroParser):
         dt = self.startTime(metadata['incoming_message'], sourceTime=datetime_local)
         if dt:
             # make sure we take into account the timezone, where appropriate.
-            metadata['event_datetime'] = dt + td
+            metadata['event_datetime'] = dt - td
         # reminder is set to true by the action below.
         if not metadata.has_key('is_reminder'):
             metadata['is_reminder'] = False
@@ -133,15 +140,12 @@ def _dt(start):
 
 class ScheduleAction(IMessageAction):
     
-    def __init__(self):
+    def __init__(self, scheduler=Scheduler(), parser=None):
         # need a database job_store here..
-        self.scheduler = Scheduler(self.resubmit_jobs)
+        self.scheduler = scheduler
+        scheduler.callable = self.resubmit_jobs
         self.parser = None
-        
-    def resubmit_jobs(self, message, medium, user):
-        metadata = {"incoming_message" : message, 'is_reminder': True, "input_medium": medium, "user_id": user}
-        self.parser.parse(metadata)
-        self.parser.perform_actions(metadata)
+
         
     def perform_action(self, metadata):
         if not metadata['is_reminder']:
@@ -156,8 +160,14 @@ class ScheduleAction(IMessageAction):
             for td in fset:
                 self.__schedule(td, metadata)
     
-    def __schedule(self, t, metadata):
+    def __schedule(self, time, metadata):
         message = metadata['incoming_message']
         medium = metadata['input_medium']
         user = metadata['user_id']
-        self.scheduler.schedule(t, message, medium, user)
+        message_id = metadata.get('message_id', -255)
+        self.scheduler.schedule(time, message_id, message, medium, user)
+        
+    def resubmit_jobs(self, message_id, message, medium, user_id):
+        metadata = {"incoming_message" : message, 'is_reminder': True, "input_medium": medium, "user_id": user_id, 'message_id': message_id}
+        self.parser.parse(metadata)
+        self.parser.perform_actions(metadata)
