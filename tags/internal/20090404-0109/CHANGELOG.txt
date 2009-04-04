@@ -1,0 +1,7 @@
+2009-03-23.
+Commit adds functionality for use of an email transport. Specifically, gmail (TLS hardcoded).
+Also change of database to MySQL
+Also change of database abstraction to use a more linq like module. This is no doubt completely re-inventing the python wheel, though I still feel ORM is overkill.
+
+2009-03-03.
+Initial commit in trunk. Console based parser, date parsing, scheduled messages. Plugin based, though not eggs.
