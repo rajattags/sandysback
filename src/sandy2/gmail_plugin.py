@@ -9,6 +9,8 @@ from sandy2.transports.mailer import MailListener, MailParser, MailSender
 gmail_username = "assistant@example.com"
 gmail_password = "INSERT_REAL_PASSWORD"
 
+agent_name = "Zander"
+
 class GmailPlugin(IPlugin):
     def __init__(self, parser=None, db=None, properties={}):
         self.is_preceeded_by = ['database']
@@ -16,7 +18,7 @@ class GmailPlugin(IPlugin):
         self.parser = parser
         self.database = db
         self.properties = properties
-        self.mail_parser = MailParser(email_address=gmail_username, fullname="Zander")
+        self.mail_parser = MailParser(email_address=gmail_username, fullname=agent_name)
         self.mail_sender = MailSender(username=gmail_username, password=gmail_password)
         
     def install(self):
