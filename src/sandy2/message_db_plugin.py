@@ -3,6 +3,8 @@ from sandy2.data.linqish import Schema
 from sandy2.common.plugins import IPlugin
 from sandy2.common.parsing import IMicroParser
 
+text_length = 1024
+
 class MessageDBPlugin(IPlugin):
     def __init__(self, properties={}, parser=None, db=None):
         self.is_preceeded_by = ['database']
@@ -20,7 +22,7 @@ class MessageDBPlugin(IPlugin):
             
             table.user_id(int)
             table.id(int).primary_key().auto_increment()
-            table.text(str).not_null()
+            table.text("text(%s)" % (text_length)).not_null()
             table.input_medium(str).not_null()
         
             tx = self.database.new_transaction()
@@ -53,8 +55,10 @@ class MessageRecorder(IMicroParser):
             m.id = message_id
             m.user_id = metadata['user_id']
             m.input_medium = metadata['input_medium']
-            m.text = metadata['incoming_message']
-                
+            text = metadata['incoming_message']
+            if len(text) >= text_length - 1:
+                text = text[:text_length - 1]
+            m.text = text 
             tx.execute(schema.insert_into(m))
             
             metadata['message_id'] = message_id  
