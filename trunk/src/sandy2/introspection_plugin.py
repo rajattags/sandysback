@@ -94,7 +94,8 @@ class TimeCommand(IMicroParser):
 
 class EchoCommand(IMicroParser):
     """remind, r <something> <time>:- I'll remind you of <something> at a specific time. 
-            e.g. remind me to pack my SCIP book 8am tomorrow.
+            e.g. remind me to pack my SICP book 8am tomorrow.
+            e.g. remind me to move the car in 10 minutes
     """
     def __init__(self):
         self.is_preceeded_by = ['incoming_message', 'first_word']
