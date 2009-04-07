@@ -54,7 +54,10 @@ class TimedReminder(IMicroParser):
     def micro_parse(self, metadata):
         
         tz_offset = metadata.get('tz_offset', 0)
-        td = timedelta(0, 3600 * tz_offset)
+        if tz_offset >= 12 and tz_offset <= -12:
+            tz_offset *= 3600
+            
+        td = timedelta(0, tz_offset)
 
         datetime_local = metadata.get('message_datetime_local', datetime.utcnow())
         
