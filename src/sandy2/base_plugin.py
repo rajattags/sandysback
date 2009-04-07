@@ -21,7 +21,7 @@ class TokenizerParser(IMicroParser):
         self.is_followed_by = ['tokens', 'first_word']
 
     def micro_parse(self, metadata):
-        tokens = map(lambda s: s.lower(), metadata['incoming_message'].strip().split(' '))
+        tokens = map(lambda s: s.lower().strip(), metadata['incoming_message'].split())
         metadata['tokens'] = tokens
         metadata['first_word'] = tokens[0]
 
