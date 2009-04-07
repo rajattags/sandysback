@@ -59,23 +59,31 @@ class MailParser(object):
 #          o the text as the user typed it
         subject = message['Subject']
         metadata[self.prefix + 'subject'] = subject
+        
+        # check if the command exists on the subject.
+        s = subject.lower()
+        if s.startswith("re:") or s.startswith("[") or s.startswith("fw:") or s.startswith("fwd:"):
+            subject = ""
+        
         payload = message.get_payload(decode=True)
         if type(payload) is str:
-            metadata['incoming_message'] = "\n".join([subject, payload])
+            cleaned_message = "\n".join([subject, payload])
         else:
             for payload in message.get_payload():
                 ct = payload['Content-Type']
                 if ct.startswith('text/plain'):
-                    metadata['incoming_message'] = "\n".join([subject, str(payload._payload)])
+                    cleaned_message = "\n".join([subject, str(payload._payload)])
 
+        cleaned_message = "\n".join(filter(lambda line: not line.strip().startswith(">"), cleaned_message.splitlines()))
+
+        metadata['incoming_message'] = cleaned_message.strip()
 
 #          o the date sent, including timezone
         date_tuple = email.utils.parsedate_tz(message['Date'])
         tz_offset = date_tuple[9]
         if not tz_offset:
             tz_offset = 0
-        if tz_offset > 12 or tz_offset < -12:
-            tz_offset /= 3600
+
         datetime_local = datetime(*date_tuple[0:6])
 
         metadata['message_datetime_local'] = datetime_local
