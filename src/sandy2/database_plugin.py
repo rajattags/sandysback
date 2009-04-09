@@ -15,7 +15,7 @@ class DatabasePlugin(IPlugin):
         self.properties['database'] = self.db
         
         schema = self.db.schema
-        schema.name = 'alpha_'
+        schema.name = 'dev_'
 
         user = schema.user('u')
         table = schema.create_table(user)
@@ -82,15 +82,23 @@ class NewUserCreator(IMicroParser):
                 metadata['create_new_user'] = False
                 u = metadata.tx.schema.user('u')
                 
-                query = metadata.tx.schema.select(u.fullname, u.reminder_medium, u.timezone_offset).from_(u).where(u.id == user_id)
+                tx = metadata.tx
+                query = tx.schema.select(u.fullname, u.reminder_medium, u.timezone_offset).from_(u).where(u.id == user_id)
                 
-                rows = metadata.tx.execute(query)
+                rows = tx.execute(query)
                 
 
                 for (name, medium, tz_offset) in rows:
                     metadata['fullname'] = name
                     metadata['reminder_medium'] = medium
-                    metadata['tz_offset'] = tz_offset
+                    if not metadata.has_key('tz_offset'):
+                        metadata['tz_offset'] = tz_offset
+                    else:
+                        if metadata['tz_offset'] != tz_offset:
+                            query = tx.schema.update(u).where_(u.id == user_id)
+                            u.timezone_offset = metadata['tz_offset']
+                            tx.execute(query)
+                            tx.commit()
                     return
                 
 class NewTransactionAnnotater(IMicroParser):
