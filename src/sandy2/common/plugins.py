@@ -50,6 +50,7 @@ class PluginSystem:
         self.plugins = DependencyList(plugins)
         self.di = di
     
+        di['plugin_system'] = self
         di['properties'] = di
         di['configure'] = di.configure
         # this should be split into its own plugin.
@@ -76,3 +77,7 @@ class PluginSystem:
         for p in self.plugins:
             p.run()    
    
+    def stop(self):
+        for p in self.plugins:
+            p.stop()    
+        
