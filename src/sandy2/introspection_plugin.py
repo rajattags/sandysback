@@ -56,7 +56,7 @@ class MetadataCommand(IMicroParser):
             
 
 class HelpCommand(IMicroParser):
-    """help, h, ?\t:- Gives this message."""
+    """hello, help, h, ?\t:- Gives this message."""
     """Long description : """
     """Consumes: tokens, user"""
     """Produces: reply_message"""
@@ -68,7 +68,7 @@ class HelpCommand(IMicroParser):
 
     def micro_parse(self, metadata):
         first_word = metadata['first_word']
-        if first_word in ['help', 'h', '?']:
+        if first_word in ['hello', 'help', 'h', '?']:
             mp = filter(lambda mp: mp.__doc__, self.parser.micro_parsers)
             prefix = ":- "
             replies = filter(lambda s: s.find(prefix) >= 0, (s.__doc__ for s in mp))
