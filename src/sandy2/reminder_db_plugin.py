@@ -1,7 +1,8 @@
 from sandy2.common.parsing import IMicroParser, IMessageAction, Parser
-from sandy2.common.scheduling import Scheduler, IJobStore, _s_to_dt
+from sandy2.common.scheduling import Scheduler, IJobStore, _s_to_dt, _dt_to_s
 from sandy2.common.plugins import IPlugin
 
+from datetime import datetime, timedelta
 
 from sandy2.data.linqish import SQLPair
 
@@ -19,8 +20,6 @@ class SchedulerDBPlugin(IPlugin):
         self.properties = None
 
     def install(self):
-
-        
         tx = self.database.new_transaction()
         schema = self.database.schema
         
@@ -46,8 +45,59 @@ class SchedulerDBPlugin(IPlugin):
         
     
     def start_up(self):
+        self.parser.add_micro_parser(DigestMicroParser())
+
+    def run(self):
         self.scheduler.start()
-        pass 
+
+class DigestMicroParser(IMicroParser):
+    
+    def __init__(self):
+        self.is_preceeded_by = ['first_word', 'user_id', 'message_datetime_local']
+        self.is_followed_by = ['reply_message', 'reminder_message']
+    
+    def micro_parse(self, metadata):
+        if metadata['first_word'] == 'digest':
+            tx = metadata.tx
+            
+            s = tx.schema
+            
+            me = s.message_event("me")
+            m = s.message("m")
+        
+            user_id = metadata['user_id']
+            tz_offset = metadata['tz_offset']
+            mdt = metadata['message_datetime_local']
+            
+            mdt = mdt - timedelta(0, tz_offset)
+            start_time = _dt_to_s(mdt)
+            
+            # this should be keyed of the message somewhere, but defaulted to the whole day.
+            delta = 3600 * 24
+            
+            messages = tx.execute(s.select(me.time_to_fire, m.text).\
+                                  from_(me, m).\
+                                  where(
+                                        (me.message_id == m.id) & 
+                                        (m.user_id == user_id) & 
+                                        (me.handled != _STATUS_HANDLED) & 
+                                        (me.time_to_fire >= start_time) &
+                                        (me.time_to_fire <= start_time + delta)
+                                        ).order_by(me.time_to_fire).ascending()
+                                  )
+            
+            events = list()
+            sb = list()
+            
+            for time_to_fire, message in messages:
+                dt = _s_to_dt(time_to_fire + tz_offset)
+                events.append((dt, message))
+                sb.append("%s : %s" % (dt, message))
+                
+            
+            metadata['reply_message'] = "\n".join(sb)
+            metadata['reminder_message'] = "\n".join(sb)       
+        
 
 class JobStoreDB(IJobStore):
     
@@ -95,7 +145,7 @@ class JobStoreDB(IJobStore):
             row = (message_id, message, medium, user)
             yield (time_to_fire, row, dict())
             me.handled = _STATUS_HANDLED
-            tx.execute(s.update(me).where(me.message_id == message_id))
+            tx.execute(s.update(me).where((me.message_id == message_id) & (me.time_to_fire == time_to_fire)))
         
         # not sure if the update should be committed on each iteration..
         tx.commit()
@@ -123,6 +173,8 @@ class JobStoreDB(IJobStore):
         for r in rows:
             return r[0]
         return None
+
+        
 
     def __str__(self):
         tx = self.database.new_transaction()
