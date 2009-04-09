@@ -47,23 +47,32 @@ class GmailPlugin(IPlugin):
         self.parser.add_action(EmailSender(sender=self.mail_sender, parser=self.mail_parser))
         
     def run(self):
+        
         from threading import Thread
         
         class Listening(Thread):
             def __init__(self, outer):
                 Thread.__init__(self)
                 self.outer = outer
+                self.receiver = MailListener(username=gmail_username, password=gmail_password)
             
             def run(self):
-                receiver = MailListener(username=gmail_username, password=gmail_password)
-                for txt in receiver.run():
+                for txt in self.receiver.run():
                     message = self.outer.mail_parser.parse_raw_mail(txt)
                     metadata = self.outer.mail_parser.find_metadata(message)
                     self.outer.parser.parse(metadata)
                     self.outer.parser.perform_actions(metadata)
                     
-        Listening(self).start()
+            def close(self):
+                self.receiver.close()
+                
+        self.mail_listener_thread = Listening(self)
+        self.mail_listener_thread.start()
+        
     
+    def stop(self):
+        self.mail_listener_thread.close()
+        
 class EmailUserFinder(IMicroParser):
 
     def __init__(self, db=None):
