@@ -78,14 +78,14 @@ class Scheduler(object):
         
         seconds_abs = _dt_to_s(job_dt)
         
-        try:
-            self.lock.acquire()
-            if self.is_disposed:
-                raise SchedulerDisposedException()        
-            self.job_store.store_job(seconds_abs, *job_kw, **job_kwargs)
-            self.__manage_timer(seconds_abs)
-        finally: 
-            self.lock.release()
+#        try:
+#            self.lock.acquire()
+        if self.is_disposed:
+            raise SchedulerDisposedException()        
+        self.job_store.store_job(seconds_abs, *job_kw, **job_kwargs)
+        self.__manage_timer(seconds_abs)
+#        finally: 
+#            self.lock.release()
 
     def __str__(self):
         return "Next scheduled job is for: %s.\n%s" % (_s_to_dt(self.current_job_seconds_abs), str(self.job_store))
@@ -109,6 +109,8 @@ class Scheduler(object):
             
             for job_kw in ready_jobs:
                 try:
+                    if self.is_disposed:
+                        return
                     self.callable(*job_kw[1], **job_kw[2])
                 except Exception, e:
                     # shouldn't crash the scheduler
@@ -128,14 +130,14 @@ class Scheduler(object):
     def dispose(self):
         """Dispose of this scheduler, and stop waiting for any scheduled jobs
         """
-        try:
-            self.lock.acquire()
-            self.is_disposed = True
-            if self.current_job_timer is not None:
-                self.current_job_timer.cancel()
-                self.current_job_timer = None
-        finally:
-            self.lock.release()
+#        try:
+#            self.lock.acquire()
+        self.is_disposed = True
+        if self.current_job_timer is not None:
+            self.current_job_timer.cancel()
+            self.current_job_timer = None
+#        finally:
+#            self.lock.release()
             
 
 def _to_dt(time_obj):
