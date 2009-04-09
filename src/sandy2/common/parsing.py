@@ -88,22 +88,31 @@ class IMessageAction(INode):
         """This single method should perform any action that should occur after all parsing has completed."""
         
 class Message:
+    """Annotatable dictionary class"""
     
     def __init__(self, metadata):
         self._metadata = metadata
         self._non_message = {}
+        self._getters = []
         
     def __setitem__(self, key, value):
         self._metadata[key] = value
     
     def __getitem__(self, key):
-        return self._metadata.get(key, None)
+        return self.get(key, None)
         
     def has_key(self, key):
         return self._metadata.has_key(key)
     
     def get(self, key, default=None):
-        return self._metadata.get(key, default)
+        if self._metadata.has_key(key):
+            return self._metadata[key]
+        for getter in self._getters:
+            try:
+                return getter(key)
+            except KeyError:
+                pass
+        return default
     
     def __setattr__(self, key, value):
         if key.startswith('_'):
@@ -122,4 +131,10 @@ class Message:
         
     def setdefault(self, key, default):
         return self._metadata.setdefault(key, default)
-            
+    
+    def add_dictionary(self, new_map):
+        if callable(new_map):
+            self._getters.append(new_map)
+        elif hasattr(new_map, '__getitem__'):
+            self._getters.append(new_map.__getitem__)
+
