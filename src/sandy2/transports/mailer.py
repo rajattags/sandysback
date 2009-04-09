@@ -59,11 +59,17 @@ class MailParser(object):
 #          o the text as the user typed it
         subject = message['Subject']
         metadata[self.prefix + 'subject'] = subject
-        
+                
         # check if the command exists on the subject.
-        s = subject.lower()
-        if s.startswith("re:") or s.startswith("[") or s.startswith("fw:") or s.startswith("fwd:"):
+        if subject:
+            s = subject.lower()
+            if s.startswith("re:") or s.startswith("[") or s.startswith("fw:") or s.startswith("fwd:"):
+                subject = ""
+        else:
+            s = ""
             subject = ""
+
+        subject = subject + "\n\n"
         
         payload = message.get_payload(decode=True)
         if type(payload) is str:
@@ -74,9 +80,11 @@ class MailParser(object):
                 if ct.startswith('text/plain'):
                     cleaned_message = "\n".join([subject, str(payload._payload)])
 
-        cleaned_message = "\n".join(filter(lambda line: not line.strip().startswith(">"), cleaned_message.splitlines()))
+        cleaned_message = "\n".join(filter(lambda line: not line.strip().startswith(">"), cleaned_message.splitlines())).strip()
 
-        metadata['incoming_message'] = cleaned_message.strip()
+        (left, sep, right) = cleaned_message.partition("\n\n")
+
+        metadata['incoming_message'] = left
 
 #          o the date sent, including timezone
         date_tuple = email.utils.parsedate_tz(message['Date'])
@@ -109,6 +117,9 @@ class MailParser(object):
         message['From'] = email.utils.formataddr((self.my_email_name, self.my_email_address[0]))
         prefix = 'REMINDER: ' if metadata.get('is_reminder', False) else 'Re: '
         message['Subject'] = prefix + metadata[self.prefix + 'subject']
+        
+#        evt_date = metadata['']
+#        message['Date'] = evt_date
         # TODO add Date header.
         return message
     
@@ -202,8 +213,10 @@ class MailListener(object):
                 yield d[0][1]
             M.close()
             M.logout()
-            if self.__running:
-                time.sleep(120)
+            t = 0
+            while t < self.delay and self.__running:
+                time.sleep(5)
+                t = t + 5
             
 
     def close(self):
