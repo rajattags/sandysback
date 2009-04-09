@@ -7,8 +7,6 @@ from datetime import datetime, timedelta
 import parsedatetime.parsedatetime as pdt 
 import parsedatetime.parsedatetime_consts as pdc 
 
-from datetime import datetime, timedelta
-
 class SchedulerPlugin(IPlugin):
     """Plugin to support scheduling messages to be parsed at a later date.
     
@@ -42,6 +40,9 @@ class SchedulerPlugin(IPlugin):
     
     def run(self):
         self.scheduler.start()
+        
+    def stop(self):
+        self.scheduler.dispose()
 
 class TimedReminder(IMicroParser):
 
