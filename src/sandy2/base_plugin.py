@@ -1,6 +1,8 @@
 from sandy2.common.parsing import IMicroParser, IMessageAction, Parser
 from sandy2.common.plugins import IPlugin
 
+import datetime
+
 class BasicMicroParsingPlugin(IPlugin):
     
     def __init__(self, parser=None):
@@ -23,7 +25,10 @@ class TokenizerParser(IMicroParser):
     def micro_parse(self, metadata):
         tokens = map(lambda s: s.lower().strip(), metadata['incoming_message'].split())
         metadata['tokens'] = tokens
-        metadata['first_word'] = tokens[0]
+        if len(tokens):
+            metadata['first_word'] = tokens[0]
+        else:
+            metadata['STOP'] = True
 
 class TagExtractor(IMicroParser):
     """Consumes: tokens"""
@@ -76,7 +81,8 @@ class OutputSelector(IMicroParser):
             if metadata.get('event_datetime', None):
                 # a reply to a schedule request.
                 if 'noconfirm' not in tags:
-                    metadata['output_message'] = "Confirm: %s (at %s)" % (metadata['incoming_message'], metadata['event_datetime'])
+                    tz = datetime.timedelta(seconds=metadata.get('tz_offset', 0))
+                    metadata['output_message'] = "Confirm: %s (at %s)" % (metadata['incoming_message'], metadata['event_datetime'] + tz)
             else:
                 metadata['output_message'] = metadata['reply_message']
                 
