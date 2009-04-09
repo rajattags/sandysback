@@ -5,22 +5,22 @@ class ConsolePlugin(IPlugin):
     
     def __init__(self, parser=None):
         self.parser=parser
+        self._is_running = True
         pass
     
     def start_up(self):
+        self._is_running = True
         self.parser.add_micro_parser(ConsoleUserFinder())
         self.parser.add_micro_parser(ConsoleOutputSetter())
+        self.parser.add_micro_parser(ExitCommand())
         
         self.parser.add_action(ConsoleOutputReply())
     
     def run(self):
         print "Sandy console. Try 'help' to inspect what words I understand available."
         input = None
-        while (True):
+        while (self._is_running):
             input = raw_input('>> ')
-            if input.strip() in ['exit', 'quit']:
-                print "Bye"
-                return
             self.do_command(input)
 
     def do_command(self, message):
@@ -29,6 +29,21 @@ class ConsolePlugin(IPlugin):
         return metadata
 
 
+    def stop(self):
+        self._is_running = False
+
+class ExitCommand(IMicroParser):
+    def __init__(self):
+        self.is_preceeded_by = ['input_medium', 'first_word']
+        self.plugin_system = None
+
+    def micro_parse(self, metadata):
+        if metadata['input_medium'] == 'stdin' and metadata['first_word'] == 'exit' and self.plugin_system is not None:
+            self.plugin_system.stop()
+            print "Bye"
+            metadata['STOP'] = True
+        
+            
 
 class ConsoleUserFinder(IMicroParser):
 
