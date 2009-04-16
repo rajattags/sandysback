@@ -38,8 +38,40 @@ class DatabasePlugin(IPlugin):
         
     def start_up(self):
         self.parser.add_micro_parser(NewUserCreator())
+        self.parser.add_micro_parser(UserPopulator())
         self.parser.add_micro_parser(NewTransactionAnnotater())
-        
+
+class UserPopulator(IMicroParser):        
+    def __init__(self):
+        self.is_preceeded_by = ['user_id', 'tx']
+        self.is_followed_by = ['fullname', 'tz_offset', 'reminder_medium']
+
+    def micro_parse(self, metadata):
+        user_id = metadata.get('user_id', None)
+        if user_id is not None:
+            metadata['create_new_user'] = False
+            u = metadata.tx.schema.user('u')
+            
+            tx = metadata.tx
+            query = tx.schema.select(u.fullname, u.reminder_medium, u.timezone_offset).from_(u).where(u.id == user_id)
+            
+            rows = tx.execute(query)
+            
+
+            for (name, medium, tz_offset) in rows:
+                metadata['fullname'] = name
+                metadata['reminder_medium'] = medium
+                if not metadata.has_key('tz_offset'):
+                    metadata['tz_offset'] = tz_offset
+                else:
+                    if metadata['tz_offset'] != tz_offset:
+                        query = tx.schema.update(u).where_(u.id == user_id)
+                        u.timezone_offset = metadata['tz_offset']
+                        tx.execute(query)
+                        tx.commit()
+
+
+
 
 class NewUserCreator(IMicroParser):
     def __init__(self, db=None, parser=None):
@@ -77,29 +109,6 @@ class NewUserCreator(IMicroParser):
                 u.reminder_medium = metadata['input_medium']
                 metadata['user_id'] = id
                 tx.execute(schema.insert_into(u))
-#                table.insert(id, metadata['fullname'], metadata['tz_offset'], metadata['input_medium'])
-        else:
-                metadata['create_new_user'] = False
-                u = metadata.tx.schema.user('u')
-                
-                tx = metadata.tx
-                query = tx.schema.select(u.fullname, u.reminder_medium, u.timezone_offset).from_(u).where(u.id == user_id)
-                
-                rows = tx.execute(query)
-                
-
-                for (name, medium, tz_offset) in rows:
-                    metadata['fullname'] = name
-                    metadata['reminder_medium'] = medium
-                    if not metadata.has_key('tz_offset'):
-                        metadata['tz_offset'] = tz_offset
-                    else:
-                        if metadata['tz_offset'] != tz_offset:
-                            query = tx.schema.update(u).where_(u.id == user_id)
-                            u.timezone_offset = metadata['tz_offset']
-                            tx.execute(query)
-                            tx.commit()
-                    return
                 
 class NewTransactionAnnotater(IMicroParser):
     
