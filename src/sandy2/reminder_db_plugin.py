@@ -51,10 +51,10 @@ class SchedulerDBPlugin(IPlugin):
         self.scheduler.start()
 
 class DigestMicroParser(IMicroParser):
-    
+    """digest :- give a summary of today's events"""
     def __init__(self):
-        self.is_preceeded_by = ['first_word', 'user_id', 'message_datetime_local']
         self.is_followed_by = ['reply_message', 'reminder_message']
+        self.is_preceeded_by = ['first_word', 'user_id', 'message_datetime_local', 'tz_offset']
     
     def micro_parse(self, metadata):
         if metadata['first_word'] == 'digest':
@@ -66,8 +66,8 @@ class DigestMicroParser(IMicroParser):
             m = s.message("m")
         
             user_id = metadata['user_id']
-            tz_offset = metadata['tz_offset']
-            mdt = metadata['message_datetime_local']
+            tz_offset = metadata.get('tz_offset', 0)
+            mdt =  metadata.get('event_datetime', datetime.now())
             
             mdt = mdt - timedelta(0, tz_offset)
             start_time = _dt_to_s(mdt)
@@ -94,9 +94,9 @@ class DigestMicroParser(IMicroParser):
                 events.append((dt, message))
                 sb.append("%s : %s" % (dt, message))
                 
-            
-            metadata['reply_message'] = "\n".join(sb)
-            metadata['reminder_message'] = "\n".join(sb)       
+            string = "\n".join(sb) if len(sb) else "Nothing" 
+            metadata['reply_message'] = string
+            metadata['reminder_message'] = string       
         
 
 class JobStoreDB(IJobStore):
