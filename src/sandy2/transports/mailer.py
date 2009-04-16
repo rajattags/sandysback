@@ -58,7 +58,6 @@ class MailParser(object):
         
 #          o the text as the user typed it
         subject = message['Subject']
-        metadata[self.prefix + 'subject'] = subject
                 
         # check if the command exists on the subject.
         if subject:
@@ -68,6 +67,7 @@ class MailParser(object):
         else:
             s = ""
             subject = ""
+        metadata[self.prefix + 'subject'] = subject
 
         subject = subject + "\n\n"
         
