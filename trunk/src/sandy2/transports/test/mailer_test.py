@@ -6,7 +6,7 @@ from sandy2.transports.mailer import MailParser, MailSender, MailListener
 class MailTest(unittest.TestCase):
     
     def setUp(self):
-        self.parser = MailParser(email_address = 'zander.alpha@gmail.com', fullname = 'Zander the Wonder Horse')
+        self.parser = MailParser(email_address = 'zander.dev@gmail.com', fullname = 'Zander the Wonder Horse')
         pass
     
     def testParsing(self):
@@ -47,12 +47,12 @@ class MailTest(unittest.TestCase):
         metadata['reminder_message'] = "It's time to get up"
         reply = self.parser.construct_email(metadata, 'reminder_message')
         
-        server = MailSender(username='zander.alpha@gmail.com', password='PASSWORD_THAT_ISNT_THIS')
+        server = MailSender(username='zander.dev@gmail.com', password='PASSWORD_THAT_ISNT_THIS')
         server.send(reply)
         server.disconnect()
 
     def xtestFetch(self):
-        server = MailListener(username='zander.alpha@gmail.com', password='PASSWORD_THAT_ISNT_THIS')
+        server = MailListener(username='zander.dev@gmail.com', password='PASSWORD_THAT_ISNT_THIS')
         server.run()
 
     def reply(self):
@@ -95,7 +95,7 @@ Reminder request received:<br><div style="margin-left: 40px;"><ul><li>&quot;<spa
     
     def message(self):
         return """                                                                                                                                                                                                                                                               
-Delivered-To: zander.alpha@gmail.com
+Delivered-To: zander.dev@gmail.com
 Received: by 10.140.208.13 with SMTP id f13cs1817rvg;
         Wed, 11 Feb 2009 13:11:53 -0800 (PST)
 MIME-Version: 1.0
@@ -105,7 +105,7 @@ Date: Wed, 11 Feb 2009 21:11:52 +0000
 Message-ID: <176b2d550902111311j48c97a02pa1ed7d921fe06465@mail.gmail.com>
 Subject: Another tester
 From: James Hugman <jameshugman@gmail.com>
-To: zander.alpha@gmail.com
+To: zander.dev@gmail.com
 Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 7bit
 
@@ -114,7 +114,7 @@ Remind me when it's time to stop.
     
     def message_multi_part(self):
         return """From James.Hugman@lhasalimited.org Thu Feb 12 02:10:23 2009
-Delivered-To: zander.alpha@gmail.com
+Delivered-To: zander.dev@gmail.com
 Received: by 10.140.208.13 with SMTP id f13cs2379rvg; Thu, 12 Feb 2009
  02:10:23 -0800 (PST)
 Received: by 10.86.59.2 with SMTP id h2mr1311753fga.30.1234433421119; Thu,
@@ -153,8 +153,8 @@ X-MS-TNEF-Correlator:
 Thread-Topic: A Test from Outlook!
 thread-index: AcmM+gfvDHYS03EFQgmYbnaYSl67Tw==
 From: "James Hugman" <James.Hugman@lhasalimited.org>
-To: <zander.alpha@googlemail.com>
-X-Evolution-Source: imap://zander.alpha@imap.gmail.com/
+To: <zander.dev@googlemail.com>
+X-Evolution-Source: imap://zander.dev@imap.gmail.com/
 
 
 ------_=_NextPart_001_01C98CFA.16D83FBD
@@ -279,7 +279,7 @@ font-family:Arial'>Extension: 6076</span></font><o:p></o:p></p>
 
     def more_message(self):
         return """From jameshugman@gmail.com Tue Mar 10 16:24:28 2009
-Delivered-To: zander.alpha@gmail.com
+Delivered-To: zander.dev@gmail.com
 Received: by 10.223.121.204 with SMTP id i12cs92938far; Tue, 10 Mar 2009
  16:24:28 -0700 (PDT)
 Received: by 10.216.36.209 with SMTP id w59mr3097492wea.67.1236727468333;
@@ -295,7 +295,7 @@ Authentication-Results: mx.google.com; spf=pass (google.com: domain of
  jameshugman@gmail.com designates 74.125.78.25 as permitted sender)
  smtp.mail=jameshugman@gmail.com; dkim=pass (test mode) header.i=@gmail.com
 Received: by ey-out-2122.google.com with SMTP id 9so315402eyd.9 for
- <zander.alpha@gmail.com>; Tue, 10 Mar 2009 16:24:27 -0700 (PDT)
+ <zander.dev@gmail.com>; Tue, 10 Mar 2009 16:24:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=gamma;
  h=domainkey-signature:received:received:subject:from:to:content-type
  :organization:date:message-id:mime-version:x-mailer
@@ -319,14 +319,14 @@ Received: from ?192.168.1.75?
  (version=SSLv3 cipher=RC4-MD5); Tue, 10 Mar 2009 16:24:26 -0700 (PDT)
 Subject: time at 10am tomorrow
 From: James Hugman <jameshugman@gmail.com>
-To: zander.alpha@gmail.com
+To: zander.dev@gmail.com
 Content-Type: text/plain
 Organization: hugman.it ltd
 Date: Tue, 10 Mar 2009 23:23:24 +0000
 Message-Id: <1236727404.20638.4.camel@silverback>
 Mime-Version: 1.0
 X-Mailer: Evolution 2.24.3 
-X-Evolution-Source: imap://zander.alpha@imap.gmail.com/
+X-Evolution-Source: imap://zander.dev@imap.gmail.com/
 Content-Transfer-Encoding: 8bit
 
 

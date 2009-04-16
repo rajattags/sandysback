@@ -24,7 +24,7 @@ class EmailPluginTest(unittest.TestCase):
         di = Injector()
 
         di['mail_sender'] = self.sender = DummyMailSender()
-        self.mail_parser = MailParser(['zander.alpha@gmail.com', 'zander.alpha@googlemail.com'], "Zander The Wonderhorse")
+        self.mail_parser = MailParser(['zander.dev@gmail.com', 'zander.dev@googlemail.com'], "Zander The Wonderhorse")
         ps = PluginSystem(plugins=[DatabasePlugin(), GmailPlugin(), SchedulerPlugin(), BasicMicroParsingPlugin(), IntrospectionPlugin()], di = di)
         ps.configure()
 
@@ -90,7 +90,7 @@ class EmailPluginTest(unittest.TestCase):
     
     def message(self):
         return """                                                                                                                                                                                                                                                               
-Delivered-To: zander.alpha@gmail.com
+Delivered-To: zander.dev@gmail.com
 Received: by 10.140.208.13 with SMTP id f13cs1817rvg;
         Wed, 11 Feb 2009 13:11:53 -0800 (PST)
 MIME-Version: 1.0
@@ -100,7 +100,7 @@ Date: Wed, 11 Feb 2009 21:11:52 +0000
 Message-ID: <176b2d550902111311j48c97a02pa1ed7d921fe06465@mail.gmail.com>
 Subject: Another tester
 From: James Hugman <jameshugman@gmail.com>
-To: zander.alpha@gmail.com
+To: zander.dev@gmail.com
 Content-Type: text/plain; charset=ISO-8859-1
 Content-Transfer-Encoding: 7bit
 
