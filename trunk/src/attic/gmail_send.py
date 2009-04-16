@@ -9,7 +9,7 @@ from email.MIMEImage import MIMEImage
 from email.Encoders import encode_base64
 
 def sendMail(subject, text, *attachmentFilePaths):
-    gmailUser = 'zander.alpha@gmail.com'
+    gmailUser = 'zander.dev@gmail.com'
     gmailPassword = 'PASSWORD_THAT_ISNT_THIS'
     recipient = 'jameshugman@gmail.com'
 
