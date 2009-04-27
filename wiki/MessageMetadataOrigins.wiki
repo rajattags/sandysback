@@ -1,0 +1,148 @@
+
+reminder_db_plugin.py:class DigestMicroParser(IMicroParser):
+    * first_word (w):
+    * reminder_message (w):
+    * reply_message (w):
+    * user_id (r):
+
+gmail_plugin.py:class EmailUserFinder(IMicroParser):
+    * email_id (w):
+    * email_id (r):
+    * email_subject (w):
+    * incoming_message (r):
+    * input_medium (r):
+    * user_id (r):
+    * user_id (r):
+    * user_id (w):
+    
+gmail_plugin.py:class EmailUserCreator(IMicroParser):
+    * email_id (r):
+    * input_medium (w):
+    * user_id (r):
+
+console_plugin.py:class ExitCommand(IMicroParser):
+    * input_medium (w):
+    * STOP (w):
+    
+console_plugin.py:class ConsoleUserFinder(IMicroParser):
+    * console_id (w):
+    * fullname (w):
+    * user_id (w):
+    
+console_plugin.py:class ConsoleOutputReply(IMessageAction):
+    * output_medium (r):
+    * output_message (r):
+    
+base_plugin.py:class TokenizerParser(IMicroParser):
+    * first_word (w):
+    * incoming_message (r):
+    * STOP (w):
+    * tokens (w):
+    
+base_plugin.py:class TagExtractor(IMicroParser):
+    * tags (w):
+    * tokens (r):
+    * special_tags (w):
+    
+base_plugin.py:class OutputSelector(IMicroParser):
+    * input_medium (r):
+    * output_message (w):
+    * output_medium (w):
+    * output_message (w):
+    * output_medium (w):
+    * output_message (w):
+    * output_medium (w):
+    * output_medium (w):
+    * output_message (w):
+    * output_message (w):
+    * special_tags (r):
+    * tags (r):
+    * tags (w):
+    
+transports/mailer.py:class MailParser(object):
+    * email_id (w):
+    * email_in_reply_to (w):
+    * email_id (r):
+    * email_message_id (w):
+    * email_my_address (w):
+    * email_recipients (w):
+    * email_subject (r):
+    * email_subject (w):
+    * fullname (w):
+    * fullname (r):,     
+    * input_medium (w):
+    * incoming_message (w):
+    * message_datetime_local (w):
+    * tz_offset (w):
+    
+message_db_plugin.py:class MessageRecorder(IMicroParser):
+    * input_medium (r):
+    * incoming_message (r):
+    * is_reminder (r):
+    * message_id (w):
+    * user_id (r):
+    
+introspection_plugin.py:class InspectCommand(IMicroParser):
+    * first_word (r):
+    * reminder_message (w):
+    * reply_message (w):
+    * tokens (r):
+    * tokens (r):[1]
+    
+introspection_plugin.py:class MetadataCommand(IMicroParser):
+    * first_word (r):
+    * output_message (w):
+    * reminder_message (w):
+    * reply_message (w):
+    
+introspection_plugin.py:class HelpCommand(IMicroParser):
+    * first_word (r):
+    * reminder_message (w):
+    * reply_message (w):
+    
+introspection_plugin.py:class TimeCommand(IMicroParser):
+    * first_word (r):
+    * reminder_message (w):
+    * reply_message (w):
+    
+introspection_plugin.py:class EchoCommand(IMicroParser):
+    * first_word (r):
+    * reminder_message (w):
+    * reply_message (w):
+    
+reminder_plugin.py:class TimedReminder(IMicroParser):
+    * event_datetime (w):
+    * incoming_message (r):
+    * is_reminder (w):
+
+reminder_plugin.py:class SchedulerInspectionCommand(IMicroParser):
+    * first_word (w):
+    * reminder_message (w):
+    * reply_message (w):
+    
+reminder_plugin.py:class FrequencyTagDetector(IMicroParser):
+    * frequency_timedelta (w):
+    * special_tags (r):
+    * tags (r):
+    
+reminder_plugin.py:class ScheduleAction(IMessageAction):
+    * incoming_message (r):
+    * input_medium (r):
+    * is_reminder (r):
+    * user_id (r):
+    
+database_plugin.py:class NewUserCreator(IMicroParser):
+    * create_new_user (w):
+    * create_new_user (w):
+    * fullname (r):
+    * fullname (r):     
+    * fullname (w):
+    * input_medium (r):
+    * input_medium (r):
+    * reminder_medium (w):
+    * tz_offset (r):
+    * tz_offset (r):
+    * tz_offset (r):
+    * tz_offset (r):
+    * tz_offset (w):
+    * user_id (w):
