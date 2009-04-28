@@ -13,7 +13,7 @@ _STATUS_HANDLED = 2
 class SchedulerDBPlugin(IPlugin):
 
     def __init__(self, db=None, parser=None):
-        self.is_preceeded_by = ['scheduling']
+        self.is_preceeded_by = ['scheduling', 'database']
         self.database = db
         self.parser = parser
         self.scheduler = None
@@ -45,12 +45,12 @@ class SchedulerDBPlugin(IPlugin):
         
     
     def start_up(self):
-        self.parser.add_micro_parser(DigestMicroParser())
+        self.parser.add_micro_parser(DigestCommand())
 
     def run(self):
         self.scheduler.start()
 
-class DigestMicroParser(IMicroParser):
+class DigestCommand(IMicroParser):
     """digest :- give a summary of today's events"""
     def __init__(self):
         self.is_followed_by = ['reply_message', 'reminder_message']
