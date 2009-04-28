@@ -1,0 +1,20 @@
+digraph G {
+	node [shape=box]; BasicMicroParsingPlugin IntrospectionPlugin GmailPlugin SchedulerPlugin MessageDBPlugin SchedulerDBPlugin ConsolePlugin DatabasePlugin
+	GmailPlugin -> email_database [weight = 10 color = gray];
+	DatabasePlugin -> database [weight = 10 color = gray];
+	node [shape=ellipse]; database
+	database -> GmailPlugin [weight = 10 color = gray];
+	database -> MessageDBPlugin [weight = 10 color = gray];
+	SchedulerPlugin -> scheduling [weight = 10 color = gray];
+	MessageDBPlugin -> scheduling [weight = 10 color = gray];
+	node [shape=ellipse]; scheduling
+	scheduling -> SchedulerDBPlugin [weight = 10 color = gray];
+	database -> SchedulerDBPlugin [weight = 10 color = gray];
+	BasicMicroParsingPlugin -> DatabasePlugin [penwidth = 5 weight = 100];
+	DatabasePlugin -> MessageDBPlugin [penwidth = 5 weight = 100];
+	MessageDBPlugin -> GmailPlugin [penwidth = 5 weight = 100];
+	GmailPlugin -> ConsolePlugin [penwidth = 5 weight = 100];
+	ConsolePlugin -> IntrospectionPlugin [penwidth = 5 weight = 100];
+	IntrospectionPlugin -> SchedulerPlugin [penwidth = 5 weight = 100];
+	SchedulerPlugin -> SchedulerDBPlugin [penwidth = 5 weight = 100];
+}

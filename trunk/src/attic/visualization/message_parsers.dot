@@ -1,0 +1,118 @@
+digraph G {
+	node [shape=box]; TimedReminder HelpCommand FrequencyTagDetector DigestCommand EchoCommand ExitCommand MetadataCommand MessageRecorder SchedulerInspectionCommand UserPopulator InspectCommand OutputSelector NewTransactionAnnotater TagExtractor ConsoleUserFinder TimeCommand TokenizerParser EmailUserFinder EmailUserCreator ConsoleOutputSetter NewUserCreator
+	node [shape=ellipse]; input_medium
+	input_medium -> ExitCommand [weight = 10 color = gray];
+	node [shape=ellipse]; first_word
+	first_word -> ExitCommand [weight = 10 color = gray];
+	node [shape=ellipse]; incoming_message
+	incoming_message -> EchoCommand [weight = 10 color = gray];
+	first_word -> EchoCommand [weight = 10 color = gray];
+	node [shape=ellipse]; is_reminder
+	is_reminder -> OutputSelector [weight = 10 color = gray];
+	node [shape=ellipse]; tags
+	tags -> OutputSelector [weight = 10 color = gray];
+	node [shape=ellipse]; reply_message
+	reply_message -> OutputSelector [weight = 10 color = gray];
+	node [shape=ellipse]; reminder_message
+	reminder_message -> OutputSelector [weight = 10 color = gray];
+	node [shape=ellipse]; special_tags
+	special_tags -> OutputSelector [weight = 10 color = gray];
+	node [shape=ellipse]; event_datetime
+	event_datetime -> OutputSelector [weight = 10 color = gray];
+	first_word -> TimeCommand [weight = 10 color = gray];
+	incoming_message -> EmailUserFinder [weight = 10 color = gray];
+	input_medium -> EmailUserFinder [weight = 10 color = gray];
+	node [shape=ellipse]; tx
+	tx -> EmailUserFinder [weight = 10 color = gray];
+	TagExtractor -> special_tags [weight = 10 color = gray];
+	TimedReminder -> event_datetime [weight = 10 color = gray];
+	input_medium -> NewUserCreator [weight = 10 color = gray];
+	node [shape=ellipse]; user_id
+	user_id -> NewUserCreator [weight = 10 color = gray];
+	tx -> NewUserCreator [weight = 10 color = gray];
+	node [shape=ellipse]; tz_offset
+	tz_offset -> NewUserCreator [weight = 10 color = gray];
+	reply_message -> NewUserCreator [weight = 10 color = gray];
+	node [shape=ellipse]; fullname
+	fullname -> NewUserCreator [weight = 10 color = gray];
+	node [shape=ellipse]; create_new_user
+	create_new_user -> EmailUserCreator [weight = 10 color = gray];
+	tx -> EmailUserCreator [weight = 10 color = gray];
+	EmailUserFinder -> user_id [weight = 10 color = gray];
+	ConsoleUserFinder -> user_id [weight = 10 color = gray];
+	NewTransactionAnnotater -> tx [weight = 10 color = gray];
+	UserPopulator -> tz_offset [weight = 10 color = gray];
+	first_word -> InspectCommand [weight = 10 color = gray];
+	UserPopulator -> reminder_medium [weight = 10 color = gray];
+	ConsoleOutputSetter -> reminder_medium [weight = 10 color = gray];
+	TimeCommand -> reminder_message [weight = 10 color = gray];
+	SchedulerInspectionCommand -> reminder_message [weight = 10 color = gray];
+	DigestCommand -> reminder_message [weight = 10 color = gray];
+	EchoCommand -> reminder_message [weight = 10 color = gray];
+	node [shape=ellipse]; output_message
+	output_message -> MetadataCommand [weight = 10 color = gray];
+	first_word -> MetadataCommand [weight = 10 color = gray];
+	OutputSelector -> output_message [weight = 10 color = gray];
+	TokenizerParser -> first_word [weight = 10 color = gray];
+	MessageRecorder -> message_id [weight = 10 color = gray];
+	TimedReminder -> is_reminder [weight = 10 color = gray];
+	TimedReminder -> head [weight = 10 color = gray];
+	TagExtractor -> tags [weight = 10 color = gray];
+	incoming_message -> MessageRecorder [weight = 10 color = gray];
+	input_medium -> MessageRecorder [weight = 10 color = gray];
+	user_id -> MessageRecorder [weight = 10 color = gray];
+	reply_message -> MessageRecorder [weight = 10 color = gray];
+	tx -> MessageRecorder [weight = 10 color = gray];
+	FrequencyTagDetector -> frequency_timedelta [weight = 10 color = gray];
+	NewUserCreator -> create_new_user [weight = 10 color = gray];
+	ConsoleOutputSetter -> reply_medium [weight = 10 color = gray];
+	TokenizerParser -> tokens [weight = 10 color = gray];
+	first_word -> SchedulerInspectionCommand [weight = 10 color = gray];
+	node [shape=ellipse]; tokens
+	tokens -> TagExtractor [weight = 10 color = gray];
+	node [shape=ellipse]; message_datetime_local
+	message_datetime_local -> DigestCommand [weight = 10 color = gray];
+	user_id -> DigestCommand [weight = 10 color = gray];
+	tz_offset -> DigestCommand [weight = 10 color = gray];
+	first_word -> DigestCommand [weight = 10 color = gray];
+	incoming_message -> TimedReminder [weight = 10 color = gray];
+	message_datetime_local -> TimedReminder [weight = 10 color = gray];
+	tz_offset -> TimedReminder [weight = 10 color = gray];
+	special_tags -> FrequencyTagDetector [weight = 10 color = gray];
+	tags -> FrequencyTagDetector [weight = 10 color = gray];
+	user_id -> UserPopulator [weight = 10 color = gray];
+	tx -> UserPopulator [weight = 10 color = gray];
+	OutputSelector -> output_medium [weight = 10 color = gray];
+	InspectCommand -> reply_message [weight = 10 color = gray];
+	EchoCommand -> reply_message [weight = 10 color = gray];
+	SchedulerInspectionCommand -> reply_message [weight = 10 color = gray];
+	DigestCommand -> reply_message [weight = 10 color = gray];
+	TimeCommand -> reply_message [weight = 10 color = gray];
+	HelpCommand -> reply_message [weight = 10 color = gray];
+	incoming_message -> TokenizerParser [weight = 10 color = gray];
+	node [shape=ellipse]; head
+	head -> TokenizerParser [weight = 10 color = gray];
+	UserPopulator -> fullname [weight = 10 color = gray];
+	first_word -> HelpCommand [weight = 10 color = gray];
+	input_medium -> ConsoleUserFinder [weight = 10 color = gray];
+	NewTransactionAnnotater -> ConsoleOutputSetter [penwidth = 5 weight = 100];
+	ConsoleOutputSetter -> ConsoleUserFinder [penwidth = 5 weight = 100];
+	ConsoleUserFinder -> EmailUserFinder [penwidth = 5 weight = 100];
+	EmailUserFinder -> UserPopulator [penwidth = 5 weight = 100];
+	UserPopulator -> TimedReminder [penwidth = 5 weight = 100];
+	TimedReminder -> TokenizerParser [penwidth = 5 weight = 100];
+	TokenizerParser -> HelpCommand [penwidth = 5 weight = 100];
+	HelpCommand -> TimeCommand [penwidth = 5 weight = 100];
+	TimeCommand -> DigestCommand [penwidth = 5 weight = 100];
+	DigestCommand -> SchedulerInspectionCommand [penwidth = 5 weight = 100];
+	SchedulerInspectionCommand -> InspectCommand [penwidth = 5 weight = 100];
+	InspectCommand -> ExitCommand [penwidth = 5 weight = 100];
+	ExitCommand -> EchoCommand [penwidth = 5 weight = 100];
+	EchoCommand -> NewUserCreator [penwidth = 5 weight = 100];
+	NewUserCreator -> EmailUserCreator [penwidth = 5 weight = 100];
+	EmailUserCreator -> MessageRecorder [penwidth = 5 weight = 100];
+	MessageRecorder -> TagExtractor [penwidth = 5 weight = 100];
+	TagExtractor -> FrequencyTagDetector [penwidth = 5 weight = 100];
+	FrequencyTagDetector -> OutputSelector [penwidth = 5 weight = 100];
+	OutputSelector -> MetadataCommand [penwidth = 5 weight = 100];
+}
