@@ -76,8 +76,8 @@ class GmailPlugin(IPlugin):
 class EmailUserFinder(IMicroParser):
 
     def __init__(self, db=None):
-        self.is_preceeded_by = ['db', 'input_medium', 'incoming_message']
-        self.is_followed_by = ['user', 'user_id']
+        self.is_preceeded_by = ['tx', 'input_medium', 'incoming_message']
+        self.is_followed_by = ['user_id']
         self.database = db
 
     def micro_parse(self, metadata):
@@ -117,7 +117,7 @@ class EmailUserFinder(IMicroParser):
 
 class EmailUserCreator(IMicroParser):
     def __init__(self, db=None, parser=None):
-        self.is_preceeded_by = ['db', 'create_new_user']
+        self.is_preceeded_by = ['tx', 'create_new_user']
         self.database = db
         self.parser = parser
 
