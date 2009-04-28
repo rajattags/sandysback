@@ -138,3 +138,5 @@ class Message:
         elif hasattr(new_map, '__getitem__'):
             self._getters.append(new_map.__getitem__)
 
+    def __str__(self):
+        return self._non_message.__str__()
