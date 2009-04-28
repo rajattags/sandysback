@@ -1,0 +1,5 @@
+digraph G {
+	node [shape=box]; EmailSender ScheduleAction ConsoleOutputReply
+	EmailSender -> ConsoleOutputReply [penwidth = 5 weight = 100];
+	ConsoleOutputReply -> ScheduleAction [penwidth = 5 weight = 100];
+}
