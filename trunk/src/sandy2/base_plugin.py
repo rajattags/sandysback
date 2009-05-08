@@ -29,6 +29,7 @@ class TokenizerParser(IMicroParser):
             metadata['first_word'] = tokens[0]
         else:
             metadata['STOP'] = True
+            metadata['first_word'] = ""
 
 class TagExtractor(IMicroParser):
     """Consumes: tokens"""

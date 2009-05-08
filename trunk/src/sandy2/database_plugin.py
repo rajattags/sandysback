@@ -5,17 +5,21 @@ from sandy2.common.parsing import IMicroParser
 
 class DatabasePlugin(IPlugin):
     def __init__(self, properties={}, parser=None):
+        self.is_preceeded_by = ['passwords']
         self.is_followed_by = ['database']
         self.properties = properties
         self.parser = parser
         
     def install(self):
-        self.db = DB(user="root", passwd="MySQL-root-0", db="zander_test_database", host="127.0.0.1", port=3306)
+        di = self.properties
+        
+        
+        self.db = DB(user=di['mysql_user'], passwd="MySQL-root-0", db="zander_test_database", host=di['mysql_host'], port=di['mysql_port'])
         # we should check if we already created this. 
         self.properties['database'] = self.db
         
         schema = self.db.schema
-        schema.name = 'dev_'
+        schema.name = di.get('schema_prefix', '')
 
         user = schema.user('u')
         table = schema.create_table(user)
@@ -118,3 +122,7 @@ class NewTransactionAnnotater(IMicroParser):
     
     def micro_parse(self, metadata):
         metadata.tx = self.database.new_transaction()
+        
+    def cleanup(self, metadata):
+        metadata.tx.commit()
+        metadata.tx.close()
