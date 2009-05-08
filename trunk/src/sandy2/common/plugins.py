@@ -52,6 +52,7 @@ class PluginSystem:
     
         di['plugin_system'] = self
         di['properties'] = di
+        di['di'] = di
         di['configure'] = di.configure
         # this should be split into its own plugin.
         di['parser'] = Parser(configure=di.configure)
