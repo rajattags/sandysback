@@ -92,12 +92,11 @@ class Injector(object):
             
     def _call_0_or_1_args(self, fn, obj=None):
         # Private method to call a function with one or more args. Not sure if this is the best way of doing this.
-        try:
+        num =  fn.func_code.co_argcount
+        if num == 0:
+            return fn(), 0
+        else:
             return fn(obj), 1
-        except TypeError:
-            # fall through to the next go.
-            pass
-        return fn(), 0
         
     
     def per_instance(self, **lambdas):
