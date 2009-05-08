@@ -6,6 +6,7 @@ from sandy2.database_plugin import DatabasePlugin
 from sandy2.introspection_plugin import IntrospectionPlugin
 from sandy2.gmail_plugin import GmailPlugin
 from sandy2.message_db_plugin import MessageDBPlugin
+from sandy2.password_plugin import PasswordPlugin
 from sandy2.reminder_plugin import SchedulerPlugin
 from sandy2.reminder_db_plugin import SchedulerDBPlugin
 
@@ -28,6 +29,7 @@ class Sandy2(object):
                    IntrospectionPlugin(),
                    SchedulerDBPlugin(),
                    GmailPlugin(),
+                   PasswordPlugin()
                 ]
         
         PluginSystem(plugins).start()

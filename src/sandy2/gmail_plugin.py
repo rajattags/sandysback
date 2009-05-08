@@ -5,23 +5,25 @@ from sandy2.data.linqish_db import *
 from sandy2.transports.mailer import MailListener, MailParser, MailSender
 
 
-# TODO move these to a real config file.
-gmail_username = "assistant@example.com"
-gmail_password = "INSERT_REAL_PASSWORD"
 
-agent_name = "Zander"
 
 class GmailPlugin(IPlugin):
     def __init__(self, parser=None, db=None, properties={}):
-        self.is_preceeded_by = ['database']
+        self.is_preceeded_by = ['database', 'passwords']
         self.is_followed_by = ['email_database']
         self.parser = parser
         self.database = db
         self.properties = properties
-        self.mail_parser = MailParser(email_address=gmail_username, fullname=agent_name)
-        self.mail_sender = MailSender(username=gmail_username, password=gmail_password)
+        self.mail_parser = None
+        self.mail_sender = None
+        self.gmail_user = 'See passwords_plugin.py'
+        self.gmail_password = 'See passwords_plugin.py'
         
     def install(self):
+        if not self.mail_parser:
+            self.mail_parser = MailParser(email_address=self.gmail_user, fullname=self.properties['agent_name'])
+        if not self.mail_sender:
+            self.mail_sender = MailSender(username=self.gmail_user, password=self.gmail_password)
         
         schema = self.database.schema
         
@@ -54,7 +56,7 @@ class GmailPlugin(IPlugin):
             def __init__(self, outer):
                 Thread.__init__(self)
                 self.outer = outer
-                self.receiver = MailListener(username=gmail_username, password=gmail_password)
+                self.receiver = MailListener(username=outer.gmail_user, password=outer.gmail_password)
             
             def run(self):
                 for txt in self.receiver.run():
