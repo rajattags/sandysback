@@ -28,16 +28,20 @@ class Parser(object):
 
         metadata = Message(metadata)
         for t in self.micro_parsers:
-            if self.__can_continue(metadata):
-                # todo: check that this method actually exists.
-                try:
+            try:
+                if getattr(t, 'micro_parse', None):
                     t.micro_parse(metadata)
-                except BaseException, e:
-                    print "Exception %s: in %s" % (e, t)
-            else:
-                break
-            if self.debug:
-                print metadata
+            except BaseException, e:
+                print "Exception %s: in %s" % (e, t)
+            
+
+        for t in reversed(self.micro_parsers._nodes):
+            try:
+                if getattr(t, 'cleanup', None):
+                    t.cleanup(metadata)
+            except BaseException, e:
+                print "Exception %s: in %s" % (e, t)
+        
 
         return metadata
 
