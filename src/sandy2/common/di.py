@@ -66,7 +66,7 @@ class Injector(object):
         return self.__evaluate_function(key)
 
     def get(self, key, default_value=None):
-        return __getitem__(key) if self.__dict.has_key(key) else default_value
+        return self.__getitem__(key) if self.__dict.has_key(key) else default_value
 
     def __register_lambda(self, key, fn):
         assert callable(fn)
