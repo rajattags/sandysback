@@ -1,5 +1,7 @@
 from sandy2.common.parsing import IMicroParser, IMessageAction, Parser
 from sandy2.common.plugins import IPlugin
+from sandy2.common.re_dispatch import REDispatcher
+
 
 import datetime
 
@@ -8,10 +10,23 @@ class BasicMicroParsingPlugin(IPlugin):
     def __init__(self, parser=None):
         self.parser = parser
         
-    def start_up(self):
-        self.parser.add_micro_parser(TagExtractor())
-        self.parser.add_micro_parser(TokenizerParser())
-        self.parser.add_micro_parser(OutputSelector())
+    def install(self, ctx):
+        if not self.parser:
+            self.parser = Parser(configure=ctx.di.configure)
+        ctx.di['parser'] = self.parser
+
+    def start_up(self, ctx):
+        ctx.er.micro_parsers.track(self.parser.add_micro_parser)
+        ctx.er.parser_actions.track(self.parser.add_action)
+
+        re_parser = CommandsParser()
+        ctx.er.message_patterns.track(re_parser)
+        
+        ctx.er.micro_parsers.add(re_parser)
+        
+        ctx.er.micro_parsers.add(TagExtractor())
+        ctx.er.micro_parsers.add(TokenizerParser())
+        ctx.er.micro_parsers.add(OutputSelector())
 
 class TokenizerParser(IMicroParser):
 
@@ -30,6 +45,24 @@ class TokenizerParser(IMicroParser):
         else:
             metadata['STOP'] = True
             metadata['first_word'] = ""
+
+class CommandsParser(IMicroParser):
+    
+    def __init__(self, re_dispatch=REDispatcher()):
+        self.is_preceeded_by = ['incoming_message', 'user_id']
+        self.is_followed_by = ['reply_message', 'reminder_message']
+
+        self.dispatch = re_dispatch
+        
+    def register(self, pattern, fn):
+        if hasattr(pattern, 'match'):
+            self.dispatch.register_re(pattern, fn)
+        else:
+            self.dispatch.register_pattern(pattern.__str__(), fn)
+    
+    def micro_parse(self, metadata):
+        string = metadata['incoming_message']
+        self.dispatch.search(string, metadata)
 
 class TagExtractor(IMicroParser):
     """Consumes: tokens"""
