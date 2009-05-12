@@ -19,7 +19,7 @@ class GmailPlugin(IPlugin):
         self.gmail_user = 'See passwords_plugin.py'
         self.gmail_password = 'See passwords_plugin.py'
         
-    def install(self):
+    def install(self, ctx):
         if not self.mail_parser:
             self.mail_parser = MailParser(email_address=self.gmail_user, fullname=self.properties['agent_name'])
         if not self.mail_sender:
@@ -43,10 +43,10 @@ class GmailPlugin(IPlugin):
         else:
             print "Table %s already exists. Not re-creating." % (user._name)
     
-    def start_up(self):
-        self.parser.add_micro_parser(EmailUserFinder())
-        self.parser.add_micro_parser(EmailUserCreator())
-        self.parser.add_action(EmailSender(sender=self.mail_sender, parser=self.mail_parser))
+    def start_up(self, ctx):
+        ctx.er.micro_parsers.add(EmailUserFinder())
+        ctx.er.micro_parsers.add(EmailUserCreator())
+        ctx.er.parser_actions.add(EmailSender(sender=self.mail_sender, parser=self.mail_parser))
         
     def run(self):
         

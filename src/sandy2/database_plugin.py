@@ -10,7 +10,7 @@ class DatabasePlugin(IPlugin):
         self.properties = properties
         self.parser = parser
         
-    def install(self):
+    def install(self, ctx):
         di = self.properties
         
         
@@ -40,10 +40,10 @@ class DatabasePlugin(IPlugin):
 
 
         
-    def start_up(self):
-        self.parser.add_micro_parser(NewUserCreator())
-        self.parser.add_micro_parser(UserPopulator())
-        self.parser.add_micro_parser(NewTransactionAnnotater())
+    def start_up(self, ctx):
+        ctx.er.micro_parsers.add(NewUserCreator())
+        ctx.er.micro_parsers.add(UserPopulator())
+        ctx.er.micro_parsers.add(NewTransactionAnnotater())
 
 class UserPopulator(IMicroParser):        
     def __init__(self):

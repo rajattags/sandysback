@@ -27,16 +27,17 @@ class SchedulerPlugin(IPlugin):
         self.db = db
         self.properties = None
     
-    def install(self):
+    def install(self, ctx):
         self.scheduler = Scheduler()
         self.properties['scheduler'] = self.scheduler
     
-    def start_up(self):
-        self.parser.add_micro_parser(TimedReminder())
-        self.parser.add_micro_parser(FrequencyTagDetector())
-        schedule_action = ScheduleAction(scheduler=self.scheduler)
-        self.parser.add_action(schedule_action)
-        self.parser.add_micro_parser(SchedulerInspectionCommand(schedule_action.scheduler))
+    def start_up(self, ctx):
+        ctx.er.micro_parsers.add(TimedReminder())
+        ctx.er.micro_parsers.add(FrequencyTagDetector())
+        
+        ctx.er.parser_actions.add(ScheduleAction(self.scheduler))
+
+        ctx.er.message_patterns.add('^scheduler', SchedulerInspectionCommand().inspect_scheduler)
     
     def run(self):
         self.scheduler.start()
@@ -95,17 +96,14 @@ class TimedReminder(IMicroParser):
         
         return None
 
-class SchedulerInspectionCommand(IMicroParser):
-    """Short description: Display the state of the schedule
-    """
+class SchedulerInspectionCommand:
+
     def __init__(self, scheduler=None):
-        self.is_preceeded_by = ['first_word']
-        self.is_followed_by = ['reply_message', 'reminder_message']
         self.scheduler = scheduler
 
 
-    def micro_parse(self, metadata):
-        if metadata['first_word'] == 'schedule':
+    def inspect_scheduler(self, metadata):
+        if metadata['input_medium'] == 'stdin':
             s = self.scheduler.__str__()
             metadata['reply_message'] = s
             metadata['reminder_message'] = s

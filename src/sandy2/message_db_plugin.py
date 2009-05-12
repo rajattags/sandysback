@@ -13,7 +13,7 @@ class MessageDBPlugin(IPlugin):
         self.parser = parser
         self.database = db
 
-    def install(self):
+    def install(self, ctx):
         schema = self.database.schema
         message = schema.message('m')
         if (message._name not in self.database.get_tablenames()):
@@ -33,8 +33,8 @@ class MessageDBPlugin(IPlugin):
             print "Table %s already exists. Not re-creating." % (message._name)
 
 
-    def start_up(self):
-        self.parser.add_micro_parser(MessageRecorder())
+    def start_up(self, ctx):
+        ctx.er.micro_parsers.add(MessageRecorder())
         
 
 
