@@ -83,6 +83,10 @@ class IMicroParser(INode):
         MicroParsers may cooperate with one another, or with other actions.
         """
 
+    def cleanup(self, metadata):
+        """Executed after all micro_parse methods have been executed, in the reverse order 
+        of execution.        
+        """
 
 class IMessageAction(INode):
 
@@ -103,7 +107,10 @@ class Message:
         self._metadata[key] = value
     
     def __getitem__(self, key):
-        return self.get(key, None)
+        value = self.get(key, None)
+        if value is not None:
+            return value
+        raise KeyError(key)
         
     def has_key(self, key):
         return self._metadata.has_key(key)
