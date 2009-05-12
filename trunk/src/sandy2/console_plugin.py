@@ -8,13 +8,13 @@ class ConsolePlugin(IPlugin):
         self._is_running = True
         pass
     
-    def start_up(self):
+    def start_up(self, ctx):
         self._is_running = True
-        self.parser.add_micro_parser(ConsoleUserFinder())
-        self.parser.add_micro_parser(ConsoleOutputSetter())
-        self.parser.add_micro_parser(ExitCommand())
+        ctx.er.micro_parsers.add(ConsoleUserFinder())
+        ctx.er.micro_parsers.add(ConsoleOutputSetter())
+        ctx.er.message_patterns.add('^(exit|quit)', ExitCommand().exit)
         
-        self.parser.add_action(ConsoleOutputReply())
+        ctx.er.parser_actions.add(ConsoleOutputReply())        
     
     def run(self):
         print "Sandy console. Try 'help' to inspect what words I understand available."
@@ -32,13 +32,13 @@ class ConsolePlugin(IPlugin):
     def stop(self):
         self._is_running = False
 
-class ExitCommand(IMicroParser):
-    def __init__(self):
-        self.is_preceeded_by = ['input_medium', 'first_word']
-        self.plugin_system = None
+class ExitCommand:
 
-    def micro_parse(self, metadata):
-        if metadata['input_medium'] == 'stdin' and metadata['first_word'] == 'exit' and self.plugin_system is not None:
+    def __init__(self, plugin_system=None):
+        self.plugin_system = plugin_system
+
+    def exit(self, metadata):
+        if metadata['input_medium'] == 'stdin'  and self.plugin_system is not None:
             self.plugin_system.stop()
             print "Bye"
             metadata['STOP'] = True
@@ -86,4 +86,3 @@ class ConsoleOutputReply(IMessageAction):
             message = metadata['output_message']
             print message
             
-

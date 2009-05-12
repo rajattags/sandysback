@@ -19,7 +19,7 @@ class SchedulerDBPlugin(IPlugin):
         self.scheduler = None
         self.properties = None
 
-    def install(self):
+    def install(self, ctx):
         tx = self.database.new_transaction()
         schema = self.database.schema
         
@@ -44,60 +44,59 @@ class SchedulerDBPlugin(IPlugin):
         self.scheduler.job_store = store
         
     
-    def start_up(self):
-        self.parser.add_micro_parser(DigestCommand())
+    def start_up(self, ctx):
+        ctx.er.message_patterns.add('^digest .*?(?P<digest_duration>week|day)?', DigestCommand().digest)
 
     def run(self):
         self.scheduler.start()
 
-class DigestCommand(IMicroParser):
-    """digest :- give a summary of today's events"""
-    def __init__(self):
-        self.is_followed_by = ['reply_message', 'reminder_message']
-        self.is_preceeded_by = ['first_word', 'user_id', 'message_datetime_local', 'tz_offset']
+class DigestCommand:
     
-    def micro_parse(self, metadata):
-        if metadata['first_word'] == 'digest':
-            tx = metadata.tx
-            
-            s = tx.schema
-            
-            me = s.message_event("me")
-            m = s.message("m")
+    def digest(self, metadata):
+        """digest <day or week> :- give a summary of today's events"""
+        tx = metadata.tx
         
-            user_id = metadata['user_id']
-            tz_offset = metadata.get('tz_offset', 0)
-            mdt =  metadata.get('event_datetime', datetime.now())
-            
-            mdt = mdt - timedelta(0, tz_offset)
-            start_time = _dt_to_s(mdt)
-            
-            # this should be keyed of the message somewhere, but defaulted to the whole day.
-            delta = 3600 * 24
-            
-            messages = tx.execute(s.select(me.time_to_fire, m.text).\
-                                  from_(me, m).\
-                                  where(
-                                        (me.message_id == m.id) & 
-                                        (m.user_id == user_id) & 
-                                        (me.handled != _STATUS_HANDLED) & 
-                                        (me.time_to_fire >= start_time) &
-                                        (me.time_to_fire <= start_time + delta)
-                                        ).order_by(me.time_to_fire).ascending()
-                                  )
-            
-            events = list()
-            sb = list()
-            
-            for time_to_fire, message in messages:
-                dt = _s_to_dt(time_to_fire + tz_offset)
-                events.append((dt, message))
-                sb.append("%s : %s" % (dt, message))
-                
-            string = "\n".join(sb) if len(sb) else "Nothing" 
-            metadata['reply_message'] = string
-            metadata['reminder_message'] = string       
+        s = tx.schema
         
+        me = s.message_event("me")
+        m = s.message("m")
+    
+        user_id = metadata['user_id']
+        tz_offset = metadata.get('tz_offset', 0)
+        mdt =  metadata.get('event_datetime', datetime.now())
+        
+        mdt = mdt - timedelta(0, tz_offset)
+        start_time = _dt_to_s(mdt)
+        
+        # this should be keyed of the message somewhere, but defaulted to the whole day.
+        duration = metadata.get('digest_duration', 'today')
+        delta = 3600 * 24
+        if duration is 'week':
+            delta *= 7
+        
+        messages = tx.execute(s.select(me.time_to_fire, m.text).\
+                              from_(me, m).\
+                              where(
+                                    (me.message_id == m.id) & 
+                                    (m.user_id == user_id) & 
+                                    (me.handled != _STATUS_HANDLED) & 
+#                                    (me.time_to_fire >= start_time) &
+                                    (me.time_to_fire <= start_time + delta)
+                                    ).order_by(me.time_to_fire).ascending()
+                              )
+        
+        events = list()
+        sb = list()
+        
+        for time_to_fire, message in messages:
+            dt = _s_to_dt(time_to_fire + tz_offset)
+            events.append((dt, message))
+            sb.append("%s : %s" % (dt, message))
+            
+        string = "\n".join(sb) if len(sb) else "Nothing" 
+        metadata['reply_message'] = string
+        metadata['reminder_message'] = string       
+    
 
 class JobStoreDB(IJobStore):
     
