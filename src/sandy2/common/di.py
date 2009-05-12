@@ -46,12 +46,19 @@ class Injector(object):
     def configure(self, obj):
         """Iterate through all attributes of the given object, and set them with values taken from the injector.
         """
-        for key in obj.__dict__.keys():
-            try:
-                fn1 = self.__dict[key]             
-                obj.__dict__[key] = self.__evaluate_function(key, obj)
-            except KeyError:
-                pass
+
+        import types
+        if isinstance(obj, types.MethodType):
+            self.configure(obj.im_self)
+
+        dict = getattr(obj, "__dict__", None)
+        if dict:
+            for key in obj.__dict__.keys():
+                try:
+                    fn1 = self.__dict[key]             
+                    obj.__dict__[key] = self.__evaluate_function(key, obj)
+                except KeyError:
+                    pass
 
     def __setitem__(self, key, item):
         if item is None:
