@@ -45,7 +45,7 @@ class SchedulerDBPlugin(IPlugin):
         
     
     def start_up(self, ctx):
-        ctx.er.message_patterns.add('^digest .*?(?P<digest_duration>week|day)?', DigestCommand().digest)
+        ctx.er.message_patterns.add('^digest\s?.*?(?P<digest_duration>week|day)?', DigestCommand().digest)
 
     def run(self):
         self.scheduler.start()

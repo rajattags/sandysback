@@ -14,7 +14,7 @@ class DatabasePlugin(IPlugin):
         di = self.properties
         
         
-        self.db = DB(user=di['mysql_user'], passwd="MySQL-root-0", db="zander_test_database", host=di['mysql_host'], port=di['mysql_port'])
+        self.db = DB(user=di['mysql_user'], passwd=di['mysql_password'], db=di['mysql_db'], host=di['mysql_host'], port=di['mysql_port'])
         # we should check if we already created this. 
         self.properties['database'] = self.db
         
