@@ -1,7 +1,7 @@
 import re
 
 def default_pattern_transform(pattern):
-    return pattern.replace(" ", "[.:;?!\s]+")  
+    return pattern.replace(" ", "[.:;?!\s]+").replace('^', '^\s*')
 
 class REDispatcher:
     
@@ -27,14 +27,15 @@ class REDispatcher:
         
 
     def search(self, string, message=None):
-        if not message:
+        if message is None:
             message = string
         matched = False
         for r, fn in self._re_map.items():
             m = r.search(string)
             if m:
                 if hasattr(message, 'add_dictionary'):
-                    message.add_dictionary(lambda key: m.group(key))
+                    match = m
+                    message.add_dictionary(lambda key: match.groupdict()[key])
                     fn(message)
                 else:
                     fn(m)
