@@ -1,7 +1,6 @@
 from sandy2.common.di import Injector
 from sandy2.common.ordering import DependencyList
-from sandy2.common.parsing import Parser
-
+from sandy2.common.extensions import ExtensionRegistry
 
 class IPlugin:
     """Interface class for documenting the plugin methods called by the plugin system.
@@ -10,13 +9,13 @@ class IPlugin:
     def __init__(self):
         pass
 
-    def install(self):
+    def install(self, ctx):
         """Method to be run before any start-up methods are run. Any initial first time code should be run here, 
         though the detection of whether this is the first time this plugin is used is left up to the plugin.
         """
         pass
     
-    def start_up(self):
+    def start_up(self, ctx):
         """Method to be run just prior the main event loops are launched. This is guaranteed to be run after everything has been installed.
         """
         pass
@@ -55,19 +54,20 @@ class PluginSystem:
         di['di'] = di
         di['configure'] = di.configure
         # this should be split into its own plugin.
-        di['parser'] = Parser(configure=di.configure)
 
+        
     
     def configure(self):
         """Configure, install and start all plugins. Currently this is called by calling self.run(), 
         so only useful outside of the context of the run method. e.g. testing
         """
+        ctx = PluginContext(self.di, ExtensionRegistry(configure=self.di.configure))
         for p in self.plugins:
             self.di.configure(p)
-            p.install()
+            p.install(ctx)
         
         for p in self.plugins:
-            p.start_up()
+            p.start_up(ctx)
 
 
     def start(self):
@@ -81,4 +81,9 @@ class PluginSystem:
     def stop(self):
         for p in self.plugins:
             p.stop()    
-        
+
+class PluginContext:
+    
+    def __init__(self, dependency_injector, extension_registry):
+        self.er = extension_registry
+        self.di = dependency_injector
