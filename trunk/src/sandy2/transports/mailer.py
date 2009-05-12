@@ -199,20 +199,23 @@ class MailListener(object):
         import time
 
         while self.__running:
-            M = imaplib.IMAP4_SSL(self.mailhost, self.port)
-            M.login(self.username, self.password)
-            M.select()
-            typ, data = M.search(None, '(UNSEEN)')
-            
-            nums = data[0].split()
-            if len(nums):
-                print "Found %s new emails" % (len(nums)) 
-            for num in nums:
-                typ, d = M.fetch(num, '(RFC822)')
-                M.store(num, "+FLAGS", '\\Seen')
-                yield d[0][1]
-            M.close()
-            M.logout()
+            try:
+                M = imaplib.IMAP4_SSL(self.mailhost, self.port)
+                M.login(self.username, self.password)
+                M.select()
+                typ, data = M.search(None, '(UNSEEN)')
+                
+                nums = data[0].split()
+                if len(nums):
+                    print "Found %s new emails" % (len(nums)) 
+                for num in nums:
+                    typ, d = M.fetch(num, '(RFC822)')
+                    M.store(num, "+FLAGS", '\\Seen')
+                    yield d[0][1]
+                M.close()
+                M.logout()
+            except Error, e:
+                print "Error found in listening for mail: %s", e.__str__()
             t = 0
             while t < self.delay and self.__running:
                 time.sleep(5)
