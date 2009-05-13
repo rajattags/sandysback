@@ -86,7 +86,7 @@ class EmailUserFinder(IMicroParser):
         if (metadata['input_medium'] != 'email'):
             return
         
-        if metadata['user_id'] is not None:
+        if metadata.has_key('user_id'):
             # ie. we have a user id, but need an email address
             # so this is probably a reminder.
             user_id = metadata['user_id']
