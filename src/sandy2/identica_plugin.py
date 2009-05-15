@@ -4,35 +4,35 @@ from sandy2.data.linqish import SQLOperand, SQLCommand, SQLQuery
 from sandy2.data.linqish_db import *
 from sandy2.transports.twitterer import TwitterListener
 
-class TwitterPlugin(IPlugin):
+class IdenticaPlugin(IPlugin):
    def __init__(self, parser=None, db=None, properties={}):
       self.is_preceeded_by = ['database', 'passwords', 'servicecfg_database']
-      self.is_followed_by = ['twitter_database']
+      self.is_followed_by = ['identica_database']
       self.parser = parser
       self.database = db
       self.properties = properties
 
    def install(self, ctx):
-      self.twitter_user = self.properties['twitter_user']
-      self.twitter_pass = self.properties['twitter_password']
+      self.identica_user = self.properties['identica_user']
+      self.identica_pass = self.properties['identica_password']
 
       schema = self.database.schema
-      tweets = schema.twitter('t')
+      identices = schema.identices('i')
       user = schema.user('u')
 
-      table = schema.create_table(tweets)
-      table.twitter_id(int).primary_key()
-      table.twitter_name(str)
+      table = schema.create_table(identices)
+      table.notice_id(int).primary_key()
+      table.identica_name(str)
       table.user_id(int).foreign_key(user.id)
       table.is_verified(bool)
 
-      if (tweets._name not in self.database.get_tablenames()):
+      if (identices._name not in self.database.get_tablenames()):
          tx = self.database.new_transaction()
          tx.execute(table)
          tx.commit()
          tx.close()
       else:
-         print "table %s already exists.  not re-creating." % (tweets._name)
+         print "table %s already exists.  not re-creating." % (identices._name)
 
    def start_up(self, ctx):
       print "starting up...\n";
@@ -44,7 +44,7 @@ class TwitterPlugin(IPlugin):
          def __init__(self, outer):
             Thread.__init__(self)
             self.outer = outer
-            self.receiver = TwitterListener(username=outer.twitter_user, password=outer.twitter_pass)
+            self.receiver = TwitterListener(hostname='identi.ca/api', username=outer.identica_user, password=outer.identica_pass)
 
          def run(self):
             for msg in self.receiver.run():

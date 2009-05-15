@@ -16,10 +16,11 @@ class GmailPlugin(IPlugin):
         self.properties = properties
         self.mail_parser = None
         self.mail_sender = None
-        self.gmail_user = 'See passwords_plugin.py'
-        self.gmail_password = 'See passwords_plugin.py'
         
     def install(self, ctx):
+        self.gmail_user = self.properties['gmail_user'] 
+        self.gmail_password = self.properties['gmail_password']
+
         if not self.mail_parser:
             self.mail_parser = MailParser(email_address=self.gmail_user, fullname=self.properties['agent_name'])
         if not self.mail_sender:
