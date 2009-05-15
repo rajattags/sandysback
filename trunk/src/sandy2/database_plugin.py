@@ -74,7 +74,9 @@ class UserPopulator(IMicroParser):
                         tx.execute(query)
                         tx.commit()
 
-
+    def cleanup(self, metadata):
+        if not metadata.has_key('user_id'):
+            metadata['STOP'] = True
 
 
 class NewUserCreator(IMicroParser):
