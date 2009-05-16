@@ -166,7 +166,9 @@ class MailSender:
             failed = self.server.sendmail(mime['From'], [mime['To'], mime['CC']], mime.as_string())
             print failed
             self.server.noop()
-        except Exception:
+        except:
+            e = sys.exc_info()[0]
+            print "Error found while sending mail: ", e
             self.connected = False
             self.send(mime)
         finally:
@@ -214,8 +216,10 @@ class MailListener(object):
                     yield d[0][1]
                 M.close()
                 M.logout()
-            except Error, e:
-                print "Error found in listening for mail: %s", e.__str__()
+            except:
+                e = sys.exc_info()[0]
+                print "Error found in listening for mail: ", e
+
             t = 0
             while t < self.delay and self.__running:
                 time.sleep(5)
