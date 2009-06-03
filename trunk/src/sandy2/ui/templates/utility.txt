@@ -1,0 +1,20 @@
+<%!
+def _(self, *templates):
+    for name in templates:
+        if hasattr(self, name):
+            return getattr(self, name)
+    
+    raise Exception("No templates for %s." % templates)
+%>
+
+<%def name="payload()">${text_payload()}</%def>
+
+<%def name="text_payload()">${_(self, 'text__' + M.command)()}</%def>
+
+<%def name="html_payload()">${_(self, 'html__' + M.command)()}</%def>
+
+<%def name="text__unknown_command()">You said '${M.incoming_message}', but I don't really know what to do about it.
+
+You may be interested in the list of words I'm sensitive to, by asking me for 'help'.
+</%def>
+

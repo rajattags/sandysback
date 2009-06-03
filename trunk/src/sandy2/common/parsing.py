@@ -94,9 +94,19 @@ class IMessageAction(INode):
 
     def perform_action(self, metadata):
         """This single method should perform any action that should occur after all parsing has completed."""
-        
+
+_NOT_PRESENT = "__not__present___"
 class Message:
-    """Annotatable dictionary class"""
+    """Extendable dictionary class.
+    
+    Instances can be extended in a number of ways:
+    * key value pairs via standard dictionary access
+    * setting attributes on the instance.
+    * adding other dictionaries via the add_dictionary method.
+    
+    The latter mechanism allows the getitem method to scan the main dictionary for a key, followed 
+    by any added dictionaries, until an entry can be found.
+    """
     
     def __init__(self, metadata):
         self._metadata = metadata
@@ -104,18 +114,23 @@ class Message:
         self._getters = []
         
     def __setitem__(self, key, value):
+        """Set a value on the appropriate key. This will override any pre-existing entry, even on added dictionaries."""
         self._metadata[key] = value
     
     def __getitem__(self, key):
-        value = self.get(key, None)
-        if value is not None:
+        """Scan available dictionaries looking for an entry with the given key. If none is found, a KeyError is raised."""
+        value = self.get(key, _NOT_PRESENT)
+        if value is not _NOT_PRESENT:
             return value
         raise KeyError(key)
         
     def has_key(self, key):
-        return self._metadata.has_key(key)
+        """Returns true iff an entry is found in any dictionary with the given key."""
+        return self.get(key, _NOT_PRESENT) != _NOT_PRESENT
     
     def get(self, key, default=None):
+        """Scan available dictionaries looking for an entry with the given key. If none is found the default is returned.
+        The default value for the default is None."""
         if self._metadata.has_key(key):
             return self._metadata[key]
         for getter in self._getters:
@@ -138,12 +153,14 @@ class Message:
             return self._non_message[key]
         
     def items(self):
+        """Returns the items for the top level dictionary."""
         return self._non_message.items()
         
     def setdefault(self, key, default):
         return self._metadata.setdefault(key, default)
     
     def add_dictionary(self, new_map):
+        """Accepts an object with the __getitem__ method, to extend this instance. This affects the getitem methods."""
         if callable(new_map):
             self._getters.append(new_map)
         elif hasattr(new_map, '__getitem__'):

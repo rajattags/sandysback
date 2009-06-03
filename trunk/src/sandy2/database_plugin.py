@@ -81,12 +81,12 @@ class UserPopulator(IMicroParser):
 
 class NewUserCreator(IMicroParser):
     def __init__(self, db=None, parser=None):
-        self.is_preceeded_by = ['user_id', 'reply_message', 'tx', 'fullname', 'tz_offset', 'input_medium']
+        self.is_preceeded_by = ['user_id',  'tx', 'fullname', 'tz_offset', 'input_medium']
         self.is_followed_by = ['create_new_user', ]
         self.database = db
 
     def micro_parse(self, metadata):
-        if not metadata.get('reply_message', None): 
+        if not metadata.get('command', None): 
             # if we haven't got a valid message, then we haven't got a valid reply.
             # if that's the case, we shouldn't create a user.
             return

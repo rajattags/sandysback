@@ -80,7 +80,7 @@ class DigestCommand:
                                     (me.message_id == m.id) & 
                                     (m.user_id == user_id) & 
                                     (me.handled != _STATUS_HANDLED) & 
-#                                    (me.time_to_fire >= start_time) &
+                                    #(me.time_to_fire >= start_time) &
                                     (me.time_to_fire <= start_time + delta)
                                     ).order_by(me.time_to_fire).ascending()
                               )
@@ -94,8 +94,9 @@ class DigestCommand:
             sb.append("%s : %s" % (dt, message))
             
         string = "\n".join(sb) if len(sb) else "Nothing" 
-        metadata['reply_message'] = string
-        metadata['reminder_message'] = string       
+
+        metadata['command'] = 'digest_command'
+        metadata['event_tuples'] = events
     
 
 class JobStoreDB(IJobStore):

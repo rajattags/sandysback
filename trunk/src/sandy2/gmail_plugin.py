@@ -49,6 +49,8 @@ class GmailPlugin(IPlugin):
         ctx.er.micro_parsers.add(EmailUserCreator())
         ctx.er.parser_actions.add(EmailSender(sender=self.mail_sender, parser=self.mail_parser))
         
+        ctx.er.template_files.add(self, 'ui/templates/email.txt')
+        
     def run(self):
         
         from threading import Thread
@@ -144,6 +146,7 @@ class EmailUserCreator(IMicroParser):
                 
 class EmailSender(IMessageAction):
     def __init__(self, sender=None, parser=MailParser()):
+        self.is_preceeded_by = ['output_message']
         self.mail_sender = sender
         self.mail_parser = parser
         

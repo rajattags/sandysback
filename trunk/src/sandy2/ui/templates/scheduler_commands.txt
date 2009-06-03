@@ -1,0 +1,44 @@
+<%def name="schedule_payload()">${schedule_text_payload()}</%def>
+
+<%def name="schedule_text_payload()">${_(self, 'schedule_text__' + M.command, 'schedule_text_command')()}</%def>
+
+<%def name="schedule_html_payload()">${_(self, 'schedule_html__' + M.command, 'schedule_html_command')()}</%def>
+
+<%def name="schedule_text_command()">At ${M.schedule_time_tz} I'll let give you '${M.incoming_message}'.</%def>
+
+<%def name="schedule_text__unknown_command()">
+Well done, you've got here. I don't know how you did that.
+</%def>
+
+<%def name="schedule_text_command()">
+I'll look at what you've asked:
+'${M.incoming_message}' at ${M.schedule_time_tz}.
+</%def>
+
+<%def name="text__digest_command()">
+${text__digest_command__header()}
+% if len(M.event_tuples) > 0:
+    % for t in M.event_tuples:
+    ${t[0]} -- ${t[1]}
+    % endfor
+% else:
+  Nothing planned.
+% endif
+${text__digest_command__footer()}
+</%def>
+
+<%def name="text__digest_command__header()">Here is you itinerary for today:</%def>
+<%def name="text__digest_command__footer()"></%def>
+
+<%def name="text__schedule_command()">
+The state of the scheduler is this:
+${M.scheduler_string}
+
+All times are in UTC.
+
+At the moment, there is no real way to change this.
+</%def>
+
+<%def name="text__time_command()">
+The time is now ${M.time}.
+</%def>

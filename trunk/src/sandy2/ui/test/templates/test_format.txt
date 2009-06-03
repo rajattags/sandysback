@@ -1,0 +1,1 @@
+<%def name="body()">It is ${adjective()}, in the ${place()}.</%def>

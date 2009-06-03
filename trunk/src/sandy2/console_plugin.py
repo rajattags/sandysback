@@ -34,12 +34,12 @@ class ConsolePlugin(IPlugin):
 
 class ExitCommand:
 
-    def __init__(self, plugin_system=None):
-        self.plugin_system = plugin_system
+    def __init__(self, plugin_framework=None):
+        self.plugin_framework = plugin_framework
 
     def exit(self, metadata):
-        if metadata['input_medium'] == 'stdin'  and self.plugin_system is not None:
-            self.plugin_system.stop()
+        if metadata['input_medium'] == 'stdin'  and self.plugin_framework is not None:
+            self.plugin_framework.stop()
             print "Bye"
             metadata['STOP'] = True
         
@@ -80,6 +80,9 @@ class ConsoleOutputSetter(IMicroParser):
             metadata.setdefault('reminder_medium', 'stdout')
 
 class ConsoleOutputReply(IMessageAction):
+    def __init__(self):
+        self.is_preceeded_by = ['output_medium', 'output_message']
+    
     def perform_action(self, metadata):        
         medium = metadata['output_medium']
         if medium == 'stdout':

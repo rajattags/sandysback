@@ -1,5 +1,24 @@
 from sandy2.common import NOP
 
+"""Module to add the concept of extensions and extension points.
+
+Extension points are an encapsulation technique hiding the implementation 
+details of an extensible subsystem from a contributing plugin. 
+
+This removes the need to expose much of the implementation to the plugin framework, 
+and simplifies a plugins interactions with the rest of the framework."""
+    
+class ExtensionRegistry:
+    """Clients are unlikely need to be able to instantiate this object."""
+    
+    def __init__(self, configure=NOP):
+        if configure is not None and callable(configure):
+            self._configure = configure
+        self._extension_points = {}
+        
+    def __getattr__(self, extension_point_name):
+        return self._extension_points.setdefault(extension_point_name, ExtensionPoint(self._configure))
+
 class ExtensionPoint:
     
     def __init__(self, configure):
@@ -65,18 +84,6 @@ class ExtensionPoint:
             del self._addition_trackers[tracker]
 
     
-    
-class ExtensionRegistry:
-    
-    def __init__(self, configure=NOP):
-        if configure is not None and callable(configure):
-            self._configure = configure
-        self._extension_points = {}
-        
-    def __getattr__(self, extension_point_name):
-    
-        return self._extension_points.setdefault(extension_point_name, ExtensionPoint(self._configure))
-        
 
 class IExtensionTracker:
     

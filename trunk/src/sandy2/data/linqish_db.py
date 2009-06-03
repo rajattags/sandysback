@@ -110,7 +110,7 @@ class Results:
         self._sql_string = sql_string
         self._cursor_fn = cursor_fn
         self._params = params
-        self._debug = True
+        self._debug = False
 
     def __iter__(self):
         self._query(self._sql_string, self._params)

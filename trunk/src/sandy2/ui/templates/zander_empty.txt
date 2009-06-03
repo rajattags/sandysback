@@ -1,0 +1,4 @@
+[zander]
+
+agent_name = Zander
+agent_name = Z

@@ -1,0 +1,30 @@
+<%def name="email_reply()">${email_header()}
+Subject: Re: ${M.email_subject}
+${email_text_body}
+</%def>
+
+
+<%def name="email_reminder()">${email_header()}
+Subject: ${_(self, 'subject_' + command, 'email_reminder_subject')()}
+${email_text_body}
+</%def>
+
+<%def name="email_reminder_subject()">${M.incoming_message}</%def>
+
+<%def name="email_header()">
+From ${System.agent_name} Mon Jun  1 23:44:40 2009
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+To: ${M.fullname} <${M.email_id}>
+% if M.has_key('email_message_id'):
+In-Reply-To: <M.email_message_id>
+% endif
+From: ${System.agent_name} <${System.gmail_user}>
+</%def>
+
+<%def name="email_text_body()">
+
+
+
+</%def>
