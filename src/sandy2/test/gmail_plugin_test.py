@@ -1,6 +1,6 @@
 import unittest
 from sandy2.common.parsing import Parser
-from sandy2.common.plugins import PluginSystem
+from sandy2.common.plugins import PluginFramework
 
 from sandy2.common.di import Injector
 from sandy2.transports.mailer import MailParser
@@ -25,7 +25,7 @@ class EmailPluginTest(unittest.TestCase):
 
         di['mail_sender'] = self.sender = DummyMailSender()
         self.mail_parser = MailParser(['zander.dev@gmail.com', 'zander.dev@googlemail.com'], "Zander The Wonderhorse")
-        ps = PluginSystem(plugins=[DatabasePlugin(), GmailPlugin(), SchedulerPlugin(), BasicMicroParsingPlugin(), IntrospectionPlugin()], di = di)
+        ps = PluginFramework(plugins=[DatabasePlugin(), GmailPlugin(), SchedulerPlugin(), BasicMicroParsingPlugin(), IntrospectionPlugin()], di = di)
         ps.configure()
 
         self.parser = ps.di['parser']
@@ -85,7 +85,6 @@ class EmailPluginTest(unittest.TestCase):
         msg = self.mail_parser.parse_raw_mail(self.message())
     
         event = self.mail_parser.find_metadata(msg)
-        event['reply_message'] = "A valid input has been detected (faked)"
         return event
     
     def message(self):

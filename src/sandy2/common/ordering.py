@@ -1,7 +1,7 @@
 __author__="james"
 __date__ ="$05-Jan-2009 22:14:29$"
 
-debug = True
+debug = False
 
 class INode(object):
     """A common type to allow ordering of parsers and actions.

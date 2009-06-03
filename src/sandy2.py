@@ -1,4 +1,4 @@
-from sandy2.common.plugins import PluginSystem
+from sandy2.common.plugins import PluginFramework
 
 from sandy2.base_plugin import BasicMicroParsingPlugin
 from sandy2.console_plugin import ConsolePlugin
@@ -9,7 +9,7 @@ from sandy2.message_db_plugin import MessageDBPlugin
 from sandy2.password_plugin import PasswordPlugin
 from sandy2.reminder_plugin import SchedulerPlugin
 from sandy2.reminder_db_plugin import SchedulerDBPlugin
-
+from sandy2.templating_plugin import TemplatingPlugin
 
 class Sandy2(object):
 
@@ -29,10 +29,11 @@ class Sandy2(object):
                    IntrospectionPlugin(),
                    SchedulerDBPlugin(),
                    GmailPlugin(),
-                   PasswordPlugin()
+                   PasswordPlugin(),
+                   TemplatingPlugin(),
                 ]
         
-        PluginSystem(plugins).start()
+        PluginFramework(plugins).start()
 
 
 

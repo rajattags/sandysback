@@ -1,0 +1,10 @@
+[zander]
+
+schedule_text__remind_me_command = I'll ping you at ${M.schedule_time_tz} to remind you ${M.reminder_text}.
+schedule_text__remind_me_command = I will remind you ${M.reminder_text} at ${M.schedule_time_tz}.
+
+text__remind_me_command = You asked me to remind you ${M.reminder_text}. 
+text__remind_me_command = Ping: ${M.reminder_text}.
+
+text__time_command = The time to a billion decimal places is ${M.time} GMT.
+text__time_command = The time is ${M.time} GMT. 

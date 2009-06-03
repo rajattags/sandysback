@@ -1,0 +1,1 @@
+<%def name="loaded()">Loaded ${M.success}!</%def>

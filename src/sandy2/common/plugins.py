@@ -37,7 +37,7 @@ class IPlugin:
         pass
  
  
-class PluginSystem:
+class PluginFramework:
     """Container for configuring and starting a set of plugins.
     Internally the plugins are ordered with a dependency graph. A plugin may use:
         self.is_preceeded_by = ['database'] # requires the database 
@@ -49,7 +49,7 @@ class PluginSystem:
         self.plugins = DependencyList(plugins)
         self.di = di
     
-        di['plugin_system'] = self
+        di['plugin_framework'] = self
         di['properties'] = di
         di['di'] = di
         di['configure'] = di.configure
@@ -84,6 +84,6 @@ class PluginSystem:
 
 class PluginContext:
     
-    def __init__(self, dependency_injector, extension_registry):
+    def __init__(self, dependency_injector=Injector(), extension_registry=ExtensionRegistry()):
         self.er = extension_registry
         self.di = dependency_injector

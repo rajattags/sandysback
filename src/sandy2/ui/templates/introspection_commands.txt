@@ -1,0 +1,34 @@
+
+<%def name="text__help_command()">
+The commands available are:
+
+% for ds in M.doc_strings:
+      ${ds}
+% endfor
+
+We try to add to these all the time, so check back regularly.
+</%def>
+
+<%def name="text__inspect_microparsers_command()">
+${inspect_command_header()}
+
+The filters are evaluated in the following order:
+% for filter_name in M.parser_filters:
+  ${filter_name}
+% endfor
+
+The actions are evaluated after the filters, in the follwing order: 
+% for action_name in M.parser_actions:
+  ${action_name}  
+% endfor 
+${inspect_command_footer()}
+</%def>
+
+<%def name="text__metadata_command()">
+The contents of the metadata data structure is as follows:
+% for k, v in M._metadata.items():
+	${k} : ${v}
+% endfor
+
+It should be noted that this will change depending on what command is run, and where it is run from.
+</%def>

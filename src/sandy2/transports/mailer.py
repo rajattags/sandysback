@@ -1,11 +1,14 @@
 import email
 import email.utils
-from email.message import Message
-from email.MIMEText import MIMEText
+import sys
 
 from datetime import datetime, timedelta
-
+from email.message import Message
+from email.MIMEText import MIMEText
 from string import join
+
+
+
 
 if __name__ == "__main__":
     pass
@@ -118,6 +121,7 @@ class MailParser(object):
         prefix = 'REMINDER: ' if metadata.get('is_reminder', False) else 'Re: '
         message['Subject'] = prefix + metadata[self.prefix + 'subject']
         
+        print message
 #        evt_date = metadata['']
 #        message['Date'] = evt_date
         # TODO add Date header.
