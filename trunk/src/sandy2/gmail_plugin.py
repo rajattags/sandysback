@@ -16,15 +16,18 @@ class GmailPlugin(IPlugin):
         self.properties = properties
         self.mail_parser = None
         self.mail_sender = None
+        self.mail_receiver = None
         
     def install(self, ctx):
-        self.gmail_user = self.properties['gmail_user'] 
-        self.gmail_password = self.properties['gmail_password']
+        gmail_user = self.properties['gmail_user'] 
+        gmail_password = self.properties['gmail_password']
 
         if not self.mail_parser:
-            self.mail_parser = MailParser(email_address=self.gmail_user, fullname=self.properties['agent_name'])
+            self.mail_parser = MailParser(email_address=gmail_user, fullname=self.properties['agent_name'])
         if not self.mail_sender:
-            self.mail_sender = MailSender(username=self.gmail_user, password=self.gmail_password)
+            self.mail_sender = MailSender(username=gmail_user, password=gmail_password)
+        if not self.mail_receiver:
+            self.mail_receiver = MailListener(username=gmail_user, password=gmail_password, listener=self.parse_mail)
         
         schema = self.database.schema
         
@@ -52,31 +55,16 @@ class GmailPlugin(IPlugin):
         ctx.er.template_files.add(self, 'ui/templates/email.txt')
         
     def run(self):
+        self.mail_receiver.start()
         
-        from threading import Thread
-        
-        class Listening(Thread):
-            def __init__(self, outer):
-                Thread.__init__(self)
-                self.outer = outer
-                self.receiver = MailListener(username=outer.gmail_user, password=outer.gmail_password)
-            
-            def run(self):
-                for txt in self.receiver.run():
-                    message = self.outer.mail_parser.parse_raw_mail(txt)
-                    metadata = self.outer.mail_parser.find_metadata(message)
-                    self.outer.parser.parse(metadata)
-                    self.outer.parser.perform_actions(metadata)
-                    
-            def close(self):
-                self.receiver.close()
-                
-        self.mail_listener_thread = Listening(self)
-        self.mail_listener_thread.start()
-        
+    def parse_mail(self, txt):
+        message = self.mail_parser.parse_raw_mail(txt)
+        metadata = self.mail_parser.find_metadata(message)
+        self.parser.parse(metadata)
+        self.parser.perform_actions(metadata)
     
     def stop(self):
-        self.mail_listener_thread.close()
+        self.mail_receiver.close()
         
 class EmailUserFinder(IMicroParser):
 

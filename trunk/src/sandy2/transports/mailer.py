@@ -20,7 +20,8 @@ class MailParser(object):
         if type(email_address) is str:
             email_address=[email_address, email_address.replace("gmail.com", "googlemail.com")]
         self.my_email_address = email_address
-        
+        if fullname is None:
+            fullname = []
         self.my_email_name = fullname
         pass
     
@@ -50,7 +51,9 @@ class MailParser(object):
 #          o additional receipients of the message.
         tos = message.get_all('to', [])
         ccs = message.get_all('cc', [])
-        all_recipients = filter(lambda a : a[0] not in self.my_email_name and a[1] not in self.my_email_address, email.utils.getaddresses(tos + ccs))
+        
+        all_recipients = [a[0] for a in email.utils.getaddresses(tos + ccs) if (a[0] not in self.my_email_name and a[1] not in self.my_email_address)]
+#        all_recipients = filter(lambda a : a[0] not in self.my_email_name and a[1] not in self.my_email_address, email.utils.getaddresses(tos + ccs))
         metadata[self.prefix + 'recipients'] = all_recipients
 
 #          o the location where to respond
@@ -88,6 +91,8 @@ class MailParser(object):
         (left, sep, right) = cleaned_message.partition("\n\n")
 
         metadata['incoming_message'] = left
+
+        metadata[self.prefix + 'body'] = cleaned_message
 
 #          o the date sent, including timezone
         date_tuple = email.utils.parsedate_tz(message['Date'])
@@ -196,20 +201,23 @@ class MailSender:
             pass
         finally:
             self.connected = False
-        
-class MailListener(object):
+
+from threading import Thread
+class MailListener(Thread):
 
 
-    def __init__(self, mailhost='imap.gmail.com', port=993, username=None, password=None, delay=120):
+    def __init__(self, mailhost='imap.gmail.com', port=993, username=None, password=None, delay=120, listener=None):
+        Thread.__init__(self)
         self.mailhost = mailhost
         self.port = port
         self.username = username
         self.password = password
         self.delay = delay
+        self.__listener = listener
         self.__running = True
+
     
     def run(self):
-        from threading import Thread
         import imaplib
         import time
 
@@ -222,14 +230,18 @@ class MailListener(object):
                 
                 nums = data[0].split()
                 if len(nums):
-                    print "Found %s new emails" % (len(nums)) 
+                    print "Found %s new emails at %s" % (len(nums), self.username) 
+                
                 for num in nums:
                     typ, d = M.fetch(num, '(RFC822)')
                     M.store(num, "+FLAGS", '\\Seen')
-                    yield d[0][1]
+                    
+                    self.__listener(d[0][1])
                 M.close()
                 M.logout()
             except:
+                import traceback
+                traceback.print_exc()
                 e = sys.exc_info()[0]
                 print "Error found in listening for mail: ", e
 
@@ -237,7 +249,7 @@ class MailListener(object):
             while t < self.delay and self.__running:
                 time.sleep(5)
                 t = t + 5
-            
+        
 
     def close(self):
         self.__running = False
