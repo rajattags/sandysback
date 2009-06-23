@@ -95,6 +95,7 @@ class DigestCommand:
             
         string = "\n".join(sb) if len(sb) else "Nothing" 
 
+        print string
         metadata['command'] = 'digest_command'
         metadata['event_tuples'] = events
     
@@ -115,6 +116,7 @@ class JobStoreDB(IJobStore):
         me.time_to_fire = abs_seconds
         me.handled = _STATUS_SCHEDULED
         
+        print s.insert_into(me)
         tx.execute(s.insert_into(me))
         tx.commit()
         tx.close()

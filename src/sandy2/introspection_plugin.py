@@ -19,7 +19,7 @@ class IntrospectionPlugin(IPlugin):
         
         internal = InternalCommands(self.parser)
         ctx.er.message_patterns.add('^inspect', internal.inspect)
-        ctx.er.message_patterns.add('^(?P<metadata_command>metadata)', internal.metadata_command)
+        ctx.er.message_patterns.add('^metadata', internal.metadata_command)
         
         ctx.er.template_files.add(self, "ui/templates/introspection_commands.txt")
         ctx.er.phrase_banks.add(self, "ui/templates/zander_introspection_commands.txt")

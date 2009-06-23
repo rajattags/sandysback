@@ -31,8 +31,10 @@ def dictionary_viewer(dict):
         def __getattr__(self, key):
             if hasattr(dict, key):
                 return getattr(dict, key)
-            else:
+            elif hasattr(dict, '__getitem__'):
                 return dict[key]
+            else:
+                raise KeyError(key)
         def __getitem_(self, key):
             return dict[key]
         def has_key(self, key):
@@ -146,14 +148,14 @@ class PhraseBank:
     
 class PhraseBankParser(RawConfigParser):
     
-    def __init__(self, defaults={}, dict_type=PhraseBank):
-        RawConfigParser.__init__(self, defaults, dict_type)
-        self._sections = {}
+    def __init__(self, defaults={}):
+        RawConfigParser.__init__(self, defaults)
+        self._dict = PhraseBank
         self._template = None
     
     def add_section(self, section):
-        if not self._sections.has_key(section):
-            RawConfigParser.add_section(self, section)
+        if section not in self._sections:
+            self._sections[section] = self._dict()
         
     def get_phrasebank(self, section):
         if not self._sections.has_key(section):
@@ -167,7 +169,7 @@ class PhraseBankParser(RawConfigParser):
         
     def set_base_template(self, template):
         if template:
-            for pb in self._sections.values():
+            for key, pb in self._sections.items():
                 pb.set_template(template)
         self._template = template
 

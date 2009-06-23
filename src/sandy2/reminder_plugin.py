@@ -81,25 +81,28 @@ class TimedReminder(IMicroParser):
         if not metadata.has_key('is_reminder'):
             metadata['is_reminder'] = False
             
-    def startTime(self, msg, sourceTime=None):
+    def startTime(self, msg, sourceTime):
         calendar = pdt.Calendar(self.constants)
         (start, end, valid) = calendar.evalRanges(msg, sourceTime=sourceTime)
         
         if valid:
-            return _dt(start)
+            # need to address the occurrence of 11-3pm being interpretted as 11pm-3pm
+            return _f_dt(start, sourceTime)
         
         (start, valid) = calendar.parse(msg, sourceTime=sourceTime)
         if valid == 1:
             # date
-            return _dt(start)
+            return _f_dt(start, sourceTime)
         elif valid == 2:
             # time
-            return _dt(start)
+            return _f_dt(start, sourceTime)
         elif valid == 3:
             # datetime
-            return _dt(start)
+            return _f_dt(start, sourceTime)
         
         return None
+
+
 
 class Commands:
 
@@ -152,6 +155,10 @@ class FrequencyTagDetector(IMicroParser):
 
 def _dt(start):
     return datetime(*start[0:6])
+
+def _f_dt(time_tuple, datum):
+    dt = _dt(time_tuple)
+    return dt if dt > datum else dt + timedelta(1)
 
 class ScheduleAction(IMessageAction):
     
