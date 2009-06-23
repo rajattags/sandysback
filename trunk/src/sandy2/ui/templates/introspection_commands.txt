@@ -9,8 +9,7 @@ The commands available are:
 We try to add to these all the time, so check back regularly.
 </%def>
 
-<%def name="text__inspect_microparsers_command()">
-${inspect_command_header()}
+<%def name="text__inspect_microparsers_command()">${inspect_command_header()}
 
 The filters are evaluated in the following order:
 % for filter_name in M.parser_filters:
@@ -21,14 +20,35 @@ The actions are evaluated after the filters, in the follwing order:
 % for action_name in M.parser_actions:
   ${action_name}  
 % endfor 
+
+These are contributed by plugins. The following plugins are installed:
+% for plugin in System.plugin_framework.plugins:
+  ${plugin.id}
+% endfor
+
 ${inspect_command_footer()}
 </%def>
 
+<%def name="inspect_command_header()">The system is constructed of a number of systems. Two of them are:
+ 1. The parser filters 
+ 2. The parser actions
+</%def>
+<%def name="inspect_command_footer()"></%def> 
+
+
+
+
 <%def name="text__metadata_command()">
 The contents of the metadata data structure is as follows:
-% for k, v in M._metadata.items():
+% for k, v in M.items():
 	${k} : ${v}
 % endfor
 
 It should be noted that this will change depending on what command is run, and where it is run from.
+
+I also have access to System data which for obvious reasons, I will not enumerate here. Some of which may be useful, and can be referred to as:
+% for k in System.keys():
+    ${k}
+% endfor
+
 </%def>

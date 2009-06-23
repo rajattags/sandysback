@@ -9,7 +9,10 @@ def _(self, *templates):
 
 <%def name="payload()">${text_payload()}</%def>
 
-<%def name="text_payload()">${_(self, 'text__' + M.command)()}</%def>
+<%def name="text_payload()">${_(self, 'start_paragraph__' + M.command, 'start_paragraph_default')()}
+${_(self, 'text__' + M.command)()}
+${_(self, 'ending_paragraph__' + M.command, 'ending_paragraph_default')()}
+</%def>
 
 <%def name="html_payload()">${_(self, 'html__' + M.command)()}</%def>
 
@@ -18,3 +21,6 @@ def _(self, *templates):
 You may be interested in the list of words I'm sensitive to, by asking me for 'help'.
 </%def>
 
+<%def name="start_paragraph_default()">${text_greeting()}</%def>
+
+<%def name="ending_paragraph_default()">${text_signoff()}</%def>

@@ -1,8 +1,4 @@
 [zander]
 short_help_command = Please remain calm. I try to help by reminding you of things you ask me, including meetings.
 short_help_command = Hello, I'm ${System.agent_name}. I help by keeping track of your life, so you don't have to.
-inspect_command_header = The system is constructed of a number of systems. Three of them are:
- 1. The parser filters
- 2. The parser actions
 
-inspect_command_footer = 

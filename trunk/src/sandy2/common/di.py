@@ -79,6 +79,9 @@ class Injector(object):
         assert callable(fn)
         self.__dict[key] = fn
 
+    def keys(self):
+        return self.__dict.keys()
+
     def __evaluate_function(self, key, obj=None):
         """Attempt to call the given function with a single variable.
         If the function fails because it has too few arguments, the function call 

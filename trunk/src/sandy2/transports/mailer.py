@@ -146,22 +146,31 @@ class MailSender:
         self.connected = False
         
     def connect(self):
-        self.server = smtplib.SMTP(self.mailhost, self.port)
-        print "Connecting to SMTP..."
-        self.server.set_debuglevel(0)
-        # Start the conversation with EHLO
-        self.server.ehlo()
-
-        # Gmail uses TLS.
-        self.server.starttls()
-
-        self.server.ehlo()
-
-        # Login to the server with SMTP AUTH now that we're TLS'd and client identified
-        self.server.login(self.username, self.password)
-        print "Connected to SMTP"
-        self.connected = True
+        try:
+            self.server = smtplib.SMTP(self.mailhost, self.port)
+            print "Connecting to SMTP..."
+            self.server.set_debuglevel(0)
+            # Start the conversation with EHLO
+            self.server.ehlo()
     
+            # Gmail uses TLS.
+            self.server.starttls()
+    
+            self.server.ehlo()
+    
+            # Login to the server with SMTP AUTH now that we're TLS'd and client identified
+            self.server.login(self.username, self.password)
+            print "Connected to SMTP"
+            self.connected = True
+            return
+        except:
+            e = sys.exc_info()[0]
+            print "Error found while connecting: ", e
+            self.connected = False
+            import time
+            time.sleep(5)
+            self.connect()
+            
     def send(self, mime):
         if not self.connected:
             self.connect()

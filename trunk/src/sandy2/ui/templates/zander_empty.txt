@@ -1,4 +1,14 @@
 [zander]
-
 agent_name = Zander
-agent_name = Z
+agent_name = Zander
+tag_line = happyrobots.net
+tag_line = Your friendly personal organizer
+tag_line = Social Secretary; skilled in kung-fu
+text_greeting=Hi, ${M.fullname},
+text_greeting=Hey, ${M.fullname},
+text_greeting=Dear ${M.fullname},
+text_signoff = Thanks, and regards,
+ ${agent_name()}
+ ${tag_line()}
+ --
+# end

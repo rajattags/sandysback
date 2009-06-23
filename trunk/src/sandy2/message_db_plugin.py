@@ -41,12 +41,12 @@ class MessageDBPlugin(IPlugin):
 class MessageRecorder(IMicroParser):
     
     def __init__(self):
-        self.is_preceeded_by = ['user_id', 'input_medium', 'incoming_message', 'tx', 'reply_message']
+        self.is_preceeded_by = ['user_id', 'input_medium', 'incoming_message', 'tx', 'command']
         self.is_followed_by = ['message_id']
         
     def micro_parse(self, metadata):
         
-        if metadata.has_key('user_id') and metadata.has_key('reply_message') and not metadata.get('is_reminder', False):
+        if metadata.has_key('user_id') and metadata.has_key('command') and not metadata.get('is_reminder', False):
             tx = metadata.tx
             schema = tx.schema
             m = schema.message('m')
