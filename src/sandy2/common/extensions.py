@@ -83,7 +83,8 @@ class ExtensionPoint:
         if not has_methods and callable(tracker):
             del self._addition_trackers[tracker]
 
-    
+    def __iter__(self):
+        return self._extensions.__iter__()
 
 class IExtensionTracker:
     
