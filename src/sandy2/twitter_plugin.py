@@ -35,9 +35,14 @@ class TwitterPlugin(IPlugin):
          print "table %s already exists.  not re-creating." % (tweets._name)
 
    def start_up(self, ctx):
-      print "starting up...\n";
+      ctx.er.account_registration.add("(?P<fullname>.*?) \((?P<twitter_id>\w+)\) is now following your updates on Twitter.", self.register_new_user)
+
+
+   def register_new_user(self, message):
+      print "%s is one of us now. They go by the name of %s" % (message['twitter_id'], message['fullname'])
 
    def run(self):
+       
       from threading import Thread
 
       class Listening(Thread):
@@ -50,4 +55,4 @@ class TwitterPlugin(IPlugin):
             for msg in self.receiver.run():
                print "got %s man" % (msg.text)
 
-      Listening(self).start()
+#      Listening(self).start()
