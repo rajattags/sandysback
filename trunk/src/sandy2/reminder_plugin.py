@@ -39,7 +39,7 @@ class SchedulerPlugin(IPlugin):
 
         commands = Commands()
         ctx.er.message_patterns.add('^scheduler', commands.inspect_scheduler)
-        ctx.er.message_patterns.add('^(remind( me)?|r|echo|remember) (?P<reminder_text>.*)', commands.remind_me)
+        ctx.er.message_patterns.add('^(remind( me)?|r( me)?|echo|remember) (?P<reminder_text>.*)', commands.remind_me)
         
         ctx.er.template_files.add(self, 'ui/templates/scheduler_commands.txt')
         ctx.er.phrase_banks.add(self, 'ui/templates/zander_scheduler_commands.txt')
