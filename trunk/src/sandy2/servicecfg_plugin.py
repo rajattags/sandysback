@@ -33,7 +33,7 @@ class ServiceConfigPlugin(IPlugin):
         ar = AccountRegistrationListener()
         
         ctx.di.configure(ar)
-        ctx.er.account_registration.track(ar.add_rule)
+        ctx.er.account_registrations.track(ar.add_rule)
         
         self._account_registration = ar
     

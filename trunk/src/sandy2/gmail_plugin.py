@@ -1,10 +1,6 @@
-from sandy2.common.parsing import IMicroParser, IMessageAction, Parser
+from sandy2.common.parsing import Parser, IMessageAction
 from sandy2.common.plugins import IPlugin
-from sandy2.data.linqish import SQLOperand, SQLCommand, SQLQuery
-from sandy2.data.linqish_db import *
 from sandy2.transports.mailer import MailListener, MailParser, MailSender
-
-
 
 
 class GmailPlugin(IPlugin):
@@ -17,6 +13,7 @@ class GmailPlugin(IPlugin):
         self.mail_parser = None
         self.mail_sender = None
         self.mail_receiver = None
+        self.gmail_dao = None
         
     def install(self, ctx):
         gmail_user = self.properties['gmail_user'] 
@@ -29,6 +26,49 @@ class GmailPlugin(IPlugin):
         if not self.mail_receiver:
             self.mail_receiver = MailListener(username=gmail_user, password=gmail_password, listener=self.parse_mail)
         
+        if not self.gmail_dao:
+            self.gmail_dao = GmailDAO(self.database)
+        
+        ctx.er.transport_dao.add('email', self.gmail_dao)
+        
+        
+    def start_up(self, ctx):
+        ctx.er.parser_actions.add(EmailSender(sender=self.mail_sender, parser=self.mail_parser))
+        ctx.er.template_files.add(self, 'ui/templates/email.txt')
+        
+    def run(self):
+        self.mail_receiver.start()
+        
+    def parse_mail(self, txt):
+        message = self.mail_parser.parse_raw_mail(txt)
+        metadata = self.mail_parser.find_metadata(message)
+        self.parser.process_dictionary(metadata)
+    
+    def stop(self):
+        self.mail_receiver.close()
+        self.mail_sender.disconnect()
+                
+class EmailSender(IMessageAction):
+    def __init__(self, sender=None, parser=MailParser()):
+        self.is_preceeded_by = ['output_message']
+        self.mail_sender = sender
+        self.mail_parser = parser
+        
+    def perform_action(self, metadata):
+        if metadata.get('output_medium', None) == 'email':
+            email = self.mail_parser.construct_email(metadata, key="output_message")
+            self.mail_sender.send(email)
+
+from sandy2.data.dao import SimpleDAO
+from sandy2.data.linqish import SQLOperand, SQLCommand, SQLQuery
+from sandy2.data.linqish_db import *
+
+class GmailDAO(SimpleDAO):
+
+    def __init__(self, database=None):
+        self.database = database
+    
+    def create_tables(self):
         schema = self.database.schema
         
         email = schema.email('e')
@@ -45,100 +85,59 @@ class GmailPlugin(IPlugin):
             tx.commit()
             tx.close()
         else:
-            print "Table %s already exists. Not re-creating." % (user._name)
+            print "Table %s already exists. Not re-creating." % (email._name)
     
-    def start_up(self, ctx):
-        ctx.er.micro_parsers.add(EmailUserFinder())
-        ctx.er.micro_parsers.add(EmailUserCreator())
-        ctx.er.parser_actions.add(EmailSender(sender=self.mail_sender, parser=self.mail_parser))
-        
-        ctx.er.template_files.add(self, 'ui/templates/email.txt')
-        
-    def run(self):
-        self.mail_receiver.start()
-        
-    def parse_mail(self, txt):
-        message = self.mail_parser.parse_raw_mail(txt)
-        metadata = self.mail_parser.find_metadata(message)
-        self.parser.parse(metadata)
-        self.parser.perform_actions(metadata)
+    def update_tables(self):
+        pass
     
-    def stop(self):
-        self.mail_receiver.close()
-        
-class EmailUserFinder(IMicroParser):
+    def save_row(self, metadata):
+        tx = metadata.tx
 
-    def __init__(self, db=None):
-        self.is_preceeded_by = ['tx', 'input_medium', 'incoming_message']
-        self.is_followed_by = ['user_id']
-        self.database = db
+        row = tx.schema.email('e')
+        row.user_id = metadata['user_id']
+        row.email = metadata['email_id']
+        row.is_verified = True
 
-    def micro_parse(self, metadata):
-        if (metadata['input_medium'] != 'email'):
-            return
-        
-        if metadata.has_key('user_id'):
-            # ie. we have a user id, but need an email address
-            # so this is probably a reminder.
-            user_id = metadata['user_id']
-            s = metadata.tx.schema
-            e = s.email('e')
-            rows = metadata.tx.execute(s.select(e.email, e.is_verified).from_(e).where(e.user_id == user_id))
-                                    
-            for (email_address, verified) in rows:
-                metadata['email_id'] = email_address
+        query = s.insert_into(row)
+        metadata.tx.execute(query)
+
+    
+    def find_row(self, params, results=None):
+        if not results:
+            results = dict()
             
-            message = metadata['incoming_message']
+        if params.has_key('user_id'):
+            self.find_row_by_user_id(params['user_id'], results, params.tx)
+        else:
+            self.find_user_id(params['email_id'], results, params.tx)
+
+        if not params.has_key('email_subject') and params.has_key('incoming_message'):
+            message = params['incoming_message']
             
             if message.find("\n")>= 0:
                 subject, body = message.split("\n", 1)
             else:
                 subject = message
-            metadata['email_subject'] = subject
-        else:
+            results['email_subject'] = subject
             
-            email_address = metadata['email_id']
+        return results
+    
+    def find_user_id(self, email_address, results={}, tx=None):
+        s = tx.schema
+        e = s.email('e')
+        rows = tx.execute(s.select(e.user_id, e.is_verified).from_(e).where(e.email == email_address))
 
-            s = metadata.tx.schema
-            e = s.email('e')
-            rows = metadata.tx.execute(s.select(e.user_id, e.is_verified).from_(e).where(e.email == email_address))
+        # not set if not found.                        
+        for (user_id, verified) in rows:
+            results['user_id'] = user_id
 
-            # not set if not found.                        
-            for (user_id, verified) in rows:
-                metadata['user_id'] = user_id
-
-
-class EmailUserCreator(IMicroParser):
-    def __init__(self, db=None, parser=None):
-        self.is_preceeded_by = ['tx', 'create_new_user']
-        self.database = db
-        self.parser = parser
-
-    def micro_parse(self, metadata):
-        if metadata.get('create_new_user', False):
-            # we don't need to respond to anything from a stranger that we don't understand.
-            if metadata['input_medium'] == 'email':
-                s = metadata.tx.schema
-                e = s.email('e')
-                q = s.insert_into(e)
-                e.user_id = metadata['user_id']
-                e.email = metadata['email_id']
-                e.is_verified = True
-                metadata.tx.execute(q)
-
-
-
-                # reparse, now we've inserted some stuff into the user table.
-                self.parser.parse(metadata)
-                
-                
-class EmailSender(IMessageAction):
-    def __init__(self, sender=None, parser=MailParser()):
-        self.is_preceeded_by = ['output_message']
-        self.mail_sender = sender
-        self.mail_parser = parser
+    def find_row_by_user_id(self, user_id, results={}, tx=None):
+        # ie. we have a user id, but need an email address
+        # so this is probably a reminder.
+        s = tx.schema
+        e = s.email('e')
+        rows = tx.execute(s.select(e.email, e.is_verified).from_(e).where(e.user_id == user_id))
+                                
+        for (email_address, verified) in rows:
+            results['email_id'] = email_address
         
-    def perform_action(self, metadata):
-        if metadata.get('output_medium', None) == 'email':
-            email = self.mail_parser.construct_email(metadata, key="output_message")
-            self.mail_sender.send(email)
