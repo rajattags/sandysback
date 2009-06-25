@@ -80,7 +80,7 @@ class DigestCommand:
                                     (me.message_id == m.id) & 
                                     (m.user_id == user_id) & 
                                     (me.handled != _STATUS_HANDLED) & 
-                                    #(me.time_to_fire >= start_time) &
+                                    (me.time_to_fire >= start_time) &
                                     (me.time_to_fire <= start_time + delta)
                                     ).order_by(me.time_to_fire).ascending()
                               )
