@@ -41,9 +41,9 @@ class DatabasePlugin(IPlugin):
 
         
     def start_up(self, ctx):
-        ctx.er.micro_parsers.add(NewUserCreator())
-        ctx.er.micro_parsers.add(UserPopulator())
-        ctx.er.micro_parsers.add(NewTransactionAnnotater())
+        ctx.er.parser_filters.add(NewUserCreator())
+        ctx.er.parser_filters.add(UserPopulator())
+        ctx.er.parser_filters.add(NewTransactionAnnotater())
 
 class UserPopulator(IMicroParser):        
     def __init__(self):

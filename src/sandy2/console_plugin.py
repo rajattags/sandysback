@@ -10,8 +10,8 @@ class ConsolePlugin(IPlugin):
     
     def start_up(self, ctx):
         self._is_running = True
-        ctx.er.micro_parsers.add(ConsoleUserFinder())
-        ctx.er.micro_parsers.add(ConsoleOutputSetter())
+        ctx.er.parser_filters.add(ConsoleUserFinder())
+        ctx.er.parser_filters.add(ConsoleOutputSetter())
         ctx.er.message_patterns.add('^(exit|quit)', ExitCommand().exit)
         
         ctx.er.parser_actions.add(ConsoleOutputReply())        
