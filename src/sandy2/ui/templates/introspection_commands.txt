@@ -11,29 +11,55 @@ We try to add to these all the time, so check back regularly.
 
 <%def name="text__inspect_microparsers_command()">${inspect_command_header()}
 
-The filters are evaluated in the following order:
-% for filter_name in M.parser_filters:
-  ${filter_name}
-% endfor
+The system is constructed of a number of layers. At the lowest layer are plugins, extensions and extension points. 
 
-The actions are evaluated after the filters, in the follwing order: 
-% for action_name in M.parser_actions:
-  ${action_name}  
-% endfor 
-
-These are contributed by plugins. The following plugins are installed:
+The following plugins are installed:
 % for plugin in System.plugin_framework.plugins:
   ${plugin.id}
 % endfor
 
+Each of these plugins may contribute to one or more extension points, via the extension registry. They may also 
+contribute and track their own extension points. The following extension points are currently being tracked: 
+% for name, extension_point in System.plugin_framework.extension_registry._extension_points.items():
+ * ${name}: ${extension_point_doc(extension_point)}
+% endfor
+
+The message processor makes up the centre of the system; this is made up of two low level extension points:
+ 1. The parser filters 
+ 2. The parser actions
+
+The filters are evaluated in the following order:
+% for filter_name in M.parser_filters:
+ * ${filter_name}
+% endfor
+
+The actions are evaluated after the filters, in the follwing order: 
+% for action_name in M.parser_actions:
+ * ${action_name}  
+% endfor 
+
 ${inspect_command_footer()}
 </%def>
 
-<%def name="inspect_command_header()">The system is constructed of a number of systems. Two of them are:
- 1. The parser filters 
- 2. The parser actions
+<%def name="extension_point_doc(ep)">
+%    for m in ep.trackers:
+%        if m.__doc__:
+            ${m.__doc__}
+%        endif
+%    endfor     
 </%def>
-<%def name="inspect_command_footer()"></%def> 
+
+<%def name="inspect_command_header()">
+This following gives a little insight into the way we're organized. 
+
+It gets geeky quite quickly, so if you're not into that sort of stuff, sorry to have bothered you; you should look away now.
+
+Almost all the following is generated from the system as it is installed right now. 
+</%def>
+<%def name="inspect_command_footer()">
+
+You may also be interested in the output of the 'metadata' command.
+</%def>
 
 
 
