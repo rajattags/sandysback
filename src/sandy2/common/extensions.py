@@ -26,7 +26,8 @@ class ExtensionPoint:
         self._addition_trackers = []
         self._removal_trackers = []
         self._configure = configure
-        pass
+        
+        self.trackers = self._addition_trackers
     
     def add(self, obj, *args, **kw):
         for tracker in self._addition_trackers:
