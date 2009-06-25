@@ -49,11 +49,13 @@ class PluginFramework:
         self.plugins = DependencyList(plugins)
         self.di = di
     
+        self.extension_registry = ExtensionRegistry(configure=self.di.configure)
+    
         di['plugin_framework'] = self
         di['properties'] = di
         di['di'] = di
         di['configure'] = di.configure
-        # this should be split into its own plugin.
+        
 
         
     
@@ -61,7 +63,7 @@ class PluginFramework:
         """Configure, install and start all plugins. Currently this is called by calling self.run(), 
         so only useful outside of the context of the run method. e.g. testing
         """
-        ctx = PluginContext(self.di, ExtensionRegistry(configure=self.di.configure))
+        ctx = PluginContext(self.di, self.extension_registry)
         for p in self.plugins:
             self.di.configure(p)
             p.install(ctx)
