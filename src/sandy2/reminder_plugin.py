@@ -32,8 +32,8 @@ class SchedulerPlugin(IPlugin):
         self.properties['scheduler'] = self.scheduler
     
     def start_up(self, ctx):
-        ctx.er.micro_parsers.add(TimedReminder())
-        ctx.er.micro_parsers.add(FrequencyTagDetector())
+        ctx.er.parser_filters.add(TimedReminder())
+        ctx.er.parser_filters.add(FrequencyTagDetector())
         
         ctx.er.parser_actions.add(ScheduleAction(self.scheduler))
 
@@ -191,5 +191,4 @@ class ScheduleAction(IMessageAction):
         
     def resubmit_jobs(self, message_id, message, medium, user_id):
         metadata = {"incoming_message" : message, 'is_reminder': True, "input_medium": medium, "user_id": user_id, 'message_id': message_id}
-        self.parser.parse(metadata)
-        self.parser.perform_actions(metadata)
+        self.parser.process_dictionary(metadata)
