@@ -16,17 +16,17 @@ class BasicMicroParsingPlugin(IPlugin):
         ctx.di['parser'] = self.parser
 
     def start_up(self, ctx):
-        ctx.er.micro_parsers.track(self.parser.add_micro_parser)
+        ctx.er.parser_filters.track(self.parser.add_micro_parser)
         ctx.er.parser_actions.track(self.parser.add_action)
 
         re_parser = CommandsParser()
         ctx.er.message_patterns.track(re_parser)
         
-        ctx.er.micro_parsers.add(re_parser)
+        ctx.er.parser_filters.add(re_parser)
         
-        ctx.er.micro_parsers.add(TagExtractor())
-        ctx.er.micro_parsers.add(TokenizerParser())
-        ctx.er.micro_parsers.add(OutputSelector())
+        ctx.er.parser_filters.add(TagExtractor())
+        ctx.er.parser_filters.add(TokenizerParser())
+        ctx.er.parser_filters.add(OutputSelector())
 
 class TokenizerParser(IMicroParser):
 
@@ -55,6 +55,8 @@ class CommandsParser(IMicroParser):
         self.dispatch = re_dispatch
         
     def register(self, pattern, fn):
+        """Add a regular expression pattern and a function to run if the message matches the pattern. 
+        Matching groups will be available from the dictionary passed to the function."""
         if hasattr(pattern, 'match'):
             self.dispatch.register_re(pattern, fn)
         else:
