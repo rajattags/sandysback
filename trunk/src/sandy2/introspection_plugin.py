@@ -32,11 +32,14 @@ class Commands:
         self._help_text = []
 
     def help_text(self, pattern, fn):
+        """
+        The match functions docstring will be used as help text."""
         text = fn.__doc__
         if text:
             self.help_text_string("%s" % (text))
 
-    def help_text_string(self, text):        
+    def help_text_string(self, text):
+        """Add extra help text to be used in the help command. The help text is assembled in the order that commands and help_text is added."""
         self._help_text.append(text)
 
     def help(self, metadata):
@@ -58,7 +61,7 @@ class InternalCommands:
     
     def inspect(self, metadata):
         """inspect\t:- Display all micro-parsers in order"""
-        replies = map(lambda s: s.id, self.parser.micro_parsers)
+        replies = map(lambda s: s.id, self.parser.parser_filters)
         metadata['parser_filters'] = replies
         metadata['parser_actions'] = [s.id for s in self.parser.actions]
         metadata['command'] = 'inspect_microparsers_command'
