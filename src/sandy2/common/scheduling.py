@@ -39,11 +39,12 @@ class Scheduler(object):
         self.current_job_timer = None
         self.current_job_seconds_abs = _dt_to_s(datetime.max)
         self.callable = function
-        self.job_store = job_store if job_store else InMemoryJobStore()
         
         self.lock = Lock()
-        # make sure we don't have any more jobs waiting
-        self.start()
+        
+        self.job_store = job_store if job_store else InMemoryJobStore()
+        
+        
 
     def start(self):
         self.is_disposed = False
@@ -51,6 +52,14 @@ class Scheduler(object):
             self.job_store.start()
         return self.__reschedule()
 
+    def _set_job_store(self, job_store):
+        self._job_store = job_store
+        self.start()
+
+    def _get_job_store(self):
+        return self._job_store
+
+    job_store = property(_get_job_store, _set_job_store)
 
     def __manage_timer(self, seconds_abs):
         if seconds_abs is None:
@@ -114,8 +123,10 @@ class Scheduler(object):
                     self.callable(*job_kw[1], **job_kw[2])
                 except Exception, e:
                     # shouldn't crash the scheduler
-                    print e
-                    pass
+                    import traceback
+                    traceback.print_exc()
+                    e = sys.exc_info()[0]
+                    print "Error found launching scheduled job: ", job_kw
         # if speed is really important to us, then we should consider farming the jobs 
         # off to other threads.
         finally:
