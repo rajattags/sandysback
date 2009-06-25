@@ -34,7 +34,7 @@ class MessageDBPlugin(IPlugin):
 
 
     def start_up(self, ctx):
-        ctx.er.micro_parsers.add(MessageRecorder())
+        ctx.er.parser_filters.add(MessageRecorder())
         
 
 
