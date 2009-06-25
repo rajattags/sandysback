@@ -38,5 +38,7 @@ class AccountRegistrationListener:
             dispatcher.search(string, message)
     
     def add_rule(self, pattern, callable, match_on=ALL_TEXT):
+        """Add a rule based upon the contents of a message emailed by a third-party indicating a signup/follow of us.
+        This is done with a regular expression pattern and a function which is called if matched."""
         dispatcher = self.dispatcher_map.setdefault(match_on, REDispatcher(None))
         dispatcher.register_pattern(pattern, callable)

@@ -164,6 +164,8 @@ class PhraseBankParser(RawConfigParser):
             return self._sections[section]
         
     def register_file(self, *path_elements):
+        """Add phrasebank files. If the first argument is an object, then use the location of the object's module to locate the file. 
+        The final argument must be a valid filename."""
         self.read(_absolute_file(*path_elements))
         self.set_base_template(self._template)
         
@@ -183,6 +185,8 @@ class TemplateCollector:
         pass
     
     def register_file(self, *path_elements):
+        """Add a file used by the Mako templating engine, to render text. 
+        These may be command specific, or format specific."""
         filename = _absolute_file(*path_elements)
         self._file_set.add(filename)
         self._uber_template = None
