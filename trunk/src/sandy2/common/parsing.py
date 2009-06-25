@@ -7,10 +7,14 @@ and actions supplied externally.
 
 class Parser(object):
 
-    def __init__(self, micro_parsers=[], actions=[], configure=None):
+    def __init__(self, parser_filters=[], actions=[], configure=None):
         self.actions = DependencyList(actions, configure)
-        self.micro_parsers = DependencyList(micro_parsers, configure)
+        self.parser_filters = DependencyList(parser_filters, configure)
         self.debug = False
+
+    def process_dictionary(self, dict):
+        message = self.parse(dict)
+        self.perform_actions(message)
 
     def parse_message(self, message):
         return self.parse({"incoming_message": message, "input_medium": "stdin"})
@@ -27,7 +31,7 @@ class Parser(object):
         """
 
         metadata = Message(metadata)
-        for t in self.micro_parsers:
+        for t in self.parser_filters:
             try:
                 if getattr(t, 'micro_parse', None):
                     t.micro_parse(metadata)
@@ -35,7 +39,7 @@ class Parser(object):
                 print "Exception %s: in %s" % (e, t)
             
 
-        for t in reversed(self.micro_parsers._nodes):
+        for t in reversed(self.parser_filters._nodes):
             try:
                 if getattr(t, 'cleanup', None):
                     t.cleanup(metadata)
@@ -66,10 +70,13 @@ class Parser(object):
                 break
 
     def add_micro_parser(self, new_parser):
-        self.micro_parsers.append(new_parser)
+        """Add a low-level message transformer. 
+        E.g. a time/date scanner looking for dates in the message, or looking at the metadata around the message, deducing the person it was sent from."""
+        self.parser_filters.append(new_parser)
         self.__ordered = False
 
     def add_action(self, new_action):
+        """Add a low-level action to be run after all parser filters have been run."""
         self.actions.append(new_action)
 
 
