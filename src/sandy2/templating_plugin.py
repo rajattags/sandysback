@@ -24,7 +24,7 @@ class TemplatingPlugin(IPlugin):
         ctx.er.template_files.add(self, "ui/templates/utility.txt")
         ctx.er.phrase_banks.add(self, "ui/templates/zander_empty.txt")
         
-        ctx.er.micro_parsers.add(PersonalitySetter())
+        ctx.er.parser_filters.add(PersonalitySetter())
         ctx.er.parser_actions.add(TemplatingAction(self.phrase_banks))
 
     def reset_base_templates(self, *args, **kw):
