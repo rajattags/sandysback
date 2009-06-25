@@ -11,14 +11,16 @@ from sandy2.reminder_plugin import SchedulerPlugin
 from sandy2.reminder_db_plugin import SchedulerDBPlugin
 from sandy2.templating_plugin import TemplatingPlugin
 
+from sandy2.servicecfg_plugin import ServiceConfigPlugin
+#from sandy2.twitter_plugin import TwitterPlugin
+
+from sandy2.transports_helper_plugin import TransportHelperPlugin
+
 class Sandy2(object):
 
     def __init__(self):
         pass
 
-
-
-        
     def run(self):
         plugins = [ 
                    DatabasePlugin(),
@@ -31,6 +33,9 @@ class Sandy2(object):
                    GmailPlugin(),
                    PasswordPlugin(),
                    TemplatingPlugin(),
+                   ServiceConfigPlugin(),
+ #                  TwitterPlugin(),
+                   TransportHelperPlugin(),
                 ]
         
         PluginFramework(plugins).start()
