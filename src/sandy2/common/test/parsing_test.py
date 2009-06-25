@@ -10,7 +10,7 @@ class ParserTest(unittest.TestCase):
 
     def setUp(self):
         mp = DummyMicroParser("dummy", previous=['non-existant'])
-        self.parser = sandy2.common.parsing.Parser(micro_parsers=[mp], actions=[])
+        self.parser = sandy2.common.parsing.Parser(parser_filters=[mp], actions=[])
 
     def tearDown(self):
         # nop
@@ -22,26 +22,26 @@ class ParserTest(unittest.TestCase):
         self.assertNotEqual(None, metadata['dummy_key'], 'Dummy key was not set')
 
     def testTopSort(self):
-        micro_parsers = [    DummyMicroParser("first (real)", next=["second (fake)"]),
+        parser_filters = [    DummyMicroParser("first (real)", next=["second (fake)"]),
                             DummyMicroParser("third (real)", previous=["second (fake)"]),
                             DummyMicroParser("fifth (real)", previous=["fourth (real)"]),
                             DummyMicroParser("fourth (real)", previous=["third (real)"], next=["sixth (fake)"]),
                             DummyMicroParser("end", previous=["sixth (fake)", "fifth (real)"])
         ]
 
-        ordered = sandy2.common.ordering.topological_sort(micro_parsers)
+        ordered = sandy2.common.ordering.topological_sort(parser_filters)
         print "Top sort", map(lambda node : node.id,  ordered)
         for node in ordered:
             self.assertTrue(node.id.find("fake") == -1, "Found a fake node")
 
-        micro_parsers = [   DummyMicroParser('10', previous=['9']),
+        parser_filters = [   DummyMicroParser('10', previous=['9']),
                             DummyMicroParser('8', next=['9'], previous=['7']),
                             DummyMicroParser('4', next=['6', '7']),
                             DummyMicroParser('2', next=['4'], previous=['0']),
                             # this is an implementation detail that this will be scheduled first
                             DummyMicroParser('0')
         ]
-        ordered = sandy2.common.ordering.topological_sort(micro_parsers)
+        ordered = sandy2.common.ordering.topological_sort(parser_filters)
 
         print map(lambda p: p.id, ordered)
 
