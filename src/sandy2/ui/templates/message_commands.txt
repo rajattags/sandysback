@@ -1,0 +1,27 @@
+<%def name="text__lookup_command()"><% messages = M.lookup_messages %>
+% if len(messages):
+Here are some things you've asked me to remember:
+%    for message in messages:
+ * ${message[0]}
+%    endfor
+% else:
+I don't think you've told me about anything with any of the words '${M.query_text}' in. Sorry.
+% endif
+</%def>
+
+<%def name="short__lookup_command()"><% messages = M.lookup_messages %>
+% if len(messages):
+Any good? <% first = True %>
+%    for message in messages:
+%        if not first:
+, 
+%        else:
+<%            first = False %>
+%        endif
+'${message[0]}'
+%    endfor
+% else:
+Nothing matching '${M.query_text}'. For a message to match all the words in the query should be there.
+% endif
+
+</%def>
