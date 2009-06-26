@@ -35,19 +35,24 @@ class Parser(object):
             try:
                 if getattr(t, 'micro_parse', None):
                     t.micro_parse(metadata)
-            except BaseException, e:
-                print "Exception %s: in %s" % (e, t)
+            except:
+                self.log_error(t)
             
 
         for t in reversed(self.parser_filters._nodes):
             try:
                 if getattr(t, 'cleanup', None):
                     t.cleanup(metadata)
-            except BaseException, e:
-                print "Exception %s: in %s" % (e, t)
-        
+            except:
+                self.log_error(t)
 
         return metadata
+
+    def log_error(self, node):
+        print "Exception in %s" % (node)
+        import traceback
+        traceback.print_exc()
+
 
     def __can_continue(self, metadata):
         """The STOP key should be used to prematurely terminate processing of a 
