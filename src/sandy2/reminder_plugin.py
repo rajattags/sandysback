@@ -117,9 +117,10 @@ class Commands:
             
     
     def remind_me(self, metadata):    
-        """remind, r <something> <time>:- I'll remind you of <something> at a specific time. 
+        """remind, r, remember <something> <time>:- I'll remind you of <something> at a specific time. 
                 e.g. remind me to pack my SICP book 8am tomorrow.
                 e.g. remind me to move the car in 10 minutes
+                e.g. remember that Tom's cell is 555-1234
         """
         metadata['command'] = 'remind_me_command'
         metadata['reminder_text'] = metadata['reminder_text']
