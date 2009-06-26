@@ -5,7 +5,7 @@ class ConsolePlugin(IPlugin):
     
     def __init__(self, parser=None):
         self.parser=parser
-        self._is_running = True
+        self.__listener = ConsoleListener(self.do_command)
         pass
     
     def start_up(self, ctx):
@@ -14,14 +14,12 @@ class ConsolePlugin(IPlugin):
         ctx.er.parser_filters.add(ConsoleOutputSetter())
         ctx.er.message_patterns.add('^(exit|quit)', ExitCommand().exit)
         
-        ctx.er.parser_actions.add(ConsoleOutputReply())        
+        ctx.er.parser_actions.add(ConsoleOutputReply())
+              
     
     def run(self):
-        print "Sandy console. Try 'help' to inspect what words I understand available."
-        input = None
-        while (self._is_running):
-            input = raw_input('>> ')
-            self.do_command(input)
+        if self.__listener:
+            self.__listener.start()
 
     def do_command(self, message):
         metadata = self.parser.parse({"incoming_message": message, "input_medium": "stdin", "tz_offset" : 0})
@@ -30,7 +28,24 @@ class ConsolePlugin(IPlugin):
 
 
     def stop(self):
+        if self.__listener:
+            self.__listener._is_running = False
+
+import threading
+class ConsoleListener(threading.Thread):
+    
+    def __init__(self, fn):
+        threading.Thread.__init__(self)
         self._is_running = False
+        self.do_command = fn
+    
+    def run(self):
+        self._is_running = True
+        print "Sandy console. Try 'help' to inspect what words I understand available."
+        input = None
+        while (self._is_running):
+            input = raw_input('>> ')
+            self.do_command(input)
 
 class ExitCommand:
 
