@@ -64,25 +64,32 @@ class PluginFramework:
         so only useful outside of the context of the run method. e.g. testing
         """
         ctx = PluginContext(self.di, self.extension_registry)
-        for p in self.plugins:
-            self.di.configure(p)
-            p.install(ctx)
-        
-        for p in self.plugins:
-            p.start_up(ctx)
+        self._call_on_all_plugins('install', self.di.configure, ctx)
+        self._call_on_all_plugins('start_up', None, ctx)
 
+    def _call_on_all_plugins(self, fn_name, pre_call_function, *args, **kw):
+        for p in self.plugins:
+            if hasattr(p, fn_name) and callable(getattr(p, fn_name)):
+                
+                try:
+                    #print "PLUGIN %s: %s" % (fn_name, str(p))
+                    if pre_call_function is not None:
+                        pre_call_function(p)
+                    getattr(p, fn_name)(*args, **kw)
+                except:
+                    import sys, traceback
+                    traceback.print_exc()
+                    continue
 
     def start(self):
         """Configure and run all plugins passed to the constructor.
         """
         self.configure()
-        
-        for p in self.plugins:
-            p.run()    
+        self._call_on_all_plugins('run', None)  
    
     def stop(self):
-        for p in self.plugins:
-            p.stop()    
+        self._call_on_all_plugins('stop', None)
+        
 
 class PluginContext:
     
