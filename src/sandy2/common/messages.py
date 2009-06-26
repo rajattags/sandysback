@@ -60,7 +60,7 @@ class Message:
         
     def items(self):
         """Returns the items for the top level dictionary."""
-        return self._non_message.items()
+        return self._metadata.items()
         
     def setdefault(self, key, default):
         return self._metadata.setdefault(key, default)
