@@ -53,7 +53,7 @@ class TransportUserFinder(IMicroParser):
 class TransportUserCreator(IMicroParser):
     def __init__(self, dao_map=None, parser=None):
         self.is_preceeded_by = ['tx', 'create_new_user']
-        self.dao_map=dao_map
+        self.dao_map = dao_map
         self.parser = parser
 
     def micro_parse(self, metadata):
