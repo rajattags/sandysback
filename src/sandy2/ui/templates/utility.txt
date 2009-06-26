@@ -7,12 +7,14 @@ def _(self, *templates):
     raise Exception("No templates for %s." % templates)
 %>
 
-<%def name="payload()">${text_payload()}</%def>
+<%def name="payload()">${_(self, M.input_medium + '__payload', 'text_payload')()}</%def>
 
 <%def name="text_payload()">${_(self, 'start_paragraph__' + M.command, 'start_paragraph_default')()}
 ${_(self, 'text__' + M.command)()}
 ${_(self, 'ending_paragraph__' + M.command, 'ending_paragraph_default')()}
 </%def>
+
+<%def name="short_payload()">${_(self, 'short__' + M.command, 'short__too_long')()}</%def>
 
 <%def name="html_payload()">${_(self, 'html__' + M.command)()}</%def>
 

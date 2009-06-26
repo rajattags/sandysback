@@ -11,4 +11,7 @@ text_signoff = Thanks, and regards,
  ${agent_name()}
  ${tag_line()}
  --
+
+short__too_long = Oh, man; you'd be better asking that over email.
 # end
+
