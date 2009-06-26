@@ -63,6 +63,8 @@ class UserPopulator(IMicroParser):
             
 
             for (name, medium, tz_offset) in rows:
+                if tz_offset is None:
+                    tz_offset = 0
                 metadata['fullname'] = name
                 metadata['reminder_medium'] = medium
                 if not metadata.has_key('tz_offset'):
