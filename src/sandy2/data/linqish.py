@@ -2,10 +2,10 @@
 
 
 
-def _op(op, left, right):
+def _op(op, left, right, prefix="", postfix=""):
     if not isinstance(right, SQLOperand):
         right = SQLLiteral(right)
-    return SQLOperator(left, infix=op, second=right)
+    return SQLOperator(left, infix=op, second=right, prefix=prefix, postfix=postfix)
 
 def _nullop(op, left):
     return SQLOperator(left, infix=op, second="NULL")
@@ -90,6 +90,9 @@ class SQLOperand:
 
     def like(self, other):
         return _op("LIKE", self, other)
+
+    def ilike(self, other):
+        return _op(") LIKE LOWER(", self, other, prefix="LOWER(", postfix=")")
 
     def desc(self):
         return _desc(self)
