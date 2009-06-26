@@ -1,4 +1,4 @@
 [zander]
-short_help_command = Please remain calm. I try to help by reminding you of things you ask me, including meetings.
-short_help_command = Hello, I'm ${System.agent_name}. I help by keeping track of your life, so you don't have to.
+short__help_command = Please remain calm. I try to help by reminding you of things you ask me, including meetings.
+short__help_command = Hello, I'm ${System.agent_name}. I help by keeping track of your life, so you don't have to.
 

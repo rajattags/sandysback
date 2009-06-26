@@ -1,3 +1,4 @@
+<%def name="short__help_command()">I can remember things you want me to remind you of at a certain time.</%def>
 
 <%def name="text__help_command()">
 The commands available are:
@@ -15,7 +16,7 @@ The system is constructed of a number of layers. At the lowest layer are plugins
 
 The following plugins are installed:
 % for plugin in System.plugin_framework.plugins:
-  ${plugin.id}
+ * ${plugin.id}
 % endfor
 
 Each of these plugins may contribute to one or more extension points, via the extension registry. They may also 
@@ -41,12 +42,13 @@ The actions are evaluated after the filters, in the follwing order:
 ${inspect_command_footer()}
 </%def>
 
-<%def name="extension_point_doc(ep)">
+<%def name="extension_point_doc(ep)"><% singular= (len(ep._extensions) == 1) %>
 %    for m in ep.trackers:
 %        if m.__doc__:
-            ${m.__doc__}
+        ${m.__doc__}
 %        endif
-%    endfor     
+%    endfor
+        ${len(ep._extensions)} ${ 'extension is' if singular else 'extensions are' } contributed to this extension point. 
 </%def>
 
 <%def name="inspect_command_header()">

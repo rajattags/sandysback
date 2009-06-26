@@ -4,7 +4,7 @@
 
 <%def name="schedule_html_payload()">${_(self, 'schedule_html__' + M.command, 'schedule_html_command')()}</%def>
 
-<%def name="schedule_text_command()">At ${M.schedule_time_tz} I'll let give you '${M.incoming_message}'.</%def>
+<%def name="schedule_text_command()">At ${M.schedule_time_tz} I'll give you '${M.incoming_message}'.</%def>
 
 <%def name="schedule_text__unknown_command()">
 Well done, you've got here. I don't know how you did that.

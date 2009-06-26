@@ -6,5 +6,10 @@ schedule_text__remind_me_command = I will remind you ${M.reminder_text} at ${M.s
 text__remind_me_command = You asked me to remind you ${M.reminder_text}. 
 text__remind_me_command = Ping: ${M.reminder_text}.
 
+short__remind_me_command = Hey there: ${M.reminder_text}
+short__remind_me_command = Yo! ${M.reminder_text}
+
 text__time_command = The time to a billion decimal places is ${M.time} GMT.
 text__time_command = The time is ${M.time} GMT. 
+
+short__time_command = ${text__time_command()}
