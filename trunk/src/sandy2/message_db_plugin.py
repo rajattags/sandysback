@@ -36,7 +36,10 @@ class MessageDBCommands:
         self.message_dao = message_dao
     
     def lookup_command(self, metadata):
-        """lookup <something>"""
+        """lookup <something> :- find all the messages you've sent containing all the words in the query.
+                e.g. look up Tom cell
+                e.g. l book
+        """
         metadata['command'] = 'lookup_command'
         results = self.message_dao.find_row(metadata)
         metadata.add_dictionary(results)
