@@ -43,7 +43,7 @@ class Scheduler(object):
         self.lock = Lock()
         
         self.job_store = job_store if job_store else InMemoryJobStore()
-        
+        self.is_disposed = True
         
 
     def start(self):
@@ -53,8 +53,9 @@ class Scheduler(object):
         return self.__reschedule()
 
     def _set_job_store(self, job_store):
+        self.dispose()
         self._job_store = job_store
-        self.start()
+        
 
     def _get_job_store(self):
         return self._job_store
@@ -108,11 +109,11 @@ class Scheduler(object):
             if self.is_disposed:
                 return
 
-            # but first we must
-            self.__reschedule()
-            
             # collect all the jobs to do now.
             ready_jobs = self.job_store.find_ready_jobs(_dt_to_s(datetime.utcnow()))
+            
+            # but first we must
+            self.__reschedule()
             
             # TODO what happens if someone pulls the plug, now??
             
@@ -124,6 +125,7 @@ class Scheduler(object):
                 except Exception, e:
                     # shouldn't crash the scheduler
                     import traceback
+                    import sys
                     traceback.print_exc()
                     e = sys.exc_info()[0]
                     print "Error found launching scheduled job: ", job_kw
